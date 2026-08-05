@@ -1,0 +1,19 @@
+project_id: reference-project
+project_type: documentation-project
+repository: example/reference-project
+default_branch: main
+roles:
+  remote_parent_pm_and_coding_agent: chatgpt
+  local_deployment_agent: generic-local-agent
+  local_test_agent: generic-local-agent
+commands:
+  install: "echo no-install"
+  test: "python3 -m unittest"
+  build: "echo no-build"
+  start: "echo no-runtime"
+policies:
+  direct_main_write: false
+  automatic_merge: false
+  automatic_release: false
+owner_only_actions:
+  - public_release

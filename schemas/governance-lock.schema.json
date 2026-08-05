@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/chatgpt-parent-pm/governance-lock.schema.json",
+  "title": "ChatGPT Parent PM Governance Lock",
+  "type": "object",
+  "required": [
+    "framework",
+    "core_version",
+    "core_repository",
+    "core_commit",
+    "project_profile",
+    "policies"
+  ],
+  "properties": {
+    "framework": {
+      "const": "chatgpt-parent-pm"
+    },
+    "core_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "core_repository": {
+      "type": "string",
+      "pattern": "^[^/]+/[^/]+$"
+    },
+    "core_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "project_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "policies": {
+      "type": "object",
+      "required": [
+        "direct_main_write",
+        "automatic_merge",
+        "automatic_release"
+      ],
+      "properties": {
+        "direct_main_write": {
+          "const": false
+        },
+        "automatic_merge": {
+          "const": false
+        },
+        "automatic_release": {
+          "const": false
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

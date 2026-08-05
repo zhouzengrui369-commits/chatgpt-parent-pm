@@ -1,0 +1,9 @@
+[project]
+name = "chatgpt-parent-pm-governance"
+version = "0.1.0a0"
+description = "Repository-native governance contracts for remote ChatGPT coding and local-agent deployment/testing"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+
+[tool.setuptools]
+packages = ["validators"]
