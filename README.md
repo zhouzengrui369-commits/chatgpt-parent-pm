@@ -53,20 +53,31 @@ Owner confirms outcome
 
 ## Quick start
 
-```bash
-# Copy the starter kit into an existing repository.
-cp -R starter-kit/. your-project/
+Run these commands from a clone of this framework:
 
-cd your-project
-python3 validators/validate_install.py .
+```bash
+FRAMEWORK_ROOT="$PWD"
+TARGET="/path/to/your-project"
+
+cp -R "$FRAMEWORK_ROOT/starter-kit/." "$TARGET/"
+cp -R "$FRAMEWORK_ROOT/validators" "$TARGET/"
+
+cd "$TARGET"
+python3 validators/validate_install.py . --allow-placeholder-lock
 ```
 
-Then customize:
+Then customize and pin the real framework commit:
 
 - `.github/skills/chatgpt-parent-pm/PROJECT_PROFILE.yaml`
 - `.github/skills/chatgpt-parent-pm/GOVERNANCE_LOCK.json`
 - `PROJECT_STATUS.md`
 - the active Goal contract
+
+After replacing the placeholder lock, run the strict validation:
+
+```bash
+python3 validators/validate_install.py .
+```
 
 See [Quick Start](docs/QUICKSTART.md) and [Adoption Guide](docs/ADOPTION_GUIDE.md).
 
