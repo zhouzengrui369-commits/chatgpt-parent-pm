@@ -1,0 +1,31 @@
+project_id: replace-me
+project_type: web-app
+repository: owner/repository
+default_branch: main
+
+roles:
+  remote_parent_pm_and_coding_agent: chatgpt
+  local_deployment_agent: generic-local-agent
+  local_test_agent: generic-local-agent
+
+paths:
+  active_goal: tasks/active/GOAL.md
+  project_status: PROJECT_STATUS.md
+
+commands:
+  install: ""
+  test: ""
+  build: ""
+  start: ""
+
+policies:
+  direct_main_write: false
+  automatic_merge: false
+  automatic_release: false
+
+owner_only_actions:
+  - production_release
+  - credentials
+  - billing
+  - signing
+  - destructive_migration

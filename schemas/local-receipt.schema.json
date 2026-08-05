@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/chatgpt-parent-pm/local-receipt.schema.json",
+  "title": "Local Agent Receipt",
+  "type": "object",
+  "required": [
+    "goal_id",
+    "repository",
+    "candidate_sha",
+    "role",
+    "verdict",
+    "observed_at"
+  ],
+  "properties": {
+    "goal_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "repository": {
+      "type": "string",
+      "pattern": "^[^/]+/[^/]+$"
+    },
+    "candidate_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "role": {
+      "enum": [
+        "local-deployment-agent",
+        "local-test-agent",
+        "product-experience-auditor"
+      ]
+    },
+    "verdict": {
+      "enum": [
+        "PASS",
+        "PARTIAL PASS",
+        "BLOCKED",
+        "FAIL"
+      ]
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "not_tested": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}
