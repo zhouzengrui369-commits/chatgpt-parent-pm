@@ -52,18 +52,31 @@ Owner确认结果
 
 ## 快速接入
 
+先在本框架仓库的克隆目录中执行：
+
 ```bash
-cp -R starter-kit/. your-project/
-cd your-project
-python3 validators/validate_install.py .
+FRAMEWORK_ROOT="$PWD"
+TARGET="/path/to/your-project"
+
+cp -R "$FRAMEWORK_ROOT/starter-kit/." "$TARGET/"
+cp -R "$FRAMEWORK_ROOT/validators" "$TARGET/"
+
+cd "$TARGET"
+python3 validators/validate_install.py . --allow-placeholder-lock
 ```
 
-随后配置项目自己的：
+随后配置并锁定真实的框架提交：
 
-- `PROJECT_PROFILE.yaml`
-- `GOVERNANCE_LOCK.json`
+- `.github/skills/chatgpt-parent-pm/PROJECT_PROFILE.yaml`
+- `.github/skills/chatgpt-parent-pm/GOVERNANCE_LOCK.json`
 - `PROJECT_STATUS.md`
 - 当前活动 Goal
+
+替换占位 Governance Lock 后，执行严格验证：
+
+```bash
+python3 validators/validate_install.py .
+```
 
 详细说明见：[快速开始](docs/QUICKSTART.md)、[接入指南](docs/ADOPTION_GUIDE.md)。
 
