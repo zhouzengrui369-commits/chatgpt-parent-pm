@@ -43,7 +43,7 @@
     "pull_request": 17,
     "machine_contract": {
       "pull_request": 20,
-      "branch_head_sha": "a66b28e08ffae2f892f049b00130fae189b2b1",
+      "branch_head_sha": "a66b28e08ffae2f892f049b00130fae18969b2b1",
       "exact_tested_source_sha": "ded00acf02d7714d36c4bcb73b132cb3defdaf09",
       "ci_run_id": 31759729915
     }
