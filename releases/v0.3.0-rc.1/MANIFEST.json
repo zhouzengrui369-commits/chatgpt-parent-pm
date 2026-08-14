@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0.0",
+  "candidate_id": "parent-pm-ecosystem-v0.3.0-rc.1",
+  "version": "0.3.0-rc.1",
+  "state": "CANDIDATE_NOT_RELEASED",
+  "built_from_head": "09297f671a768a900debaccab098f177addb7396",
+  "protected_base_pr": 3,
+  "protected_base_head": "93356868f656384c5023bd9db666c73a8524d224",
+  "implementation_pr": 4,
+  "upstream": {
+    "ecosystem_sha": "e46c4be501c465884486a4417adca2e158a58ccc",
+    "contract_tested_source": "ded00acf02d7714d36c4bcb73b132cb3defdaf09",
+    "contract_lock_sha256": "15b989f37028682ca7e1a07e6061f7ebf03eff30c1c5d7a5c4bec90c5326056a"
+  },
+  "gates": {
+    "G0": "PASS",
+    "G1": "PASS",
+    "G2": "PASS",
+    "G3": "PASS",
+    "G4": "PASS",
+    "G5": "PASS",
+    "G6": "PENDING_CI",
+    "G7": "NOT_STARTED"
+  },
+  "sources": [
+    {
+      "path": "contracts/ecosystem-v03/shared-knowledge-v0.3.0.lock.json",
+      "git_blob_sha": "3986cb782d7e21e422b1b6f13fa6083e44b97ec4"
+    },
+    {
+      "path": "schemas/ecosystem-v03-adoption.schema.json",
+      "git_blob_sha": "ab20699c387a009f298601b4f97ffa4748b41b27"
+    },
+    {
+      "path": "schemas/ecosystem-v03-architecture-boundary.schema.json",
+      "git_blob_sha": "50d6583c50bfff7ae561921a955aa824947eb0a1"
+    },
+    {
+      "path": "schemas/ecosystem-v03-security-grant.schema.json",
+      "git_blob_sha": "c8728cf307de4b7699eca6e72f845f0ab0b3ade8"
+    },
+    {
+      "path": "schemas/ecosystem-v03-ownership-claim.schema.json",
+      "git_blob_sha": "78373956c36108f9baaea91733e6d3b02a177e3f"
+    },
+    {
+      "path": "starter-kit/ecosystem-v03/template-manifest.json",
+      "git_blob_sha": "a622e7fac3ee530674c1cfe7a6b114500f4ad4f7"
+    },
+    {
+      "path": "validators/validate_v03_g0_snapshot.py",
+      "git_blob_sha": "10156ad6b71b98d1420aadaff85665a4e0899508"
+    },
+    {
+      "path": "validators/validate_ecosystem_v03_adoption.py",
+      "git_blob_sha": "3f389ba5526570b1035884a1099cb1408490ae51"
+    },
+    {
+      "path": "validators/validate_ecosystem_v03_architecture.py",
+      "git_blob_sha": "d7a08b4168290cc726a1ba590667212e91437041"
+    },
+    {
+      "path": "validators/validate_ecosystem_v03_security.py",
+      "git_blob_sha": "b18bb095c2640e6b9aac1bd5fca9bffefedcf626"
+    },
+    {
+      "path": "validators/validate_ecosystem_v03_ownership.py",
+      "git_blob_sha": "7c2183f3f018bd28d3f635e1a337c3bb2d4fc2e4"
+    },
+    {
+      "path": "validators/validate_ecosystem_v03_starter_kit.py",
+      "git_blob_sha": "7e10b0f70637b07496a9485fd13345d87641abb2"
+    }
+  ],
+  "fixture_counts": {
+    "adoption_positive": 5,
+    "adoption_negative": 5,
+    "architecture_positive": 3,
+    "architecture_negative": 6,
+    "security_positive": 5,
+    "security_negative": 9,
+    "ownership_positive": 6,
+    "ownership_negative": 10,
+    "starter_templates": 7
+  },
+  "claim_ceiling": [
+    "GOVERNANCE_RELEASE_CANDIDATE_ONLY",
+    "NOT_RELEASED",
+    "NO_CONSUMER_PRODUCT_RUNTIME",
+    "NO_HUMAN_OWNER_ACCEPTANCE",
+    "NO_MERGE"
+  ]
+}

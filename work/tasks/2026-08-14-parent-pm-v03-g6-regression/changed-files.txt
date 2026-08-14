@@ -1,0 +1,12 @@
+.github/workflows/v03-g6-regression.yml
+releases/v0.3.0-rc.1/MANIFEST.json
+releases/v0.3.0-rc.1/MIGRATION_GUIDE.md
+validators/tests/test_validate_ecosystem_v03_regression.py
+validators/validate_ecosystem_v03_regression.py
+work/tasks/2026-08-14-parent-pm-v03-g6-regression/EVIDENCE.md
+work/tasks/2026-08-14-parent-pm-v03-g6-regression/GOAL.md
+work/tasks/2026-08-14-parent-pm-v03-g6-regression/PLAN.md
+work/tasks/2026-08-14-parent-pm-v03-g6-regression/RESULT.md
+work/tasks/2026-08-14-parent-pm-v03-g6-regression/TASK.md
+work/tasks/2026-08-14-parent-pm-v03-g6-regression/changed-files.txt
+work/tasks/2026-08-14-parent-pm-v03-g6-regression/commands.log
