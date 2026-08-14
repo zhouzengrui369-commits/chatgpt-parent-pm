@@ -1,0 +1,45 @@
+{
+  "expected_blocker": "BLOCKED_CAPABILITY_PM_OWNERSHIP_MISMATCH",
+  "record": {
+    "schema_version": "1.0.0",
+    "record_kind": "ECOSYSTEM_V03_OWNERSHIP_CLAIM",
+    "test_fixture": true,
+    "actors": {
+      "ecosystem_pm": "parent-pm-framework",
+      "capability_pm": "shared-knowledge-capability-pm",
+      "project_pm": "consumer-repository-project-pm",
+      "executor": "bounded-executor",
+      "reviewer": "independent-reviewer",
+      "human_owner": "human-owner"
+    },
+    "assignment": {
+      "repository": "zhouzengrui369-commits/synthetic-consumer",
+      "current_protected_goal": {
+        "id": "CURRENT-GOAL",
+        "candidate_sha": "a9bc5e535e3e466a351dd5bcbb8066760aa75885",
+        "gate": "NO-GO"
+      },
+      "local_goal": null,
+      "requested_actor_role": "PROJECT_PM",
+      "requested_actor_id": "consumer-repository-project-pm",
+      "requested_action": "IMPLEMENT_SHARED_CAPABILITY",
+      "target_candidate_sha": null,
+      "candidate_transition_authorized": false
+    },
+    "claim": {
+      "layer": "SOURCE_TEST",
+      "planning_only": false,
+      "fixture_data": false,
+      "source_receipt_sha256": "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+      "runtime_receipt_sha256": null,
+      "product_experience_receipt_sha256": null,
+      "human_owner_receipt_sha256": null,
+      "independent_reviewer": false
+    },
+    "claim_ceiling": [
+      "SCHEMA_FIXTURE_ONLY",
+      "NO_REAL_PRODUCT_CLAIM",
+      "NO_MERGE_RELEASE_AUTHORITY"
+    ]
+  }
+}

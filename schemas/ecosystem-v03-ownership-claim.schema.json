@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/zhouzengrui369-commits/chatgpt-parent-pm/schemas/ecosystem-v03-ownership-claim.schema.json",
+  "title": "Parent PM ecosystem v0.3 ownership and claim record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_kind",
+    "test_fixture",
+    "actors",
+    "assignment",
+    "claim",
+    "claim_ceiling"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "record_kind": {
+      "const": "ECOSYSTEM_V03_OWNERSHIP_CLAIM"
+    },
+    "test_fixture": {
+      "type": "boolean"
+    },
+    "actors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ecosystem_pm",
+        "capability_pm",
+        "project_pm",
+        "executor",
+        "reviewer",
+        "human_owner"
+      ],
+      "properties": {
+        "ecosystem_pm": {
+          "type": "string",
+          "minLength": 1
+        },
+        "capability_pm": {
+          "type": "string",
+          "minLength": 1
+        },
+        "project_pm": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executor": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "human_owner": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "current_protected_goal",
+        "local_goal",
+        "requested_actor_role",
+        "requested_actor_id",
+        "requested_action",
+        "target_candidate_sha",
+        "candidate_transition_authorized"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "current_protected_goal": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "candidate_sha",
+                "gate"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "candidate_sha": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{40}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "gate": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "local_goal": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "task_root",
+                "activation_receipt_sha256"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "task_root": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "activation_receipt_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requested_actor_role": {
+          "enum": [
+            "ECOSYSTEM_PM",
+            "CAPABILITY_PM",
+            "PROJECT_PM",
+            "EXECUTOR",
+            "INDEPENDENT_REVIEWER",
+            "HUMAN_OWNER"
+          ]
+        },
+        "requested_actor_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requested_action": {
+          "enum": [
+            "PLAN_GOVERNANCE",
+            "IMPLEMENT_SHARED_CAPABILITY",
+            "IMPLEMENT_CONSUMER_PRODUCT",
+            "RUN_LOCAL_DEPLOYMENT",
+            "ACCEPT_PRODUCT_EXPERIENCE",
+            "MERGE",
+            "RELEASE"
+          ]
+        },
+        "target_candidate_sha": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "candidate_transition_authorized": {
+          "type": "boolean"
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layer",
+        "planning_only",
+        "fixture_data",
+        "source_receipt_sha256",
+        "runtime_receipt_sha256",
+        "product_experience_receipt_sha256",
+        "human_owner_receipt_sha256",
+        "independent_reviewer"
+      ],
+      "properties": {
+        "layer": {
+          "enum": [
+            "PLANNING",
+            "SOURCE_TEST",
+            "FIXTURE",
+            "REFERENCE_RUNTIME",
+            "CONSUMER_RUNTIME",
+            "PRODUCT_EXPERIENCE",
+            "HUMAN_OWNER",
+            "MERGE",
+            "RELEASE"
+          ]
+        },
+        "planning_only": {
+          "type": "boolean"
+        },
+        "fixture_data": {
+          "type": "boolean"
+        },
+        "source_receipt_sha256": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "runtime_receipt_sha256": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "product_experience_receipt_sha256": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "human_owner_receipt_sha256": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "independent_reviewer": {
+          "type": "boolean"
+        }
+      }
+    },
+    "claim_ceiling": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}
