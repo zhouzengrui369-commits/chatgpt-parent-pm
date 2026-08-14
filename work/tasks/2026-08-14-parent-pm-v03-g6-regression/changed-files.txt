@@ -1,4 +1,6 @@
 .github/workflows/v03-g6-regression.yml
+docs/plans/ECOSYSTEM_V03_GOVERNANCE_ADOPTION.md
+releases/v0.3.0-rc.1/G7_REVIEW_PACKET.md
 releases/v0.3.0-rc.1/MANIFEST.json
 releases/v0.3.0-rc.1/MIGRATION_GUIDE.md
 validators/tests/test_validate_ecosystem_v03_regression.py
