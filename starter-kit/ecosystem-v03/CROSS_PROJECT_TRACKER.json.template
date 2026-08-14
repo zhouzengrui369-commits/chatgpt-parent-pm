@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0.0",
+  "program_id": "PARENT-PM-ECOSYSTEM-V03-R1",
+  "project_repository": "{{PROJECT_REPOSITORY}}",
+  "project_pm": "{{PROJECT_PM}}",
+  "local_goal_id": "{{LOCAL_GOAL_ID_OR_NONE}}",
+  "migration_state": "{{MIGRATION_STATE}}",
+  "source_sha": "{{SOURCE_SHA40_OR_NONE}}",
+  "runtime_receipt_sha256": "{{RUNTIME_RECEIPT_SHA256_OR_NONE}}",
+  "claim_ceiling": "{{CLAIM_CEILING}}",
+  "updated_at": "{{UPDATED_AT_ISO8601}}"
+}

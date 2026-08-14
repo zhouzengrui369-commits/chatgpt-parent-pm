@@ -1,0 +1,30 @@
+# {{DEVIATION_ID}} — {{DEVIATION_TITLE}}
+
+- Status: `{{DEVIATION_STATUS}}`
+- Owner: `{{PROJECT_PM}}`
+- Expires: `{{EXPIRY_DATE}}`
+- Project: `{{PROJECT_REPOSITORY}}`
+
+## Reason
+
+{{DEVIATION_REASON}}
+
+## Exact scope
+
+{{SCOPE}}
+
+## Shared-contract limitation
+
+{{SHARED_CONTRACT_LIMITATION}}
+
+## Interoperability plan
+
+{{INTEROPERABILITY_PLAN}}
+
+## Migration and removal plan
+
+{{MIGRATION_PLAN}}
+
+## Security impact
+
+{{SECURITY_IMPACT}}

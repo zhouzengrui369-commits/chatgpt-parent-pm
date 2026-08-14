@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "ECOSYSTEM_V03_ADOPTION",
+  "program_id": "PARENT-PM-ECOSYSTEM-V03-R1",
+  "fixture": false,
+  "ecosystem": {
+    "repository": "zhouzengrui369-commits/knowme-ecosystem",
+    "commit": "{{ECOSYSTEM_COMMIT_SHA40}}",
+    "version": "0.3.0",
+    "status": "{{ECOSYSTEM_STATUS}}",
+    "blueprint_path": "docs/blueprint/ecosystem-blueprint-v0.3.md",
+    "blueprint_blob_sha": "{{BLUEPRINT_BLOB_SHA40}}",
+    "blueprint_sha256": "{{BLUEPRINT_SHA256}}"
+  },
+  "shared_knowledge_engine": {
+    "required": true,
+    "supported_capabilities": ["{{SUPPORTED_CAPABILITY}}"],
+    "contract": {
+      "version": "0.3.0",
+      "source_commit": "{{CONTRACT_SOURCE_SHA40}}",
+      "manifest_path": "contracts/ecosystem-v03/shared-knowledge-v0.3.0.lock.json",
+      "contract_manifest_sha256": "{{CONTRACT_MANIFEST_SHA256}}",
+      "schema_path": "contracts/shared-knowledge/v0.3.0/shared-knowledge.schema.json",
+      "schema_sha256": "{{CONTRACT_SCHEMA_SHA256}}",
+      "positive_fixture_sha256": "{{POSITIVE_FIXTURE_SHA256}}",
+      "negative_manifest_sha256": "{{NEGATIVE_MANIFEST_SHA256}}",
+      "conformance_receipt_path": "{{CONFORMANCE_RECEIPT_PATH}}",
+      "conformance_receipt_sha256": "{{CONFORMANCE_RECEIPT_SHA256}}",
+      "workflow_run_id": {{WORKFLOW_RUN_ID}}
+    }
+  },
+  "product": {
+    "repository": "{{PROJECT_REPOSITORY}}",
+    "project_pm": "{{PROJECT_PM}}",
+    "role": "{{PRODUCT_ROLE}}",
+    "current_protected_goal": "{{CURRENT_PROTECTED_GOAL}}",
+    "current_candidate_sha": null,
+    "migration_state": "QUEUED",
+    "local_goal_id": null,
+    "deviations": []
+  },
+  "activation": {
+    "state": "PLANNED",
+    "task_root": "{{TASK_ROOT}}",
+    "scope": ["{{SCOPE}}"],
+    "non_goals": ["merge", "release", "claim-uplift"]
+  },
+  "claim_ceiling": ["PLANNING_ONLY", "NO_PRODUCT_RUNTIME_PROOF"]
+}

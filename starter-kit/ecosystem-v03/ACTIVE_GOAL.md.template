@@ -1,0 +1,28 @@
+# GOAL — {{LOCAL_GOAL_ID}}
+
+## User value
+
+{{USER_VALUE}}
+
+## Exact scope
+
+{{SCOPE}}
+
+## Protected baseline
+
+- Goal: `{{CURRENT_PROTECTED_GOAL}}`
+- Candidate: `{{CURRENT_CANDIDATE_SHA40_OR_NONE}}`
+- Ecosystem: `{{ECOSYSTEM_COMMIT_SHA40}}`
+- Contract: `{{CONTRACT_SOURCE_SHA40}}`
+
+## Prohibited
+
+{{NON_GOALS}}
+
+## Acceptance
+
+{{ACCEPTANCE_CRITERIA}}
+
+## STOP conditions
+
+{{STOP_CONDITIONS}}

@@ -1,0 +1,4 @@
+python validators/validate_ecosystem_v03_starter_kit.py starter-kit/ecosystem-v03/template-manifest.json
+python -m unittest validators.tests.test_validate_ecosystem_v03_starter_kit -v
+python -m unittest discover -s validators/tests -v
+git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"
