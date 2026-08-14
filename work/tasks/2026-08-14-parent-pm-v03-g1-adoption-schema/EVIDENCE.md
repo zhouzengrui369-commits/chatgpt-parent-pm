@@ -1,5 +1,7 @@
 # EVIDENCE
 
+## Exact upstream pins
+
 - ecosystem candidate: `e46c4be501c465884486a4417adca2e158a58ccc`
 - blueprint SHA-256: `a6f48f41bfc94a61cdf46ef3f0ae55acf013b0848de39cda2915202be142d9b7`
 - contract tested source: `ded00acf02d7714d36c4bcb73b132cb3defdaf09`
@@ -10,4 +12,16 @@
 - Parent PM contract lock manifest SHA-256: `15b989f37028682ca7e1a07e6061f7ebf03eff30c1c5d7a5c4bec90c5326056a`
 - upstream conformance run: `31759729915 SUCCESS`
 
-Pending: exact Parent PM PR head CI.
+## Exact-head acceptance
+
+- tested implementation head: `24a3013094120ab55be407ba86776a6ce0e35887`
+- G1 workflow `31768095996`: `SUCCESS`
+- G0 regression `31768095930`: `SUCCESS`
+- repository CI `31768095920`: `SUCCESS`
+- five positive product-role fixtures: PASS
+- five negative blockers: PASS_AS_EXPECTED
+- migration transition tests: PASS
+- lock manifest SHA-256 self-check: PASS
+- PR-base whitespace check: PASS
+
+No consumer source/runtime/deployment, private data, credentials, merge, release or Human Owner product gate was exercised.
