@@ -1,0 +1,39 @@
+name: v0.3 G1 adoption schema
+
+on:
+  pull_request:
+    branches:
+      - chatgpt/shared-capability-adoption-r1
+    paths:
+      - "contracts/ecosystem-v03/**"
+      - "schemas/ecosystem-v03-adoption.schema.json"
+      - "fixtures/ecosystem-v03/**"
+      - "validators/validate_ecosystem_v03_adoption.py"
+      - "validators/tests/test_validate_ecosystem_v03_adoption.py"
+      - "work/tasks/2026-08-14-parent-pm-v03-g1-adoption-schema/**"
+      - ".github/workflows/v03-g1-adoption.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-g1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - name: Validate all positive product-role fixtures
+        run: |
+          for fixture in fixtures/ecosystem-v03/positive/*.json; do
+            python validators/validate_ecosystem_v03_adoption.py "$fixture" \
+              --expected-ecosystem-sha e46c4be501c465884486a4417adca2e158a58ccc \
+              --expected-contract-source ded00acf02d7714d36c4bcb73b132cb3defdaf09 \
+              --expected-contract-manifest-sha256 15b989f37028682ca7e1a07e6061f7ebf03eff30c1c5d7a5c4bec90c5326056a \
+              --expected-contract-schema-sha256 0e21d3e9f8c07586f4ee896376885ccc27bc7250cb2351f3ab5bec3b87e05324
+          done
+      - name: Run G1 blocker and transition tests
+        run: python -m unittest validators.tests.test_validate_ecosystem_v03_adoption -v
+      - name: Check PR patch whitespace
+        run: git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"

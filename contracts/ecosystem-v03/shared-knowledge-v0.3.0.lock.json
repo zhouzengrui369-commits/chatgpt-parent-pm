@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "lock_id": "shared-knowledge-v0.3.0",
+  "upstream_repository": "zhouzengrui369-commits/knowme-ecosystem",
+  "ecosystem_candidate_sha": "e46c4be501c465884486a4417adca2e158a58ccc",
+  "blueprint": {
+    "path": "docs/blueprint/ecosystem-blueprint-v0.3.md",
+    "blob_sha": "69dd19a88667c8d71f88c02f044fb0cad54313be",
+    "sha256": "a6f48f41bfc94a61cdf46ef3f0ae55acf013b0848de39cda2915202be142d9b7"
+  },
+  "contract": {
+    "version": "0.3.0",
+    "tested_source_commit": "ded00acf02d7714d36c4bcb73b132cb3defdaf09",
+    "schema": {
+      "path": "contracts/shared-knowledge/v0.3.0/shared-knowledge.schema.json",
+      "blob_sha": "f264d28e57dfdf2331f6092dedb99d0da6bc3644",
+      "sha256": "0e21d3e9f8c07586f4ee896376885ccc27bc7250cb2351f3ab5bec3b87e05324"
+    },
+    "positive_fixture": {
+      "path": "contracts/shared-knowledge/v0.3.0/fixtures/positive/source-journey.json",
+      "blob_sha": "f82f8375930f551e0913eed95c069da45d0aea18",
+      "sha256": "2f6403bd34421caebe8e860ef9a7067c493036e2d16086c3b7ca5c1dbd3fcd80"
+    },
+    "negative_manifest": {
+      "path": "contracts/shared-knowledge/v0.3.0/fixtures/negative/cases.json",
+      "blob_sha": "03c0d0057aec21403763d8e0e523c489cfc0fdb3",
+      "sha256": "0a39ab75038aa461d00964d918d4b33dadc87a5a74b0dcfbb6b7933b6340e97f"
+    },
+    "conformance_receipt": {
+      "path": "work/tasks/2026-08-14-shared-knowledge-v03-machine-contract-r1/CONFORMANCE_RECEIPT.ded00acf02d7714d36c4bcb73b132cb3defdaf09.json",
+      "sha256": "b807b9624d4cc3d67cc22f3dcc34e61fba74198142768d1fae6b76fb38ea7abd"
+    },
+    "workflow_run_id": 31759729915,
+    "artifact_zip_sha256": "d18fdd2cfe628775b318b98963584c9795c269fbdf7e72afb84ff6ac894f3bd8",
+    "claim_ceiling": "CONTRACT_CANDIDATE_ONLY_NOT_PRODUCT_RUNTIME_NOT_HUMAN_OWNER_ACCEPTANCE"
+  }
+}

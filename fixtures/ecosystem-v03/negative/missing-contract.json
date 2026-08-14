@@ -1,0 +1,63 @@
+{
+  "expected_blocker": "BLOCKED_SHARED_CONTRACT_NOT_PINNED",
+  "record": {
+    "schema_version": "1.0.0",
+    "record_kind": "ECOSYSTEM_V03_ADOPTION",
+    "program_id": "PARENT-PM-ECOSYSTEM-V03-R1",
+    "fixture": true,
+    "ecosystem": {
+      "repository": "zhouzengrui369-commits/knowme-ecosystem",
+      "commit": "e46c4be501c465884486a4417adca2e158a58ccc",
+      "version": "0.3.0",
+      "status": "PROPOSED",
+      "blueprint_path": "docs/blueprint/ecosystem-blueprint-v0.3.md",
+      "blueprint_blob_sha": "69dd19a88667c8d71f88c02f044fb0cad54313be",
+      "blueprint_sha256": "a6f48f41bfc94a61cdf46ef3f0ae55acf013b0848de39cda2915202be142d9b7"
+    },
+    "shared_knowledge_engine": {
+      "required": true,
+      "supported_capabilities": [
+        "knowledge_object",
+        "provenance",
+        "ingestion",
+        "retrieval",
+        "review",
+        "permission",
+        "agent_access",
+        "sync_portability",
+        "security",
+        "feedback"
+      ],
+      "contract": null
+    },
+    "product": {
+      "repository": "zhouzengrui369-commits/copilot",
+      "project_pm": "Copilot repository-local Project PM",
+      "role": "REFERENCE_IMPLEMENTATION",
+      "current_protected_goal": "PR-54 OPEN_DRAFT",
+      "current_candidate_sha": null,
+      "migration_state": "QUEUED",
+      "local_goal_id": null,
+      "deviations": []
+    },
+    "activation": {
+      "state": "PLANNED",
+      "task_root": "consumer-project-local-task-root-required",
+      "scope": [
+        "schema-conformance-planning"
+      ],
+      "non_goals": [
+        "product-source",
+        "runtime",
+        "deployment",
+        "merge",
+        "release"
+      ]
+    },
+    "claim_ceiling": [
+      "SCHEMA_FIXTURE_ONLY",
+      "NO_PRODUCT_RUNTIME_PROOF",
+      "NO_HUMAN_OWNER_ACCEPTANCE"
+    ]
+  }
+}
