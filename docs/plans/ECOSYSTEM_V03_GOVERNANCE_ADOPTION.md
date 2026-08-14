@@ -1,7 +1,7 @@
 # Parent PM v0.3 Ecosystem Governance Adoption Plan
 
 > **Plan ID**: `PARENT-PM-ECOSYSTEM-V03-R1`
-> **State**: `ACTIVATED_G4 / G4_PASS`
+> **State**: `ACTIVATED_G5 / G5_PASS`
 > **Execution owner**: ChatGPT Parent PM framework Project PM
 > **Ecosystem authority**: `zhouzengrui369-commits/knowme-ecosystem@e46c4be501c465884486a4417adca2e158a58ccc`
 > **Ecosystem PR**: `knowme-ecosystem#17`
