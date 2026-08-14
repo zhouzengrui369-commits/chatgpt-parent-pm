@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "capability_id": "replace-me",
+  "capability_version": "0.0.0",
+  "authority_repository": "owner/repository",
+  "authority_commit_sha": "0000000000000000000000000000000000000000",
+  "contract_path": "path/to/contract",
+  "contract_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "adoption_mode": "PLAN_ONLY",
+  "upstream_code_included": false
+}

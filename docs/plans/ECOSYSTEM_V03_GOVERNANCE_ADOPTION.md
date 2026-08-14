@@ -1,11 +1,12 @@
 # Parent PM v0.3 Ecosystem Governance Adoption Plan
 
 > **Plan ID**: `PARENT-PM-ECOSYSTEM-V03-R1`  
-> **State**: `QUEUED / PLANNING_ONLY`  
+> **State**: `ACTIVATED_G0 / IMPLEMENTING`  
 > **Execution owner**: ChatGPT Parent PM framework Project PM  
 > **Ecosystem authority**: `zhouzengrui369-commits/knowme-ecosystem@e46c4be501c465884486a4417adca2e158a58ccc`  
 > **Ecosystem PR**: `knowme-ecosystem#17`  
-> **Date**: 2026-08-11
+> **Date**: 2026-08-11  
+> **G0 activation**: 2026-08-14, stacked on protected Draft PR #3
 
 ---
 
@@ -40,7 +41,7 @@ Hard protection:
 - v0.3 planning does not change or relabel PR #3;
 - Geo Context remains its own capability identity and evidence chain;
 - no consumer product source, candidate, deployment, review or release is changed from this repository;
-- migration remains `QUEUED` until the framework PM records a transition from the current shared-capability Goal;
+- G0 is activated by the framework PM on a branch stacked on protected Draft PR #3; this transition does not authorize consumer implementation, merge or release;
 - no central governance code may silently execute consumer product implementation.
 
 ---

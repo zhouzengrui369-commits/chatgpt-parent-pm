@@ -1,0 +1,13 @@
+docs/plans/ECOSYSTEM_V03_GOVERNANCE_ADOPTION.md
+.github/workflows/v03-g0-activation.yml
+validators/validate_v03_g0_snapshot.py
+validators/tests/test_validate_v03_g0_snapshot.py
+work/tasks/2026-08-14-parent-pm-v03-g0-activation/GOAL.md
+work/tasks/2026-08-14-parent-pm-v03-g0-activation/TASK.md
+work/tasks/2026-08-14-parent-pm-v03-g0-activation/PLAN.md
+work/tasks/2026-08-14-parent-pm-v03-g0-activation/RESULT.md
+work/tasks/2026-08-14-parent-pm-v03-g0-activation/EVIDENCE.md
+work/tasks/2026-08-14-parent-pm-v03-g0-activation/commands.log
+work/tasks/2026-08-14-parent-pm-v03-g0-activation/changed-files.txt
+work/tasks/2026-08-14-parent-pm-v03-g0-activation/CURRENT_TRUTH_SNAPSHOT.json
+work/tasks/2026-08-14-parent-pm-v03-g0-activation/BACKWARD_COMPATIBILITY_PLAN.md

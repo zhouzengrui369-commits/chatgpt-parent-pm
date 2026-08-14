@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "program_id": "PARENT-PM-ECOSYSTEM-V03-R1",
+  "migration_state": "ACTIVATED_G0",
+  "activation": {
+    "date": "2026-08-14",
+    "authority": "ChatGPT Parent PM framework Project PM",
+    "authorization_ref": "Human Owner instruction to execute the repository Parent PM plan",
+    "current_goal": "G0_CURRENT_FRAMEWORK_MAPPING",
+    "scope": "GOVERNANCE_ONLY"
+  },
+  "framework": {
+    "repository": "zhouzengrui369-commits/chatgpt-parent-pm",
+    "main_sha": "99e88020789603f17de715775b455e91e4e20b17",
+    "main_tree": "f5afc4f3c1d2e77009ffe9dc319b0c8d59dde294",
+    "version": "0.1.0-alpha",
+    "existing_schema_blobs": {
+      "governance_lock": "0d12994dff697a3ef7eb9516b4c41ee6e1512cb1",
+      "local_receipt": "e5494c1cfadfe3a14902ad8c995cbdf5c7db90ae"
+    }
+  },
+  "protected_lane": {
+    "pull_request": 3,
+    "state": "OPEN_DRAFT",
+    "base_ref": "main",
+    "head_ref": "chatgpt/shared-capability-adoption-r1",
+    "head_sha": "93356868f656384c5023bd9db666c73a8524d224",
+    "geo_context": {
+      "ecosystem_sha": "6edb5401084de24491038ac55525f584e9943bd7",
+      "schema_sha256": "8695f3d9d376bf5591138d78b1460c17758845312aeca52a4a0597ee873032df"
+    }
+  },
+  "g0_pull_request": {
+    "pull_request": 4,
+    "state": "OPEN_DRAFT",
+    "base_ref": "chatgpt/shared-capability-adoption-r1",
+    "head_ref": "chatgpt/v03-governance-adoption-plan-r1",
+    "prior_head_sha": "327275d2b7959ae20c61e2ac5df597a53280b50e"
+  },
+  "ecosystem": {
+    "repository": "zhouzengrui369-commits/knowme-ecosystem",
+    "candidate_sha": "e46c4be501c465884486a4417adca2e158a58ccc",
+    "pull_request": 17,
+    "machine_contract": {
+      "pull_request": 20,
+      "branch_head_sha": "a66b28e08ffae2f892f049b00130fae189b2b1",
+      "exact_tested_source_sha": "ded00acf02d7714d36c4bcb73b132cb3defdaf09",
+      "ci_run_id": 31759729915
+    }
+  },
+  "compatibility": {
+    "mode": "ADDITIVE_ONLY",
+    "existing_schemas_unchanged": true,
+    "geo_context_regression_boundary_preserved": true,
+    "unknown_capabilities_fail_closed": true
+  },
+  "consumer_boundary": {
+    "consumer_product_change": false,
+    "product_runtime_tested": false,
+    "merge_release_authorized": false
+  },
+  "consumers": {
+    "lingxi": {
+      "repository": "zhouzengrui369-commits/lingxi-presentation",
+      "migration_state": "QUEUED",
+      "issue": 81,
+      "milestone": 1,
+      "native_import_gate": "NOT_PASS",
+      "runtime_gate": "NOT_PASS",
+      "mvp_gate": "NO-GO"
+    }
+  },
+  "claim_ceiling": [
+    "G0_GOVERNANCE_MAPPING_ONLY",
+    "NO_CONSUMER_PRODUCT_CHANGE",
+    "NO_PRODUCT_RUNTIME_PROOF",
+    "NO_MERGE",
+    "NO_RELEASE"
+  ]
+}

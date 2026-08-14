@@ -1,0 +1,21 @@
+capability_id: geo-context
+adoption_mode: GOVERNANCE
+execution_owner: framework-pm
+current_release_scope: governance-only
+runtime_implementation: false
+responsibilities:
+  - exact_SHA_capability_locking
+  - compatibility_assessment_workflow
+  - license_scope_and_pm_ownership_fail_closed_gates
+  - project_PM_handoff_contract
+  - queued_plan_to_active_goal_transition_rules
+prohibited:
+  - product_rendering
+  - product_data_access
+  - taking_over_consumer_project_implementation_without_project_pm_assignment
+  - assigning_consumer_local_deployment_without_project_pm_assignment
+  - automatic_merge_or_release
+central_candidate:
+  repository: zhouzengrui369-commits/knowme-ecosystem
+  commit: 6edb5401084de24491038ac55525f584e9943bd7
+  schema_sha256: 8695f3d9d376bf5591138d78b1460c17758845312aeca52a4a0597ee873032df

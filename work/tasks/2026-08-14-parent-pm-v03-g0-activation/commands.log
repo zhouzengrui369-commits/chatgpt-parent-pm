@@ -1,0 +1,4 @@
+# Planned and CI-executed commands
+python validators/validate_v03_g0_snapshot.py work/tasks/2026-08-14-parent-pm-v03-g0-activation/CURRENT_TRUTH_SNAPSHOT.json --expected-main-sha 99e88020789603f17de715775b455e91e4e20b17 --expected-protected-head 93356868f656384c5023bd9db666c73a8524d224
+python -m unittest validators.tests.test_validate_v03_g0_snapshot -v
+git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"

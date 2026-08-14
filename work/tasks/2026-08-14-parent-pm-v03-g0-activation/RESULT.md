@@ -1,0 +1,12 @@
+# RESULT
+
+STATUS=IMPLEMENTED_PENDING_CI
+GOAL=G0_CURRENT_FRAMEWORK_MAPPING
+MIGRATION_STATE=ACTIVATED_G0
+PROTECTED_PR_3_HEAD=93356868f656384c5023bd9db666c73a8524d224
+PR_4_BASE=chatgpt/shared-capability-adoption-r1
+CONSUMER_PRODUCT_CHANGE=NO
+PRODUCT_RUNTIME_PROOF=NO
+MERGE_RELEASE_AUTHORITY=NO
+
+The implementation is not accepted until the exact PR head passes the G0 workflow and the receipt is recorded on PR #4 / Issue #5.
