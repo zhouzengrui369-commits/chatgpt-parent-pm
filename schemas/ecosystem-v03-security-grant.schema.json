@@ -1,0 +1,343 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/zhouzengrui369-commits/chatgpt-parent-pm/schemas/ecosystem-v03-security-grant.schema.json",
+  "title": "Parent PM ecosystem v0.3 permission and security grant",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_kind",
+    "fixture",
+    "evaluation_at",
+    "grant",
+    "request",
+    "owner_gates",
+    "security",
+    "claim_ceiling"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "record_kind": {
+      "const": "ECOSYSTEM_V03_SECURITY_GRANT"
+    },
+    "fixture": {
+      "type": "boolean"
+    },
+    "evaluation_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "grant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grant_id",
+        "product_repository",
+        "data_class",
+        "purposes",
+        "consumers",
+        "namespaces",
+        "processing_locations",
+        "actions",
+        "agent_authority",
+        "execution_risk",
+        "expires_at",
+        "revocable",
+        "receipt_id"
+      ],
+      "properties": {
+        "grant_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "product_repository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "data_class": {
+          "enum": [
+            "D0",
+            "D1",
+            "D2",
+            "D3"
+          ]
+        },
+        "purposes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "consumers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "namespaces": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "processing_locations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "LOCAL_DEVICE",
+              "PRIVATE_CLOUD",
+              "PUBLIC_CLOUD"
+            ]
+          }
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "READ",
+              "RETRIEVE",
+              "PROPOSE_WRITE",
+              "ACCEPT_WRITE",
+              "EXECUTE",
+              "EXPORT",
+              "DELETE"
+            ]
+          }
+        },
+        "agent_authority": {
+          "enum": [
+            "NONE",
+            "READ_ONLY",
+            "PROPOSE_WRITE",
+            "ACCEPT_WRITE",
+            "EXECUTE"
+          ]
+        },
+        "execution_risk": {
+          "enum": [
+            "E0",
+            "E1",
+            "E2",
+            "E3",
+            "E4",
+            "E5"
+          ]
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "revocable": {
+          "const": true
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "consumer",
+        "purpose",
+        "namespace",
+        "action",
+        "processing_location"
+      ],
+      "properties": {
+        "consumer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "namespace": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "enum": [
+            "READ",
+            "RETRIEVE",
+            "PROPOSE_WRITE",
+            "ACCEPT_WRITE",
+            "EXECUTE",
+            "EXPORT",
+            "DELETE"
+          ]
+        },
+        "processing_location": {
+          "enum": [
+            "LOCAL_DEVICE",
+            "PRIVATE_CLOUD",
+            "PUBLIC_CLOUD"
+          ]
+        }
+      }
+    },
+    "owner_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "d2_d3_receipt_sha256",
+        "e3_plus_receipt_sha256"
+      ],
+      "properties": {
+        "d2_d3_receipt_sha256": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "e3_plus_receipt_sha256": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ordinary_index",
+        "ordinary_log",
+        "encryption_at_rest",
+        "cloud_egress",
+        "cloud_egress_receipt_sha256",
+        "agent_write_receipt_sha256",
+        "deletion_lifecycle",
+        "export_lifecycle",
+        "secret_reference_only"
+      ],
+      "properties": {
+        "ordinary_index": {
+          "type": "boolean"
+        },
+        "ordinary_log": {
+          "type": "boolean"
+        },
+        "encryption_at_rest": {
+          "type": "boolean"
+        },
+        "cloud_egress": {
+          "type": "boolean"
+        },
+        "cloud_egress_receipt_sha256": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "agent_write_receipt_sha256": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "deletion_lifecycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "bound",
+            "covers"
+          ],
+          "properties": {
+            "bound": {
+              "type": "boolean"
+            },
+            "covers": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "SOURCE",
+                  "DERIVED_OBJECT",
+                  "VECTOR",
+                  "GRAPH",
+                  "CACHE",
+                  "BACKUP"
+                ]
+              }
+            }
+          }
+        },
+        "export_lifecycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "bound",
+            "destination"
+          ],
+          "properties": {
+            "bound": {
+              "type": "boolean"
+            },
+            "destination": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        "secret_reference_only": {
+          "type": "boolean"
+        }
+      }
+    },
+    "claim_ceiling": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

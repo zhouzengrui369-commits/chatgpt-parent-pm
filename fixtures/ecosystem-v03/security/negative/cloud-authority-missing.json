@@ -1,0 +1,67 @@
+{
+  "expected_blocker": "BLOCKED_CLOUD_EGRESS_AUTHORITY_MISSING",
+  "record": {
+    "schema_version": "1.0.0",
+    "record_kind": "ECOSYSTEM_V03_SECURITY_GRANT",
+    "fixture": true,
+    "evaluation_at": "2026-08-14T00:00:00Z",
+    "grant": {
+      "grant_id": "g-d2-cloud",
+      "product_repository": "zhouzengrui369-commits/synthetic-consumer",
+      "data_class": "D2",
+      "purposes": [
+        "schema-conformance"
+      ],
+      "consumers": [
+        "synthetic-agent"
+      ],
+      "namespaces": [
+        "synthetic.fixture"
+      ],
+      "processing_locations": [
+        "PRIVATE_CLOUD"
+      ],
+      "actions": [
+        "RETRIEVE"
+      ],
+      "agent_authority": "READ_ONLY",
+      "execution_risk": "E1",
+      "expires_at": "2026-12-31T00:00:00Z",
+      "revocable": true,
+      "receipt_id": "receipt-g-d2-cloud"
+    },
+    "request": {
+      "consumer": "synthetic-agent",
+      "purpose": "schema-conformance",
+      "namespace": "synthetic.fixture",
+      "action": "RETRIEVE",
+      "processing_location": "PRIVATE_CLOUD"
+    },
+    "owner_gates": {
+      "d2_d3_receipt_sha256": "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+      "e3_plus_receipt_sha256": null
+    },
+    "security": {
+      "ordinary_index": true,
+      "ordinary_log": true,
+      "encryption_at_rest": true,
+      "cloud_egress": true,
+      "cloud_egress_receipt_sha256": null,
+      "agent_write_receipt_sha256": null,
+      "deletion_lifecycle": {
+        "bound": false,
+        "covers": []
+      },
+      "export_lifecycle": {
+        "bound": false,
+        "destination": null
+      },
+      "secret_reference_only": true
+    },
+    "claim_ceiling": [
+      "SCHEMA_FIXTURE_ONLY",
+      "NO_REAL_PERMISSION_GRANTED",
+      "NO_PRODUCT_RUNTIME_PROOF"
+    ]
+  }
+}

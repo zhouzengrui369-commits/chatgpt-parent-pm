@@ -1,0 +1,4 @@
+python validators/validate_ecosystem_v03_security.py fixtures/ecosystem-v03/security/positive/<fixture>.json
+python -m unittest validators.tests.test_validate_ecosystem_v03_security -v
+python -m unittest discover -s validators/tests -v
+git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"

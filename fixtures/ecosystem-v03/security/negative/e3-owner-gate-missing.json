@@ -1,0 +1,67 @@
+{
+  "expected_blocker": "BLOCKED_E3_PLUS_OWNER_AUTHORITY_MISSING",
+  "record": {
+    "schema_version": "1.0.0",
+    "record_kind": "ECOSYSTEM_V03_SECURITY_GRANT",
+    "fixture": true,
+    "evaluation_at": "2026-08-14T00:00:00Z",
+    "grant": {
+      "grant_id": "g-e3-exec",
+      "product_repository": "zhouzengrui369-commits/synthetic-consumer",
+      "data_class": "D1",
+      "purposes": [
+        "schema-conformance"
+      ],
+      "consumers": [
+        "synthetic-agent"
+      ],
+      "namespaces": [
+        "synthetic.fixture"
+      ],
+      "processing_locations": [
+        "LOCAL_DEVICE"
+      ],
+      "actions": [
+        "EXECUTE"
+      ],
+      "agent_authority": "EXECUTE",
+      "execution_risk": "E3",
+      "expires_at": "2026-12-31T00:00:00Z",
+      "revocable": true,
+      "receipt_id": "receipt-g-e3-exec"
+    },
+    "request": {
+      "consumer": "synthetic-agent",
+      "purpose": "schema-conformance",
+      "namespace": "synthetic.fixture",
+      "action": "EXECUTE",
+      "processing_location": "LOCAL_DEVICE"
+    },
+    "owner_gates": {
+      "d2_d3_receipt_sha256": null,
+      "e3_plus_receipt_sha256": null
+    },
+    "security": {
+      "ordinary_index": true,
+      "ordinary_log": true,
+      "encryption_at_rest": true,
+      "cloud_egress": false,
+      "cloud_egress_receipt_sha256": null,
+      "agent_write_receipt_sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      "deletion_lifecycle": {
+        "bound": false,
+        "covers": []
+      },
+      "export_lifecycle": {
+        "bound": false,
+        "destination": null
+      },
+      "secret_reference_only": true
+    },
+    "claim_ceiling": [
+      "SCHEMA_FIXTURE_ONLY",
+      "NO_REAL_PERMISSION_GRANTED",
+      "NO_PRODUCT_RUNTIME_PROOF"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+name: v0.3 G3 permission security
+
+on:
+  pull_request:
+    branches:
+      - chatgpt/shared-capability-adoption-r1
+    paths:
+      - "schemas/ecosystem-v03-security-grant.schema.json"
+      - "fixtures/ecosystem-v03/security/**"
+      - "validators/validate_ecosystem_v03_security.py"
+      - "validators/tests/test_validate_ecosystem_v03_security.py"
+      - "work/tasks/2026-08-14-parent-pm-v03-g3-permission-security/**"
+      - ".github/workflows/v03-g3-security.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-g3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - name: Validate positive security fixtures
+        run: |
+          for fixture in fixtures/ecosystem-v03/security/positive/*.json; do
+            python validators/validate_ecosystem_v03_security.py "$fixture"
+          done
+      - name: Run G3 blocker tests
+        run: python -m unittest validators.tests.test_validate_ecosystem_v03_security -v
+      - name: Check PR patch whitespace
+        run: git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"
