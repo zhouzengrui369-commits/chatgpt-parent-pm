@@ -2,9 +2,13 @@
 """Umbrella deterministic regression for Parent PM ecosystem v0.3."""
 
 from __future__ import annotations
-import argparse,hashlib,json
+import argparse,hashlib,json,sys
 from pathlib import Path
 from typing import Any
+
+ROOT=Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+ sys.path.insert(0,str(ROOT))
 
 from validators.validate_v03_g0_snapshot import validate_snapshot
 from validators.validate_ecosystem_v03_adoption import validate_record as validate_adoption
@@ -13,7 +17,6 @@ from validators.validate_ecosystem_v03_security import validate_record as valida
 from validators.validate_ecosystem_v03_ownership import validate_record as validate_ownership
 from validators.validate_ecosystem_v03_starter_kit import validate_manifest as validate_starter
 
-ROOT=Path(__file__).resolve().parents[1]
 EXPECTED_COUNTS={"adoption_positive":5,"adoption_negative":5,"architecture_positive":3,"architecture_negative":6,"security_positive":5,"security_negative":9,"ownership_positive":6,"ownership_negative":10,"starter_templates":7}
 
 class RegressionValidationError(ValueError):
