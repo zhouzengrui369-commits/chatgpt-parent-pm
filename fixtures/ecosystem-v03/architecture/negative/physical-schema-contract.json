@@ -1,0 +1,41 @@
+{
+  "expected_blocker": "BLOCKED_PHYSICAL_SCHEMA_EXPOSED_AS_CONTRACT",
+  "record": {
+    "schema_version": "1.0.0",
+    "record_kind": "ECOSYSTEM_V03_ARCHITECTURE_BOUNDARY",
+    "fixture": true,
+    "product": {
+      "repository": "zhouzengrui369-commits/aog-knowledge",
+      "project_role": "DOMAIN_PRODUCT",
+      "adoption_role": "DOMAIN_PRODUCT",
+      "adoption_record_path": "fixtures/ecosystem-v03/positive/aog.json"
+    },
+    "evaluation_date": "2026-08-14",
+    "components": [
+      {
+        "name": "aog-domain-ontology",
+        "responsibility": "DOMAIN_EXTENSION",
+        "canonical_truth": false,
+        "contract_surface": true,
+        "namespace": "aog.material",
+        "shared_capability": "knowledge_object",
+        "deviation_id": null
+      }
+    ],
+    "physical_contract": {
+      "exposes_physical_schema": true,
+      "public_interfaces": [
+        "sql://aog_objects_table"
+      ],
+      "physical_identifiers": [
+        "aog_objects_table"
+      ]
+    },
+    "deviations": [],
+    "claim_ceiling": [
+      "SCHEMA_FIXTURE_ONLY",
+      "NO_PRODUCT_RUNTIME_PROOF",
+      "NO_ARCHITECTURE_ACCEPTANCE"
+    ]
+  }
+}

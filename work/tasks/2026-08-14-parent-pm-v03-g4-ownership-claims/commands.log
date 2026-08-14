@@ -1,0 +1,4 @@
+python validators/validate_ecosystem_v03_ownership.py fixtures/ecosystem-v03/ownership/positive/<fixture>.json
+python -m unittest validators.tests.test_validate_ecosystem_v03_ownership -v
+python -m unittest discover -s validators/tests -v
+git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"

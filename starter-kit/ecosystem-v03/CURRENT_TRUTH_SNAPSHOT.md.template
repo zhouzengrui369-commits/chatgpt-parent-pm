@@ -1,0 +1,14 @@
+# CURRENT TRUTH SNAPSHOT
+
+- Project: `{{PROJECT_REPOSITORY}}`
+- Project PM: `{{PROJECT_PM}}`
+- Current protected Goal: `{{CURRENT_PROTECTED_GOAL}}`
+- Current candidate SHA: `{{CURRENT_CANDIDATE_SHA40_OR_NONE}}`
+- Current Gate: `{{CURRENT_GATE}}`
+- Ecosystem SHA: `{{ECOSYSTEM_COMMIT_SHA40}}`
+- Contract source SHA: `{{CONTRACT_SOURCE_SHA40}}`
+- Local Goal: `{{LOCAL_GOAL_ID_OR_NONE}}`
+- Migration state: `{{MIGRATION_STATE}}`
+- Claim ceiling: `{{CLAIM_CEILING}}`
+
+No status may be inferred from an absent receipt.

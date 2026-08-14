@@ -1,0 +1,34 @@
+name: v0.3 G4 ownership claims
+
+on:
+  pull_request:
+    branches:
+      - chatgpt/shared-capability-adoption-r1
+    paths:
+      - "schemas/ecosystem-v03-ownership-claim.schema.json"
+      - "fixtures/ecosystem-v03/ownership/**"
+      - "validators/validate_ecosystem_v03_ownership.py"
+      - "validators/tests/test_validate_ecosystem_v03_ownership.py"
+      - "work/tasks/2026-08-14-parent-pm-v03-g4-ownership-claims/**"
+      - ".github/workflows/v03-g4-ownership.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-g4:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - name: Validate positive ownership fixtures
+        run: |
+          for fixture in fixtures/ecosystem-v03/ownership/positive/*.json; do
+            python validators/validate_ecosystem_v03_ownership.py "$fixture"
+          done
+      - name: Run G4 blocker tests
+        run: python -m unittest validators.tests.test_validate_ecosystem_v03_ownership -v
+      - name: Check PR patch whitespace
+        run: git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"

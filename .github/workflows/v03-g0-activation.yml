@@ -1,0 +1,34 @@
+name: v0.3 G0 activation
+
+on:
+  pull_request:
+    branches:
+      - chatgpt/shared-capability-adoption-r1
+    paths:
+      - "docs/plans/ECOSYSTEM_V03_GOVERNANCE_ADOPTION.md"
+      - "work/tasks/2026-08-14-parent-pm-v03-g0-activation/**"
+      - "validators/validate_v03_g0_snapshot.py"
+      - "validators/tests/test_validate_v03_g0_snapshot.py"
+      - ".github/workflows/v03-g0-activation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-g0:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - name: Validate exact current-truth snapshot
+        run: |
+          python --version
+          python validators/validate_v03_g0_snapshot.py work/tasks/2026-08-14-parent-pm-v03-g0-activation/CURRENT_TRUTH_SNAPSHOT.json \
+            --expected-main-sha 99e88020789603f17de715775b455e91e4e20b17 \
+            --expected-protected-head 93356868f656384c5023bd9db666c73a8524d224
+      - name: Run fail-closed unit tests
+        run: python -m unittest validators.tests.test_validate_v03_g0_snapshot -v
+      - name: Check patch whitespace
+        run: git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"

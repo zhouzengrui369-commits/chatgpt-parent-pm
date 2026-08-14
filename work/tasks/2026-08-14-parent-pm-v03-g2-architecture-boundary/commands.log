@@ -1,0 +1,4 @@
+python validators/validate_ecosystem_v03_architecture.py fixtures/ecosystem-v03/architecture/positive/<fixture>.json
+python -m unittest validators.tests.test_validate_ecosystem_v03_architecture -v
+python -m unittest discover -s validators/tests -v
+git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"

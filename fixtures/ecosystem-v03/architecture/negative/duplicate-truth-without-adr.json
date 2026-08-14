@@ -1,0 +1,57 @@
+{
+  "expected_blocker": "BLOCKED_DUPLICATE_TRUTH_LAYER_WITHOUT_ADR",
+  "record": {
+    "schema_version": "1.0.0",
+    "record_kind": "ECOSYSTEM_V03_ARCHITECTURE_BOUNDARY",
+    "fixture": true,
+    "product": {
+      "repository": "zhouzengrui369-commits/lingxi-presentation",
+      "project_role": "SCENARIO_PRODUCT",
+      "adoption_role": "SCENARIO_PRODUCT",
+      "adoption_record_path": "fixtures/ecosystem-v03/positive/lingxi.json"
+    },
+    "evaluation_date": "2026-08-14",
+    "components": [
+      {
+        "name": "lingxi-knowledge-adapter",
+        "responsibility": "SHARED_CONTRACT_ADAPTER",
+        "canonical_truth": false,
+        "contract_surface": true,
+        "namespace": "lingxi.presentation",
+        "shared_capability": "retrieval",
+        "deviation_id": null
+      },
+      {
+        "name": "design-language-view",
+        "responsibility": "VIEW_PROJECTION",
+        "canonical_truth": false,
+        "contract_surface": false,
+        "namespace": "lingxi.presentation.view",
+        "shared_capability": null,
+        "deviation_id": null
+      },
+      {
+        "name": "second-canonical-store",
+        "responsibility": "PHYSICAL_STORAGE",
+        "canonical_truth": true,
+        "contract_surface": false,
+        "namespace": "lingxi.truth",
+        "shared_capability": null,
+        "deviation_id": null
+      }
+    ],
+    "physical_contract": {
+      "exposes_physical_schema": false,
+      "public_interfaces": [
+        "shared-knowledge-v0.3-contract"
+      ],
+      "physical_identifiers": []
+    },
+    "deviations": [],
+    "claim_ceiling": [
+      "SCHEMA_FIXTURE_ONLY",
+      "NO_PRODUCT_RUNTIME_PROOF",
+      "NO_ARCHITECTURE_ACCEPTANCE"
+    ]
+  }
+}

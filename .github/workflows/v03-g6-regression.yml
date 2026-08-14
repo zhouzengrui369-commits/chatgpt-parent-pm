@@ -1,0 +1,30 @@
+name: v0.3 G6 deterministic regression
+
+on:
+  pull_request:
+    branches:
+      - chatgpt/shared-capability-adoption-r1
+    paths:
+      - "releases/v0.3.0-rc.1/**"
+      - "validators/validate_ecosystem_v03_regression.py"
+      - "validators/tests/test_validate_ecosystem_v03_regression.py"
+      - "work/tasks/2026-08-14-parent-pm-v03-g6-regression/**"
+      - ".github/workflows/v03-g6-regression.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-g6:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - name: Validate release candidate and all positive gates
+        run: python validators/validate_ecosystem_v03_regression.py releases/v0.3.0-rc.1/MANIFEST.json
+      - name: Run complete validator regression
+        run: python -m unittest discover -s validators/tests -v
+      - name: Check PR patch whitespace
+        run: git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"

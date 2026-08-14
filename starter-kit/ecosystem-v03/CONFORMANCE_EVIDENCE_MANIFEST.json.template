@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "project_repository": "{{PROJECT_REPOSITORY}}",
+  "local_goal_id": "{{LOCAL_GOAL_ID}}",
+  "source_sha": "{{SOURCE_SHA40}}",
+  "candidate_sha": "{{CANDIDATE_SHA40_OR_NONE}}",
+  "ecosystem_sha": "{{ECOSYSTEM_COMMIT_SHA40}}",
+  "contract_source_sha": "{{CONTRACT_SOURCE_SHA40}}",
+  "receipts": {
+    "source": "{{SOURCE_RECEIPT_SHA256_OR_NONE}}",
+    "runtime": "{{RUNTIME_RECEIPT_SHA256_OR_NONE}}",
+    "product_experience": "{{PRODUCT_RECEIPT_SHA256_OR_NONE}}",
+    "human_owner": "{{HUMAN_OWNER_RECEIPT_SHA256_OR_NONE}}"
+  },
+  "claim_ceiling": ["{{CLAIM_CEILING}}"]
+}

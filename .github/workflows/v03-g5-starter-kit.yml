@@ -1,0 +1,30 @@
+name: v0.3 G5 starter kit
+
+on:
+  pull_request:
+    branches:
+      - chatgpt/shared-capability-adoption-r1
+    paths:
+      - "starter-kit/ecosystem-v03/**"
+      - "validators/validate_ecosystem_v03_starter_kit.py"
+      - "validators/tests/test_validate_ecosystem_v03_starter_kit.py"
+      - "work/tasks/2026-08-14-parent-pm-v03-g5-starter-kit/**"
+      - ".github/workflows/v03-g5-starter-kit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-g5:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - name: Validate starter kit
+        run: python validators/validate_ecosystem_v03_starter_kit.py starter-kit/ecosystem-v03/template-manifest.json
+      - name: Run G5 tests
+        run: python -m unittest validators.tests.test_validate_ecosystem_v03_starter_kit -v
+      - name: Check PR patch whitespace
+        run: git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"

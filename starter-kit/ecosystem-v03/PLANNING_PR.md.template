@@ -1,0 +1,27 @@
+## Planning PR — {{LOCAL_GOAL_ID}}
+
+### Authority
+
+- Project: `{{PROJECT_REPOSITORY}}`
+- Project PM: `{{PROJECT_PM}}`
+- Protected Goal: `{{CURRENT_PROTECTED_GOAL}}`
+- Ecosystem pin: `{{ECOSYSTEM_COMMIT_SHA40}}`
+- Contract pin: `{{CONTRACT_SOURCE_SHA40}}`
+
+### Scope
+
+{{SCOPE}}
+
+### Non-goals
+
+{{NON_GOALS}}
+
+### Exit criteria
+
+{{ACCEPTANCE_CRITERIA}}
+
+```text
+PLANNING_ONLY
+PRODUCT_RUNTIME_PROOF=NO
+MERGE_RELEASE_AUTHORITY=NO
+```

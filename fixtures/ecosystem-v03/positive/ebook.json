@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "ECOSYSTEM_V03_ADOPTION",
+  "program_id": "PARENT-PM-ECOSYSTEM-V03-R1",
+  "fixture": true,
+  "ecosystem": {
+    "repository": "zhouzengrui369-commits/knowme-ecosystem",
+    "commit": "e46c4be501c465884486a4417adca2e158a58ccc",
+    "version": "0.3.0",
+    "status": "PROPOSED",
+    "blueprint_path": "docs/blueprint/ecosystem-blueprint-v0.3.md",
+    "blueprint_blob_sha": "69dd19a88667c8d71f88c02f044fb0cad54313be",
+    "blueprint_sha256": "a6f48f41bfc94a61cdf46ef3f0ae55acf013b0848de39cda2915202be142d9b7"
+  },
+  "shared_knowledge_engine": {
+    "required": true,
+    "supported_capabilities": [
+      "provenance",
+      "retrieval",
+      "permission",
+      "feedback"
+    ],
+    "contract": {
+      "version": "0.3.0",
+      "source_commit": "ded00acf02d7714d36c4bcb73b132cb3defdaf09",
+      "manifest_path": "contracts/ecosystem-v03/shared-knowledge-v0.3.0.lock.json",
+      "contract_manifest_sha256": "15b989f37028682ca7e1a07e6061f7ebf03eff30c1c5d7a5c4bec90c5326056a",
+      "schema_path": "contracts/shared-knowledge/v0.3.0/shared-knowledge.schema.json",
+      "schema_sha256": "0e21d3e9f8c07586f4ee896376885ccc27bc7250cb2351f3ab5bec3b87e05324",
+      "positive_fixture_sha256": "2f6403bd34421caebe8e860ef9a7067c493036e2d16086c3b7ca5c1dbd3fcd80",
+      "negative_manifest_sha256": "0a39ab75038aa461d00964d918d4b33dadc87a5a74b0dcfbb6b7933b6340e97f",
+      "conformance_receipt_path": "work/tasks/2026-08-14-shared-knowledge-v03-machine-contract-r1/CONFORMANCE_RECEIPT.ded00acf02d7714d36c4bcb73b132cb3defdaf09.json",
+      "conformance_receipt_sha256": "b807b9624d4cc3d67cc22f3dcc34e61fba74198142768d1fae6b76fb38ea7abd",
+      "workflow_run_id": 31759729915
+    }
+  },
+  "product": {
+    "repository": "zhouzengrui369-commits/ebook-miniapp",
+    "project_pm": "ebook repository-local Project PM",
+    "role": "CONTENT_PRODUCT",
+    "current_protected_goal": "READING_VALUE_GATE",
+    "current_candidate_sha": null,
+    "migration_state": "QUEUED_OPTIONAL",
+    "local_goal_id": null,
+    "deviations": []
+  },
+  "activation": {
+    "state": "PLANNED",
+    "task_root": "consumer-project-local-task-root-required",
+    "scope": [
+      "schema-conformance-planning"
+    ],
+    "non_goals": [
+      "product-source",
+      "runtime",
+      "deployment",
+      "merge",
+      "release"
+    ]
+  },
+  "claim_ceiling": [
+    "SCHEMA_FIXTURE_ONLY",
+    "NO_PRODUCT_RUNTIME_PROOF",
+    "NO_HUMAN_OWNER_ACCEPTANCE"
+  ]
+}

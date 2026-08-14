@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "kit_id": "PARENT_PM_ECOSYSTEM_V03_STARTER_KIT",
+  "template_count": 7,
+  "templates": [
+    {
+      "path": "starter-kit/ecosystem-v03/ECOSYSTEM_V03_ADOPTION.json.template",
+      "required_placeholders": [
+        "{{PROJECT_REPOSITORY}}",
+        "{{PROJECT_PM}}",
+        "{{ECOSYSTEM_COMMIT_SHA40}}",
+        "{{CONTRACT_SOURCE_SHA40}}",
+        "{{TASK_ROOT}}"
+      ]
+    },
+    {
+      "path": "starter-kit/ecosystem-v03/CURRENT_TRUTH_SNAPSHOT.md.template",
+      "required_placeholders": [
+        "{{PROJECT_REPOSITORY}}",
+        "{{CURRENT_PROTECTED_GOAL}}",
+        "{{CURRENT_GATE}}",
+        "{{CLAIM_CEILING}}"
+      ]
+    },
+    {
+      "path": "starter-kit/ecosystem-v03/PLANNING_PR.md.template",
+      "required_placeholders": [
+        "{{PROJECT_REPOSITORY}}",
+        "{{LOCAL_GOAL_ID}}",
+        "{{SCOPE}}",
+        "{{NON_GOALS}}",
+        "{{ACCEPTANCE_CRITERIA}}"
+      ]
+    },
+    {
+      "path": "starter-kit/ecosystem-v03/ACTIVE_GOAL.md.template",
+      "required_placeholders": [
+        "{{LOCAL_GOAL_ID}}",
+        "{{USER_VALUE}}",
+        "{{STOP_CONDITIONS}}"
+      ]
+    },
+    {
+      "path": "starter-kit/ecosystem-v03/CONFORMANCE_EVIDENCE_MANIFEST.json.template",
+      "required_placeholders": [
+        "{{PROJECT_REPOSITORY}}",
+        "{{SOURCE_SHA40}}",
+        "{{CLAIM_CEILING}}"
+      ]
+    },
+    {
+      "path": "starter-kit/ecosystem-v03/DEVIATION_ADR.md.template",
+      "required_placeholders": [
+        "{{DEVIATION_ID}}",
+        "{{PROJECT_PM}}",
+        "{{EXPIRY_DATE}}",
+        "{{MIGRATION_PLAN}}",
+        "{{SECURITY_IMPACT}}"
+      ]
+    },
+    {
+      "path": "starter-kit/ecosystem-v03/CROSS_PROJECT_TRACKER.json.template",
+      "required_placeholders": [
+        "{{PROJECT_REPOSITORY}}",
+        "{{MIGRATION_STATE}}",
+        "{{UPDATED_AT_ISO8601}}"
+      ]
+    }
+  ]
+}

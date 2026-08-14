@@ -1,0 +1,4 @@
+python validators/validate_ecosystem_v03_regression.py releases/v0.3.0-rc.1/MANIFEST.json
+python -m unittest validators.tests.test_validate_ecosystem_v03_regression -v
+python -m unittest discover -s validators/tests -v
+git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"
