@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "ECOSYSTEM_V03_ARCHITECTURE_BOUNDARY",
+  "fixture": true,
+  "product": {
+    "repository": "zhouzengrui369-commits/know-me",
+    "project_role": "DIGITAL_TWIN_PRODUCT",
+    "adoption_role": "DIGITAL_TWIN_PRODUCT",
+    "adoption_record_path": "fixtures/ecosystem-v03/positive/knowme.json"
+  },
+  "evaluation_date": "2026-08-14",
+  "components": [
+    {
+      "name": "temporary-offline-identity-cache",
+      "responsibility": "PHYSICAL_STORAGE",
+      "canonical_truth": true,
+      "contract_surface": false,
+      "namespace": "knowme.local.cache",
+      "shared_capability": null,
+      "deviation_id": "ADR-V03-001"
+    }
+  ],
+  "physical_contract": {
+    "exposes_physical_schema": false,
+    "public_interfaces": [
+      "shared-knowledge-v0.3-contract"
+    ],
+    "physical_identifiers": []
+  },
+  "deviations": [
+    {
+      "id": "ADR-V03-001",
+      "path": "docs/adr/ADR-V03-001.md",
+      "sha256": "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+      "status": "ACCEPTED",
+      "owner": "KnowMe repository-local Project PM",
+      "expires_on": "2026-12-31",
+      "reason": "bounded offline continuity",
+      "interoperability_plan": "shared object IDs remain authoritative",
+      "migration_plan": "delete cache after shared runtime adoption",
+      "security_impact": "local encrypted cache only"
+    }
+  ],
+  "claim_ceiling": [
+    "SCHEMA_FIXTURE_ONLY",
+    "NO_PRODUCT_RUNTIME_PROOF",
+    "NO_ARCHITECTURE_ACCEPTANCE"
+  ]
+}
