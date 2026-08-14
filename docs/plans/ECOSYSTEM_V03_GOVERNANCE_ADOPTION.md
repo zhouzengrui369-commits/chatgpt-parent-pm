@@ -1,11 +1,11 @@
 # Parent PM v0.3 Ecosystem Governance Adoption Plan
 
-> **Plan ID**: `PARENT-PM-ECOSYSTEM-V03-R1`  
-> **State**: `ACTIVATED_G0 / IMPLEMENTING`  
-> **Execution owner**: ChatGPT Parent PM framework Project PM  
-> **Ecosystem authority**: `zhouzengrui369-commits/knowme-ecosystem@e46c4be501c465884486a4417adca2e158a58ccc`  
-> **Ecosystem PR**: `knowme-ecosystem#17`  
-> **Date**: 2026-08-11  
+> **Plan ID**: `PARENT-PM-ECOSYSTEM-V03-R1`
+> **State**: `ACTIVATED_G0 / IMPLEMENTING`
+> **Execution owner**: ChatGPT Parent PM framework Project PM
+> **Ecosystem authority**: `zhouzengrui369-commits/knowme-ecosystem@e46c4be501c465884486a4417adca2e158a58ccc`
+> **Ecosystem PR**: `knowme-ecosystem#17`
+> **Date**: 2026-08-11
 > **G0 activation**: 2026-08-14, stacked on protected Draft PR #3
 
 ---
