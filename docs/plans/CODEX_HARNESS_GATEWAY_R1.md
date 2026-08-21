@@ -1,12 +1,13 @@
 # CODEX_HARNESS_GATEWAY_R1
 
-> Repository：`zhouzengrui369-commits/chatgpt-parent-pm`  
-> Program：`ECOSYSTEM-CODEX-HARNESS-R1`  
-> State：`QUEUED / PLANNING_ONLY`  
-> Execution owner：ChatGPT Parent PM Framework Project PM  
-> Central capability：`zhouzengrui369-commits/knowme-ecosystem@8ccb543804a7881fd37b31e1ce35085ca7285a76`  
-> Central Draft PR：`knowme-ecosystem#21`  
-> Upstream research anchor：`openai/codex@93c54bca38996b56d344a2ca65f01627b1953b27`
+> Repository: `zhouzengrui369-commits/chatgpt-parent-pm`  
+> Program: `ECOSYSTEM-CODEX-HARNESS-R1`  
+> State: `QUEUED / PLANNING_ONLY`  
+> Execution owner: ChatGPT Parent PM Framework Project PM  
+> Central capability: `zhouzengrui369-commits/knowme-ecosystem@fd01ef7619a31b7ffca5dd2205a2e31a96fac834`  
+> Central Draft PR: `knowme-ecosystem#21`  
+> Upstream research anchor: `openai/codex@93c54bca38996b56d344a2ca65f01627b1953b27`  
+> Local execution plan: [`SELF_HOSTED_RUNNER_LOCAL_EXECUTION_PLANE_R1.md`](./SELF_HOSTED_RUNNER_LOCAL_EXECUTION_PLANE_R1.md)
 
 ## 1. Goal
 
@@ -20,11 +21,22 @@ Codex Harness Gateway
 + Model Profile enforcement
 + Session Binding
 + Event/Evidence Ledger
-+ Process Supervisor
-+ GitHub Self-hosted Runner Adapter
++ Codex process supervisor
 ```
 
-The Gateway converts a repository Project PM's GitHub-authorized task into a reproducible Codex worker session. It does not create product Goals, decide product scope, merge, deploy or issue Human Owner product decisions.
+The Codex Gateway converts a repository Project PM's GitHub-authorized task into a reproducible Codex worker session.
+
+Local machine execution is a separate capability:
+
+```text
+GitHub Self-hosted Runner Local Execution Plane
+  -> owns GitHub-to-Mac transport, worktree, outer process and artifact control
+
+Codex Harness Gateway
+  -> optionally runs inside an accepted LocalExecutionRequest
+```
+
+The Codex Gateway does not register or dispatch the Owner Mac by itself, widen Runner authority, create product Goals, decide product scope, merge, deploy or issue Human Owner product decisions.
 
 ## 2. Current protected lane
 
@@ -45,7 +57,7 @@ Activation requires an explicit Project PM transition from the current G7 lane o
 
 ## 3. Architecture boundary
 
-### This repository owns
+### This repository owns for Codex Harness
 
 - stable Codex release selection process;
 - platform binary and protocol Schema locks;
@@ -55,18 +67,28 @@ Activation requires an explicit Project PM transition from the current G7 lane o
 - approval broker;
 - session/thread lifecycle binding;
 - model-profile discovery and enforcement;
-- process timeout/cancellation;
+- inner Codex process timeout/cancellation;
 - event/evidence normalization;
 - secret/private-data redaction;
-- Self-hosted Runner adapter;
-- conformance fixtures and starter kit;
+- Codex conformance fixtures and starter kit;
 - Gateway release and migration guide.
+
+### This repository separately owns for Self-hosted Runner
+
+Defined in `SELF_HOSTED_RUNNER_LOCAL_EXECUTION_PLANE_R1.md`:
+
+- RunnerProfile and LocalExecutionRequest;
+- secure cross-repository dispatcher;
+- Runner registration/health/update policy;
+- outer worktree/task/process/evidence supervisor;
+- reusable workflow and product thin adapters;
+- Runner failure classification and rollback.
 
 ### This repository does not own
 
 - consumer product source or Runtime;
 - product data and knowledge truth;
-- product local deployment assignment;
+- product local Gate adjudication;
 - product experience repair;
 - product candidate/Owner Gate;
 - main merge, cloud deploy, signing, notarization or release in consumer repositories.
@@ -91,6 +113,14 @@ APP_SERVER_TRANSPORT=stdio-jsonl
 PRODUCTION_WEBSOCKET=FORBIDDEN
 ```
 
+Runner relationship:
+
+```text
+RUNNER_REQUEST_REQUIRED_FOR_LOCAL_EXECUTION=YES
+CODEX_CAN_WIDEN_RUNNER_SCOPE=NO
+RUNNER_AUTO_REPAIR_BY_CODEX=NO
+```
+
 ## 5. Milestones
 
 ### HG0 — Current truth, transition and task authority
@@ -102,15 +132,8 @@ Deliverables:
 - exact central capability pin;
 - protected current files/evidence;
 - new repository-local `GOAL/TASK/PLAN/RESULT/EVIDENCE/commands.log`;
-- claim ceiling and rollback.
-
-Exit:
-
-```text
-CURRENT_G7_TRUTH=RESTORED
-ACTIVATION=EXPLICIT
-CONSUMER_PRODUCT_CHANGE=0
-```
+- claim ceiling and rollback;
+- relationship to the Local Execution Plane Goal.
 
 ### HG1 — Stable upstream Binary and Protocol Lock
 
@@ -145,17 +168,11 @@ Deliverables:
 - thread start/resume/fork/read/list/interrupt subset used by R1;
 - turn start and event stream;
 - Codex Exec one-shot adapter;
-- process group/session;
+- inner process group/session;
 - init/turn/command/idle/wall-clock timeouts;
 - TERM then KILL grace;
-- no surviving children;
+- no surviving Codex children;
 - unsupported API/transport rejection.
-
-Exit:
-
-- deterministic protocol fixtures pass;
-- cancellation and timeout receipts are durable;
-- no global Codex/Git/shell/proxy configuration changed.
 
 ### HG3 — Task, approval and model profiles
 
@@ -167,37 +184,24 @@ Deliverables:
 - `ApprovalEnvelope`;
 - `SessionBinding`;
 - A0–A5 approval classes;
-- exact path/command/network scope;
+- exact path/command/network scope inherited from Runner request;
 - protected path hashing;
 - Luna/xhigh and Sol/xhigh capability validation;
 - no silent fallback.
-
-Exit:
-
-- positive/negative validation fixtures;
-- predecessor approvals are rejected;
-- wrong repository/source/model/path/network is rejected.
 
 ### HG4 — Event, evidence and redaction
 
 Deliverables:
 
-- normalized event journal;
-- `EvidenceReceipt`;
+- normalized Codex event journal;
+- nested Harness `EvidenceReceipt`;
 - source/final SHA and diff hash;
 - commands/checks/artifact identities;
 - approval/network/token/time summaries;
 - first blocker and next authority;
 - secret/cookie/token/private path/data redaction;
-- evidence claim layer.
-
-Exit:
-
-```text
-TERMINAL_RECEIPT_RATE=100_PERCENT
-UNREDACTED_SECRET_HITS=0
-CLAIM_LAYER_ESCALATION=0
-```
+- evidence claim layer;
+- outer Runner ExecutionReceipt binding.
 
 ### HG5 — Security negative conformance
 
@@ -217,11 +221,12 @@ Must fail closed for:
 - incomplete receipt;
 - Harness evidence presented as Runtime/Product/Owner PASS;
 - ecosystem/capability PM product takeover;
-- Runner automatic self-repair.
+- Runner automatic self-repair;
+- Codex request scope wider than LocalExecutionRequest.
 
 ### HG6 — Synthetic Pilot
 
-Pilot ID：`PARENT-PM-HARNESS-PILOT-001`
+Pilot ID: `PARENT-PM-HARNESS-PILOT-001`
 
 Scenario:
 
@@ -234,20 +239,23 @@ Scenario:
 7. interrupt/resume/fork;
 8. timeout/cancel cleanup;
 9. zero push/merge/private data;
-10. terminal receipt.
+10. nested Harness + outer Runner terminal receipt when local execution is enabled.
 
-### HG7 — GitHub Self-hosted Runner Pilot
+### HG7 — GitHub Self-hosted Runner integration Pilot
 
-Prove on intended Owner Mac mini:
+This milestone depends on the separate Local Execution Plane plan.
 
-- correct runner/machine identity;
-- exact Binary/Schema Lock;
+Prove on the intended Owner Mac mini:
+
+- accepted secure registration topology;
+- exact RunnerProfile and health receipt;
+- exact Codex Binary/Schema Lock;
 - isolated task `CODEX_HOME` and worktree;
 - Luna/xhigh discovery;
 - receipt/artifact upload;
 - no interference with existing product Runtime/processes;
 - injected Runner failure uploads evidence and launches no automatic Codex repair;
-- Web ChatGPT Parent PM must create a new GitHub workflow/script/task successor.
+- Web ChatGPT Parent PM creates a new GitHub workflow/script/task successor.
 
 ### HG8 — Cross-repository cold-start and Human Owner Gate
 
@@ -289,7 +297,11 @@ BLOCKED_CODEX_COST_OR_TIME_BUDGET
 BLOCKED_CODEX_HARNESS_PRESENTED_AS_PRODUCT_PASS
 BLOCKED_CODEX_PRODUCT_PM_OWNERSHIP_MISMATCH
 BLOCKED_CODEX_RUNNER_SELF_REPAIR_NOT_AUTHORIZED
+BLOCKED_CODEX_RUNNER_REQUEST_MISSING
+BLOCKED_CODEX_SCOPE_WIDER_THAN_RUNNER_REQUEST
 ```
+
+Runner-specific blockers are authoritative in the Local Execution Plane plan and central ADR 0008 security standard.
 
 ## 7. Acceptance layers
 
@@ -298,12 +310,12 @@ SOURCE_GATE
 PROTOCOL_CONFORMANCE_GATE
 SECURITY_GATE
 SYNTHETIC_RUNTIME_GATE
-SELF_HOSTED_RUNNER_GATE
+SELF_HOSTED_RUNNER_INTEGRATION_GATE
 MULTI_REPO_COLD_START_GATE
 HUMAN_OWNER_FRAMEWORK_GATE
 ```
 
-A green source/protocol/security Gate does not prove product Runtime or customer value.
+A green source/protocol/security/Runner Gate does not prove consumer product Runtime or customer value.
 
 ## 8. Claim ceiling
 
@@ -311,9 +323,9 @@ A green source/protocol/security Gate does not prove product Runtime or customer
 PLANNING_ONLY
 CURRENT_PR3_PR4_GATE_CHANGE=NO
 REFERENCE_GATEWAY_IMPLEMENTATION=NOT_STARTED_BY_THIS_PLAN
+LOCAL_EXECUTION_PLANE_IMPLEMENTATION=SEPARATE_PLAN_NOT_STARTED
 CONSUMER_PRODUCT_CHANGE=NO
 REAL_SECRET_OR_PRIVATE_DATA=NO
-SELF_HOSTED_RUNNER_PILOT=NOT_STARTED
 AUTO_MERGE_DEPLOY_RELEASE=NO
 HUMAN_OWNER_FRAMEWORK_GATE=REQUIRED
 ```
