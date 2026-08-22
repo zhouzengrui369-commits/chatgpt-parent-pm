@@ -3,172 +3,143 @@
 > Repository: `zhouzengrui369-commits/chatgpt-parent-pm`  
 > Program: `ECOSYSTEM-CODEX-HARNESS-R1`  
 > Capability: `github-self-hosted-runner@0.1.0-accepted`  
-> State: `QUEUED / FRAMEWORK_SOURCE_ONLY`  
+> State: `SRF1_SRF3_SOURCE_IMPLEMENTED_PENDING_CI_AND_CONSUMER_PILOT`  
 > Owner: ChatGPT Parent PM Framework Project PM  
-> Central capability: `zhouzengrui369-commits/knowme-ecosystem@<READ_LIVE_PR_21_HEAD>`  
 > Decision: ADR 0008 + ADR 0009
 
-## 1. Purpose
+## 1. Boundary
 
-Build and maintain the open Parent PM schemas, validators, workflow templates and governance starter kit used by **private repositories** that deploy through repository-bound Mac mini Self-hosted Runners.
-
-This public repository does not register or run its own Self-hosted Runner.
-
-Its own local deployment follows:
+This public repository provides open contracts and starter tooling for **private consumer repositories**. It does not register or operate a production Self-hosted Runner for itself.
 
 ```text
-PUBLIC_REPOSITORY -> OWNER_DESIGNATED_LOCAL_AGENT
+PRIVATE_REPOSITORY -> MAC_MINI_SELF_HOSTED_RUNNER
+PUBLIC_REPOSITORY  -> OWNER_DESIGNATED_LOCAL_AGENT
 ```
 
-Actual Runner registration and Pilots occur in private repositories.
+## 2. SRF1 — contracts and semantic validator
 
-## 2. Current private repository consumers
+Implemented on this framework source lane:
 
-- `knowme-ecosystem`
-- `knowme`
-- `knowme-personal-workbench`
-- `knowme-copilot`
+- `schemas/runner-profile.schema.json`;
+- `schemas/local-execution-request.schema.json`;
+- `schemas/runner-attempt.schema.json`;
+- `schemas/runner-execution-receipt.schema.json`;
+- `schemas/runner-health-receipt.schema.json`;
+- `schemas/runner-update-receipt.schema.json`;
+- `validators/validate_private_runner.py`;
+- deterministic positive/negative `unittest` coverage.
 
-The Framework PM must re-read visibility before every release or Pilot.
+The semantic validator fails closed on visibility/executor mismatch, non-repository registration scope, missing repository label, non-unique service/work roots, non-repository secret scope, D2/D3/raw-PII defaults, Local Agent fallback, source/local repair, prohibited writes, predecessor reuse, broad process kill, invalid profile/request/receipt binding, `strongest`, and PASS receipts with prohibited mutations.
 
-## 3. Framework owns
+## 3. SRF2 — private workflow starter kit
 
-- RunnerProfile schema;
-- LocalExecutionRequest schema;
-- RunnerExecutionReceipt schema;
-- RunnerHealth/Update receipts;
-- FailureClassification;
-- private-repository workflow template;
-- full-SHA action pin validator;
-- repository-bound service/profile template;
-- global Mac host mutex/protected-resource contract;
-- process/worktree/evidence supervisor contract;
-- negative fixtures;
-- migration/rollback guides;
-- Project PM prompts.
+`starter-kit/private-runner/private-runner-technical-gate.yml.template` requires:
 
-## 4. Framework does not own
-
-- production Runner registration in this public repository;
-- product source/Candidate/Runtime decisions;
-- private repository secrets;
-- consumer local Gate adjudication;
-- Product Experience/Human Owner/merge/release.
-
-## 5. Required routing guard
-
-The framework must reject:
-
-```text
-PUBLIC_REPOSITORY + SELF_HOSTED_RUNNER
-PRIVATE_REPOSITORY + LOCAL_AGENT without explicit exception
-VISIBILITY_CHANGED_AFTER_FREEZE
-```
-
-Stable blockers:
-
-```text
-BLOCKED_REPOSITORY_VISIBILITY_UNRESOLVED
-BLOCKED_EXECUTOR_VISIBILITY_POLICY_MISMATCH
-BLOCKED_PUBLIC_REPOSITORY_SELF_HOSTED_RUNNER
-BLOCKED_PRIVATE_REPOSITORY_LOCAL_AGENT_WITHOUT_EXCEPTION
-BLOCKED_REPOSITORY_VISIBILITY_CHANGED_AFTER_FREEZE
-```
-
-## 6. Milestones
-
-### SRF0 — Current truth and routing transition
-
-- live PR #3/#4/#12 state;
-- central ADR 0009 and repository inventory;
-- mark prior central/public Runner topology superseded;
-- create paired Local Agent plan;
-- protect consumer current Goals.
-
-### SRF1 — Runner schemas and validator
-
-Implement RunnerProfile, request, attempt, receipt, health/update and semantic validators, including visibility policy.
-
-### SRF2 — Private workflow starter kit
-
-- workflow_dispatch/private repository only;
-- exact SHA/tree/request hash;
+- `workflow_dispatch` control;
+- `contents: read` default permission;
 - full-SHA action pins;
-- contents:read default;
-- repository-bound Runner labels/profile;
-- artifact upload on failure;
-- no issue/comment shell;
-- no direct main/merge/release.
+- exact candidate SHA/tree proof;
+- repository-specific self-hosted labels;
+- validated tracked request/profile;
+- exact task script under `work/tasks/`;
+- sanitized evidence artifact upload on terminal outcomes;
+- no issue/comment shell, direct main write, merge, cloud deploy or release authority.
 
-### SRF3 — Multi-service Mac host policy
+The template is a consumer artifact. It does not make this public repository a Runner host.
 
-- unique Runner service/work directory per private repository;
-- unique repository registration and secret scope;
-- global concurrency lock;
-- protected ports/processes;
-- Runner version/health/update receipt;
-- no cross-repository cache/evidence reuse.
+## 4. SRF3 — multi-service Mac host policy
 
-### SRF4 — Private repository Pilots
-
-- KnowMe existing Runner mapping/fresh contract Pilot;
-- knowme-ecosystem contract/conformance Pilot;
-- knowme-personal-workbench technical Gate;
-- knowme-copilot after bootstrap.
-
-### SRF5 — Failure, visibility transition and rollback
-
-- Runner failure -> GitHub evidence -> Web Parent PM successor;
-- private-to-public visibility change invalidates Runner;
-- service removal/credential revocation/receipt preservation;
-- no automatic Codex repair.
-
-### SRF6 — Framework release
-
-- local-Agent validation of this public repository's source/tests;
-- independent governance review;
-- cold-start consumer trials;
-- Human Owner Framework Gate.
-
-## 7. Fixed failure model
+The starter contracts require:
 
 ```text
-Private Runner FAIL
--> GitHub logs/jobs/steps/artifacts
--> Web ChatGPT Parent PM diagnoses
--> GitHub workflow/script/task/source successor
--> fresh Runner attempt
+REGISTRATION_SCOPE=repository
+UNIQUE_RUNNER_SERVICE=YES
+UNIQUE_WORK_DIR=YES
+UNIQUE_TASK_ROOT=YES
+UNIQUE_EVIDENCE_ROOT=YES
+REPOSITORY_SPECIFIC_SECRETS=YES
+MAX_LOCAL_CONCURRENCY=1
+GLOBAL_MAC_MUTEX=YES
+STALE_LOCK=AUTO_DELETE_FORBIDDEN
+PROTECTED_RESOURCE_REGISTRY=REQUIRED
 ```
 
-Codex Luna is not the default Runner recovery Agent.
+`host_mutex.sh` writes a run/repository ownership token and will not delete a busy/stale lock. `runner_health.sh` creates only sanitized service/platform/version/path/label evidence. `runner_update.sh` records version/update state without secrets or product data.
 
-## 8. Claim ceiling
+## 5. Data, write and process boundaries
 
 ```text
-FRAMEWORK_SOURCE_ONLY
+DATA=D0_SYNTHETIC_OR_D1_SANITIZED
+RAW_PRODUCTION_PII=NO
+D2_DEFAULT_ACCESS=NO
+D3_ACCESS=NO
+NETWORK=DENY_BY_DEFAULT_OR_EXACT_ALLOWLIST
+SOURCE_MUTATION_DURING_DEPLOYMENT=NO
+LOCAL_REPAIR=NO
+OWNER_SOURCE_WRITE=NO
+MANUAL_STATUS_OVERRIDE=NO
+PRODUCTION_DB_WRITE=NO
+CLOUD_WRITE=NO
+PREDECESSOR_REUSE=NO
+BROAD_PROCESS_KILL=NO
+RUNNER_AUTO_REPAIR_BY_CODEX=NO
+AUTO_MERGE_DEPLOY_RELEASE=NO
+```
+
+## 6. Codex profile
+
+```text
+ENGINEERING_OR_SRE=Luna/xhigh
+PRODUCT_EXPERIENCE=Sol/xhigh
+SILENT_FALLBACK=NO
+strongest=FORBIDDEN_AS_CONTRACT_VALUE
+```
+
+Harness authority must be a subset of the outer Runner request.
+
+## 7. Failure model
+
+```text
+Runner FAIL
+-> GitHub Actions logs/jobs/steps/artifacts
+-> Web ChatGPT Parent PM classifies FIRST_BLOCKER
+-> GitHub source/workflow/script/task successor
+-> NEW_ATTEMPT_ID + fresh worktree/release/task/evidence/runtime
+```
+
+Stable classifications:
+
+```text
+TASK_CONTRACT_DEFECT
+SOURCE_DEFECT
+WORKFLOW_DEFECT
+RUNNER_DEFECT
+TOOLCHAIN_DEFECT
+DATA_POLICY_DEFECT
+PII_DEFECT
+IMPORT_FIDELITY_DEFECT
+RUNTIME_DEFECT
+EVIDENCE_INCOMPLETE
+```
+
+## 8. Evidence boundary
+
+Framework source/CI PASS proves only that these reusable contracts are coherent. It does **not** prove any consumer Runner is registered, online, healthy or authorized for product data. A private consumer must pin one exact framework SHA, create and validate a repository-specific RunnerProfile, register a repository-scoped service, produce fresh health/update receipts, then execute a new exact-SHA task.
+
+## 9. Next milestones
+
+- framework CI on the exact SRF1-SRF3 source SHA;
+- SRF4 private consumer health Pilot;
+- SRF5 visibility transition/failure/rollback trial;
+- SRF6 independent governance + Human Owner framework Gate.
+
+## 10. Claim ceiling
+
+```text
+FRAMEWORK_SOURCE_IMPLEMENTATION_ONLY
 CHATGPT_PARENT_PM_SELF_HOSTED_RUNNER_REGISTRATION=NO
-PRIVATE_CONSUMER_RUNNER_IMPLEMENTATION=NOT_STARTED_BY_THIS_PLAN
+CONSUMER_RUNNER_HEALTH=NOT_PROVEN_BY_FRAMEWORK
 CONSUMER_PRODUCT_CHANGE=NO
-PRODUCT_RUNTIME_PROOF=NO
 REAL_D2_D3_OR_PRODUCTION_PII=NO
 AUTO_MERGE_DEPLOY_SIGN_NOTARIZE_RELEASE=NO
-```
-
-## 9. First takeover output
-
-```text
-PARENT_PM_PRIVATE_RUNNER_FRAMEWORK_TAKEOVER_COMPLETE
-CURRENT_PR3_SHA=
-CURRENT_PR4_G7_STATE=
-CURRENT_PR12_SHA=
-CENTRAL_CAPABILITY_SHA=
-VISIBILITY_ROUTER_STATE=
-PRIVATE_REPOSITORY_MAP=
-RUNNER_FRAMEWORK_STATE=QUEUED|ACTIVATED|BLOCKED
-FIRST_PRIVATE_PILOT=
-CURRENT_FIRST_BLOCKER=
-NEXT_GOAL=
-NEXT_AUTHORITY=
-PARENT_PM_REPOSITORY_EXECUTOR=LOCAL_AGENT
-RUNNER_REGISTRATION_IN_PARENT_PM=NO
 ```
