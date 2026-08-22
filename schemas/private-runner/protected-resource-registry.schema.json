@@ -1,5 +1,5 @@
 {
   "$schema":"https://json-schema.org/draft/2020-12/schema","title":"ProtectedResourceRegistry","type":"object","additionalProperties":false,
-  "required":["schema","registry_id","repository_full_name","protected_processes","protected_ports","broad_process_kill","owned_pid_pgid_only","sha256"],
-  "properties":{"schema":{"const":"parent-pm.protected-resource-registry.v1"},"registry_id":{"type":"string"},"repository_full_name":{"type":"string"},"protected_processes":{"type":"array","items":{"type":"string"}},"protected_ports":{"type":"array","items":{"type":"integer","minimum":1,"maximum":65535}},"broad_process_kill":{"const":false},"owned_pid_pgid_only":{"const":true},"sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"}}
+  "required":["schema","registry_id","repository_full_name","protected_processes","protected_ports","broad_process_kill","owned_pid_pgid_only"],
+  "properties":{"schema":{"const":"parent-pm.protected-resource-registry.v1"},"registry_id":{"type":"string"},"repository_full_name":{"type":"string"},"protected_processes":{"type":"array","items":{"type":"string"}},"protected_ports":{"type":"array","items":{"type":"integer","minimum":1,"maximum":65535}},"broad_process_kill":{"const":false},"owned_pid_pgid_only":{"const":true}}
 }

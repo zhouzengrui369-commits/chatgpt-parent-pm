@@ -7,6 +7,8 @@ on:
       source_tree: {description: Exact 40-hex source tree, required: true, type: string}
       request_sha256: {description: Frozen LocalExecutionRequest file SHA-256, required: true, type: string}
       profile_sha256: {description: Frozen RunnerProfile file SHA-256, required: true, type: string}
+      material_manifest_sha256: {description: Frozen MaterialManifest file SHA-256, required: true, type: string}
+      protected_registry_sha256: {description: Frozen ProtectedResourceRegistry file SHA-256, required: true, type: string}
       profile_id: {description: Repository-bound RunnerProfile ID, required: true, type: string}
 
 permissions:
@@ -32,6 +34,8 @@ jobs:
           test -z "$(git status --porcelain)"
           test "$(shasum -a 256 .runner/LocalExecutionRequest.json | awk '{print $1}')" = "${{ inputs.request_sha256 }}"
           test "$(shasum -a 256 .runner/RunnerProfile.json | awk '{print $1}')" = "${{ inputs.profile_sha256 }}"
+          test "$(shasum -a 256 .runner/MaterialManifest.json | awk '{print $1}')" = "${{ inputs.material_manifest_sha256 }}"
+          test "$(shasum -a 256 .runner/ProtectedResourceRegistry.json | awk '{print $1}')" = "${{ inputs.protected_registry_sha256 }}"
           python3 validators/validate_private_runner_framework.py .runner/current-authority-bundle.json
           test "$(python3 -c 'import json; print(json.load(open(".runner/RunnerProfile.json"))["profile_id"])')" = "${{ inputs.profile_id }}"
       - name: Execute repository-owned bounded task

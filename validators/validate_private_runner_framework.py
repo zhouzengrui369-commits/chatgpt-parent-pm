@@ -27,7 +27,9 @@ def fresh(now,value):
 def validate_bundle(b):
     try:
         now=b['validation_time']; v=b['visibility']; p=b['profile']; r=b['request']; a=b['attempt']; h=b['health']; u=b['update']; g=b['registry']; m=b['material']
+        profile_file_sha=b['profile_file_sha256']; request_file_sha=b['request_file_sha256']; material_file_sha=b['material_file_sha256']; registry_file_sha=b['registry_file_sha256']
     except (KeyError,TypeError): return block('BLOCKED_RUNNER_FRAMEWORK_RECORD_MISSING')
+    if not all(SHA64.match(str(x or '')) for x in (profile_file_sha,request_file_sha,material_file_sha,registry_file_sha)): return block('BLOCKED_RUNNER_AUTHORITY_FILE_HASH')
     repo=v.get('repository_full_name')
     if v.get('visibility')!='private': return block('BLOCKED_PUBLIC_REPOSITORY_SELF_HOSTED_RUNNER')
     if v.get('executor_route')!='MAC_MINI_SELF_HOSTED_RUNNER': return block('BLOCKED_EXECUTOR_VISIBILITY_POLICY_MISMATCH')
@@ -45,17 +47,17 @@ def validate_bundle(b):
     if pp.get('broad_process_kill') is not False or pp.get('owned_pid_pgid_only') is not True: return block('BLOCKED_BROAD_PROCESS_KILL_POLICY')
     if p.get('predecessor_reuse') is not False: return block('BLOCKED_PREDECESSOR_REUSE')
     if r.get('repository_full_name')!=repo or r.get('profile_id')!=p.get('profile_id'): return block('BLOCKED_RUNNER_REQUEST_PROFILE_MISMATCH')
-    if not SHA64.match(str(r.get('profile_sha256',''))): return block('BLOCKED_RUNNER_PROFILE_HASH')
+    if r.get('profile_sha256')!=profile_file_sha: return block('BLOCKED_RUNNER_PROFILE_HASH')
     if not SHA40.match(str(r.get('source_sha',''))) or not SHA40.match(str(r.get('source_tree',''))): return block('BLOCKED_RUNNER_SOURCE_IDENTITY')
-    if not SHA64.match(str(r.get('request_sha256',''))) or r.get('fresh_attempt_required') is not True: return block('BLOCKED_RUNNER_REQUEST_IDENTITY')
+    if r.get('fresh_attempt_required') is not True: return block('BLOCKED_RUNNER_REQUEST_IDENTITY')
     commands=r.get('allowed_commands') or []
     if any(pattern.search(cmd) for cmd in commands for pattern in FORBIDDEN_COMMANDS): return block('BLOCKED_RUNNER_FORBIDDEN_COMMAND')
     reqnet=r.get('network_allowlist') or []
     if any(x in ('*','0.0.0.0/0','::/0') for x in reqnet) or not set(reqnet).issubset(set(allow)): return block('BLOCKED_RUNNER_REQUEST_NETWORK_WIDENING')
     claims=set(r.get('claim_ceiling') or [])
     if not claims or not claims.issubset(ALLOWED_CLAIMS): return block('BLOCKED_RUNNER_CLAIM_ESCALATION')
-    if r.get('material_manifest_sha256')!=m.get('manifest_sha256'): return block('BLOCKED_MATERIAL_MANIFEST_IDENTITY')
-    if r.get('protected_registry_sha256')!=g.get('sha256'): return block('BLOCKED_PROTECTED_RESOURCE_REGISTRY_IDENTITY')
+    if r.get('material_manifest_sha256')!=material_file_sha: return block('BLOCKED_MATERIAL_MANIFEST_IDENTITY')
+    if r.get('protected_registry_sha256')!=registry_file_sha: return block('BLOCKED_PROTECTED_RESOURCE_REGISTRY_IDENTITY')
     if m.get('data_class') not in ('D0','D1_SYNTHETIC_OR_SANITIZED') or m.get('use_authorized') is not True or m.get('content_egress') is not False or m.get('local_path_publication') is not False: return block('BLOCKED_MATERIAL_DATA_OR_PRIVACY_AUTHORITY')
     if g.get('repository_full_name')!=repo or g.get('broad_process_kill') is not False or g.get('owned_pid_pgid_only') is not True: return block('BLOCKED_PROTECTED_RESOURCE_POLICY')
     if a.get('request_id')!=r.get('request_id') or a.get('profile_id')!=p.get('profile_id') or a.get('source_sha')!=r.get('source_sha') or a.get('source_tree')!=r.get('source_tree'): return block('BLOCKED_RUNNER_ATTEMPT_IDENTITY')
@@ -69,6 +71,7 @@ def validate_bundle(b):
     rec=b.get('receipt')
     if rec is not None:
         if rec.get('request_id')!=r.get('request_id') or rec.get('attempt_id')!=a.get('attempt_id') or rec.get('profile_id')!=p.get('profile_id') or rec.get('repository_full_name')!=repo or rec.get('source_sha')!=r.get('source_sha') or rec.get('source_tree')!=r.get('source_tree'): return block('BLOCKED_RUNNER_RECEIPT_IDENTITY')
+        if rec.get('request_sha256')!=request_file_sha or rec.get('profile_sha256')!=profile_file_sha or rec.get('material_manifest_sha256')!=material_file_sha or rec.get('protected_registry_sha256')!=registry_file_sha: return block('BLOCKED_RUNNER_RECEIPT_AUTHORITY_HASH')
         if rec.get('source_mutation') is not False or rec.get('local_repair') is not False or rec.get('predecessor_reuse') is not False: return block('BLOCKED_RUNNER_RECEIPT_POLICY_VIOLATION')
         if rec.get('owned_processes_terminal') is not True or rec.get('owned_ports_terminal') is not True: return block('BLOCKED_RUNNER_PROCESS_OR_PORT_NOT_TERMINAL')
         if rec.get('claim_layer')!='EXECUTOR_LOCAL_RUNTIME': return block('BLOCKED_RUNNER_CLAIM_ESCALATION')
@@ -87,8 +90,7 @@ def set_path(obj,path,value):
     cur[parts[-1]]=value
 
 def self_test(root):
-    positive=load(root/'fixtures/private-runner/positive-lingxi-shaped.json')
-    err=validate_bundle(positive)
+    positive=load(root/'fixtures/private-runner/positive-lingxi-shaped.json'); err=validate_bundle(positive)
     if err: raise SystemExit(f'positive failed: {err}')
     cases=load(root/'fixtures/private-runner/negative-cases.json')
     for case in cases:
