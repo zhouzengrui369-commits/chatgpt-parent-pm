@@ -1,0 +1,34 @@
+name: private runner framework
+
+on:
+  pull_request:
+    branches:
+      - chatgpt/v03-governance-adoption-plan-r1
+    paths:
+      - "schemas/runner-*.schema.json"
+      - "schemas/local-execution-request.schema.json"
+      - "validators/validate_private_runner.py"
+      - "validators/tests/test_validate_private_runner.py"
+      - "starter-kit/private-runner/**"
+      - "docs/plans/SELF_HOSTED_RUNNER_LOCAL_EXECUTION_PLANE_R1.md"
+      - ".github/workflows/private-runner-framework.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-framework:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Unit tests
+        run: python -m unittest validators.tests.test_validate_private_runner -v
+      - name: Compile validator
+        run: python -m py_compile validators/validate_private_runner.py
+      - name: Validate workflow starter pins and safety
+        run: python validators/validate_private_runner.py --workflow starter-kit/private-runner/private-runner-technical-gate.yml.template
+      - name: Check whitespace
+        run: git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"
