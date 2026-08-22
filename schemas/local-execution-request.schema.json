@@ -1,0 +1,25 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Private Runner LocalExecutionRequest",
+  "type":"object",
+  "required":["schema_version","request_id","attempt_id","repository","candidate_sha","candidate_tree","framework_sha","runner_profile_sha256","task_script","freshness","data_class","network_allowlist","claim_ceiling","authority"],
+  "properties":{
+    "schema_version":{"const":"parent-pm.local-execution-request.v1"},
+    "request_id":{"type":"string","minLength":1},
+    "attempt_id":{"type":"string","minLength":1},
+    "repository":{"type":"string","pattern":"^[^/]+/[^/]+$"},
+    "candidate_sha":{"type":"string","pattern":"^[0-9a-f]{40}$"},
+    "candidate_tree":{"type":"string","pattern":"^[0-9a-f]{40}$"},
+    "framework_sha":{"type":"string","pattern":"^[0-9a-f]{40}$"},
+    "runner_profile_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "task_script":{"type":"string","pattern":"^work/tasks/"},
+    "freshness":{"type":"object"},
+    "data_class":{"enum":["D0_SYNTHETIC","D1_SANITIZED","D0_SYNTHETIC_OR_D1_SANITIZED"]},
+    "network_allowlist":{"type":"array","items":{"type":"string"}},
+    "path_allowlist":{"type":"array","items":{"type":"string"}},
+    "endpoint_allowlist":{"type":"array","items":{"type":"string"}},
+    "claim_ceiling":{"type":"array","minItems":1,"items":{"type":"string"}},
+    "authority":{"type":"object"}
+  },
+  "additionalProperties":true
+}
