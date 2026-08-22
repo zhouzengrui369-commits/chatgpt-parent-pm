@@ -7,15 +7,17 @@
 > Owner: ChatGPT Parent PM Framework Project PM
 > Decision: ADR 0008 + ADR 0009
 
-## 1. Frozen source identity
+## 1. Current accepted source pin
 
 ```text
-PRE_CI_SOURCE_SHA=46e66f483cc22e0d8fbccfde70553e68cb326774
-CI=32546217588 PASS
-PRIVATE_RUNNER_FRAMEWORK_CI=32546217587 PASS
+FRAMEWORK_SOURCE_SHA=676fb82b614ec4d94a4889a372f0b474d902aa8b
+FRAMEWORK_CI_RUN=32546264415
+FRAMEWORK_CI=PASS
+PRIVATE_RUNNER_FRAMEWORK_CI_RUN=32546264436
+PRIVATE_RUNNER_FRAMEWORK_CI=PASS
 ```
 
-Any later framework change requires a new exact pin before a consumer Runner task.
+This document change follows that accepted source pin and does not replace it for consumer contracts. A consumer must explicitly pin `676fb82b614ec4d94a4889a372f0b474d902aa8b` until Parent PM publishes and revalidates a later framework source.
 
 ## 2. Boundary
 
@@ -28,7 +30,7 @@ PUBLIC_REPOSITORY  -> OWNER_DESIGNATED_LOCAL_AGENT
 
 ## 3. SRF1 — contracts and semantic validator: PASS source gate
 
-Implemented and CI-validated:
+Implemented and CI-validated on the accepted pin:
 
 - `schemas/runner-profile.schema.json`;
 - `schemas/local-execution-request.schema.json`;
@@ -38,8 +40,6 @@ Implemented and CI-validated:
 - `schemas/runner-update-receipt.schema.json`;
 - `validators/validate_private_runner.py`;
 - deterministic positive/negative `unittest` coverage.
-
-The exact-head framework CI executed 10/10 private Runner semantic tests, validator compilation and workflow-starter safety/full-SHA action-pin validation.
 
 The semantic validator fails closed on visibility/executor mismatch, non-repository registration scope, missing repository label, non-unique service/work roots, non-repository secret scope, D2/D3/raw-PII defaults, Local Agent fallback, source/local repair, prohibited writes, predecessor reuse, broad process kill, invalid profile/request/receipt binding, `strongest`, and PASS receipts with prohibited mutations.
 
@@ -57,11 +57,7 @@ The semantic validator fails closed on visibility/executor mismatch, non-reposit
 - sanitized evidence artifact upload on terminal outcomes;
 - no issue/comment shell, direct main write, merge, cloud deploy or release authority.
 
-The template is a consumer artifact. It does not make this public repository a Runner host.
-
 ## 5. SRF3 — multi-service Mac host policy: PASS source gate
-
-The starter contracts require:
 
 ```text
 REGISTRATION_SCOPE=repository
@@ -107,7 +103,7 @@ SILENT_FALLBACK=NO
 strongest=FORBIDDEN_AS_CONTRACT_VALUE
 ```
 
-Harness authority must be a subset of the outer Runner request.
+Harness authority must remain a subset of the outer Runner request.
 
 ## 8. Failure model
 
@@ -136,9 +132,7 @@ EVIDENCE_INCOMPLETE
 
 ## 9. Evidence boundary / next milestone
 
-Framework source PASS does **not** prove any consumer Runner is registered, online, healthy or authorized for product data. A private consumer must pin one exact framework source SHA, create and validate a repository-specific RunnerProfile, register a repository-scoped service, produce fresh health/update receipts, then execute a new exact-SHA task.
-
-Next milestone is SRF4 private consumer health Pilot.
+Framework source PASS does **not** prove any consumer Runner is registered, online, healthy or authorized for product data. The next milestone is SRF4 private consumer health Pilot. A private consumer must pin the accepted framework SHA, create and validate a repository-specific RunnerProfile, register a repository-scoped service, produce fresh health/update receipts, then execute a fresh exact-SHA task.
 
 ## 10. Claim ceiling
 
