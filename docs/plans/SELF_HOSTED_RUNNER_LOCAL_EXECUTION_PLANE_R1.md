@@ -1,10 +1,10 @@
 # SELF_HOSTED_RUNNER_PRIVATE_REPOSITORY_FRAMEWORK_R1
 
-> Repository: `zhouzengrui369-commits/chatgpt-parent-pm`  
-> Program: `ECOSYSTEM-CODEX-HARNESS-R1`  
-> Capability: `github-self-hosted-runner@0.1.0-accepted`  
-> State: `SRF1_SRF3_SOURCE_IMPLEMENTED_PENDING_CI_AND_CONSUMER_PILOT`  
-> Owner: ChatGPT Parent PM Framework Project PM  
+> Repository: `zhouzengrui369-commits/chatgpt-parent-pm`
+> Program: `ECOSYSTEM-CODEX-HARNESS-R1`
+> Capability: `github-self-hosted-runner@0.1.0-accepted`
+> State: `SRF1_SRF3_SOURCE_IMPLEMENTED_PENDING_CI_AND_CONSUMER_PILOT`
+> Owner: ChatGPT Parent PM Framework Project PM
 > Decision: ADR 0008 + ADR 0009
 
 ## 1. Boundary
