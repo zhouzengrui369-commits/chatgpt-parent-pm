@@ -106,6 +106,7 @@ def validate_workflow(path):
     if "workflow_dispatch:" not in text:e.append("BLOCKED_RUNNER_WORKFLOW_NOT_DISPATCH_ONLY")
     if "permissions:\n  contents: read" not in text:e.append("BLOCKED_RUNNER_WORKFLOW_PERMISSIONS")
     if re.search(r"(?mi)^\s*runs-on:\s*['\"]?(?:ubuntu-|windows-|macos-)",text):e.append("BLOCKED_PRIVATE_RUNNER_GITHUB_HOSTED_DEPENDENCY")
+    if "actions/upload-artifact@" in text:e.append("BLOCKED_PRIVATE_RUNNER_GITHUB_ARTIFACT_STORAGE_DEPENDENCY")
     for m in re.finditer(r"uses:\s*([^@\s]+)@([^\s]+)",text):
         if not SHA40.fullmatch(m.group(2).strip("'\"")):e.append(f"BLOCKED_RUNNER_ACTION_NOT_FULL_SHA:{m.group(1)}")
     if "runs-on: [self-hosted, macOS, ARM64, __REPOSITORY_LABEL__]" not in text:e.append("BLOCKED_RUNNER_WORKFLOW_LABEL_SCOPE")
