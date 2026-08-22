@@ -3,11 +3,21 @@
 > Repository: `zhouzengrui369-commits/chatgpt-parent-pm`
 > Program: `ECOSYSTEM-CODEX-HARNESS-R1`
 > Capability: `github-self-hosted-runner@0.1.0-accepted`
-> State: `SRF1_SRF3_SOURCE_IMPLEMENTED_PENDING_CI_AND_CONSUMER_PILOT`
+> State: `SRF1_SRF3_SOURCE_PASS_PENDING_CONSUMER_PILOT`
 > Owner: ChatGPT Parent PM Framework Project PM
 > Decision: ADR 0008 + ADR 0009
 
-## 1. Boundary
+## 1. Frozen source identity
+
+```text
+PRE_CI_SOURCE_SHA=46e66f483cc22e0d8fbccfde70553e68cb326774
+CI=32546217588 PASS
+PRIVATE_RUNNER_FRAMEWORK_CI=32546217587 PASS
+```
+
+Any later framework change requires a new exact pin before a consumer Runner task.
+
+## 2. Boundary
 
 This public repository provides open contracts and starter tooling for **private consumer repositories**. It does not register or operate a production Self-hosted Runner for itself.
 
@@ -16,9 +26,9 @@ PRIVATE_REPOSITORY -> MAC_MINI_SELF_HOSTED_RUNNER
 PUBLIC_REPOSITORY  -> OWNER_DESIGNATED_LOCAL_AGENT
 ```
 
-## 2. SRF1 — contracts and semantic validator
+## 3. SRF1 — contracts and semantic validator: PASS source gate
 
-Implemented on this framework source lane:
+Implemented and CI-validated:
 
 - `schemas/runner-profile.schema.json`;
 - `schemas/local-execution-request.schema.json`;
@@ -29,9 +39,11 @@ Implemented on this framework source lane:
 - `validators/validate_private_runner.py`;
 - deterministic positive/negative `unittest` coverage.
 
+The exact-head framework CI executed 10/10 private Runner semantic tests, validator compilation and workflow-starter safety/full-SHA action-pin validation.
+
 The semantic validator fails closed on visibility/executor mismatch, non-repository registration scope, missing repository label, non-unique service/work roots, non-repository secret scope, D2/D3/raw-PII defaults, Local Agent fallback, source/local repair, prohibited writes, predecessor reuse, broad process kill, invalid profile/request/receipt binding, `strongest`, and PASS receipts with prohibited mutations.
 
-## 3. SRF2 — private workflow starter kit
+## 4. SRF2 — private workflow starter kit: PASS source gate
 
 `starter-kit/private-runner/private-runner-technical-gate.yml.template` requires:
 
@@ -47,7 +59,7 @@ The semantic validator fails closed on visibility/executor mismatch, non-reposit
 
 The template is a consumer artifact. It does not make this public repository a Runner host.
 
-## 4. SRF3 — multi-service Mac host policy
+## 5. SRF3 — multi-service Mac host policy: PASS source gate
 
 The starter contracts require:
 
@@ -66,7 +78,7 @@ PROTECTED_RESOURCE_REGISTRY=REQUIRED
 
 `host_mutex.sh` writes a run/repository ownership token and will not delete a busy/stale lock. `runner_health.sh` creates only sanitized service/platform/version/path/label evidence. `runner_update.sh` records version/update state without secrets or product data.
 
-## 5. Data, write and process boundaries
+## 6. Fixed data/write/process policy
 
 ```text
 DATA=D0_SYNTHETIC_OR_D1_SANITIZED
@@ -86,7 +98,7 @@ RUNNER_AUTO_REPAIR_BY_CODEX=NO
 AUTO_MERGE_DEPLOY_RELEASE=NO
 ```
 
-## 6. Codex profile
+## 7. Codex profile
 
 ```text
 ENGINEERING_OR_SRE=Luna/xhigh
@@ -97,7 +109,7 @@ strongest=FORBIDDEN_AS_CONTRACT_VALUE
 
 Harness authority must be a subset of the outer Runner request.
 
-## 7. Failure model
+## 8. Failure model
 
 ```text
 Runner FAIL
@@ -107,7 +119,7 @@ Runner FAIL
 -> NEW_ATTEMPT_ID + fresh worktree/release/task/evidence/runtime
 ```
 
-Stable classifications:
+Failure classifications:
 
 ```text
 TASK_CONTRACT_DEFECT
@@ -122,23 +134,19 @@ RUNTIME_DEFECT
 EVIDENCE_INCOMPLETE
 ```
 
-## 8. Evidence boundary
+## 9. Evidence boundary / next milestone
 
-Framework source/CI PASS proves only that these reusable contracts are coherent. It does **not** prove any consumer Runner is registered, online, healthy or authorized for product data. A private consumer must pin one exact framework SHA, create and validate a repository-specific RunnerProfile, register a repository-scoped service, produce fresh health/update receipts, then execute a new exact-SHA task.
+Framework source PASS does **not** prove any consumer Runner is registered, online, healthy or authorized for product data. A private consumer must pin one exact framework source SHA, create and validate a repository-specific RunnerProfile, register a repository-scoped service, produce fresh health/update receipts, then execute a new exact-SHA task.
 
-## 9. Next milestones
-
-- framework CI on the exact SRF1-SRF3 source SHA;
-- SRF4 private consumer health Pilot;
-- SRF5 visibility transition/failure/rollback trial;
-- SRF6 independent governance + Human Owner framework Gate.
+Next milestone is SRF4 private consumer health Pilot.
 
 ## 10. Claim ceiling
 
 ```text
-FRAMEWORK_SOURCE_IMPLEMENTATION_ONLY
-CHATGPT_PARENT_PM_SELF_HOSTED_RUNNER_REGISTRATION=NO
+FRAMEWORK_SRF1_SRF3_SOURCE_GATE=PASS
+CONSUMER_RUNNER_REGISTRATION=NOT_PROVEN_BY_FRAMEWORK
 CONSUMER_RUNNER_HEALTH=NOT_PROVEN_BY_FRAMEWORK
+CHATGPT_PARENT_PM_SELF_HOSTED_RUNNER_REGISTRATION=NO
 CONSUMER_PRODUCT_CHANGE=NO
 REAL_D2_D3_OR_PRODUCTION_PII=NO
 AUTO_MERGE_DEPLOY_SIGN_NOTARIZE_RELEASE=NO
