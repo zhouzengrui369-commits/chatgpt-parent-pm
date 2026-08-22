@@ -1,0 +1,5 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","title":"MaterialManifest","type":"object","additionalProperties":false,
+  "required":["schema","material_id","name","bytes","sha256","data_class","provenance","use_authorized","privacy","local_path_publication","content_egress","manifest_sha256"],
+  "properties":{"schema":{"const":"parent-pm.material-manifest.v1"},"material_id":{"type":"string"},"name":{"type":"string"},"bytes":{"type":"integer","minimum":0},"sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},"data_class":{"enum":["D0","D1_SYNTHETIC_OR_SANITIZED"]},"provenance":{"type":"string","minLength":3},"use_authorized":{"const":true},"privacy":{"enum":["PUBLIC_SAFE","SYNTHETIC","SANITIZED"]},"local_path_publication":{"const":false},"content_egress":{"const":false},"manifest_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"}}
+}

@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","title":"RunnerProfile",
+  "type":"object","additionalProperties":false,
+  "required":["schema","profile_id","repository_full_name","repository_visibility","registration_scope","service_name","work_dir","labels","repository_secret_scope","global_mac_mutex_required","max_concurrent_local_execution","permissions","network","process_policy","predecessor_reuse"],
+  "properties":{
+    "schema":{"const":"parent-pm.runner-profile.v1"},"profile_id":{"type":"string","minLength":8},
+    "repository_full_name":{"type":"string"},"repository_visibility":{"const":"private"},"registration_scope":{"const":"repository"},
+    "service_name":{"type":"string","minLength":3},"work_dir":{"type":"string","minLength":3},
+    "labels":{"type":"array","minItems":4,"uniqueItems":true,"items":{"type":"string"}},
+    "repository_secret_scope":{"type":"string","minLength":3},"global_mac_mutex_required":{"const":true},"max_concurrent_local_execution":{"const":1},
+    "permissions":{"type":"object","additionalProperties":false,"required":["source_mutation","local_repair","push","merge","tag","release","provider_change"],"properties":{"source_mutation":{"const":false},"local_repair":{"const":false},"push":{"const":false},"merge":{"const":false},"tag":{"const":false},"release":{"const":false},"provider_change":{"const":false}}},
+    "network":{"type":"object","additionalProperties":false,"required":["default_policy","allowlist"],"properties":{"default_policy":{"const":"deny"},"allowlist":{"type":"array","uniqueItems":true,"items":{"type":"string"}}}},
+    "process_policy":{"type":"object","additionalProperties":false,"required":["broad_process_kill","owned_pid_pgid_only"],"properties":{"broad_process_kill":{"const":false},"owned_pid_pgid_only":{"const":true}}},
+    "predecessor_reuse":{"const":false}
+  }
+}

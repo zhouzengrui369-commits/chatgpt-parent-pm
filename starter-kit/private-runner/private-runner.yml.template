@@ -1,0 +1,54 @@
+name: Private repository exact-SHA local execution
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha: {description: Exact 40-hex source SHA, required: true, type: string}
+      source_tree: {description: Exact 40-hex source tree, required: true, type: string}
+      request_sha256: {description: Frozen request SHA-256, required: true, type: string}
+      profile_id: {description: Repository-bound RunnerProfile ID, required: true, type: string}
+
+permissions:
+  contents: read
+
+jobs:
+  private-local-gate:
+    runs-on: [self-hosted, macOS, ARM64, <REPOSITORY_UNIQUE_LABEL>]
+    timeout-minutes: 60
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+        with:
+          ref: ${{ inputs.source_sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Verify frozen authority before local execution
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${{ inputs.source_sha }}"
+          test "$(git rev-parse 'HEAD^{tree}')" = "${{ inputs.source_tree }}"
+          test -z "$(git status --porcelain)"
+          python3 validators/validate_private_runner_framework.py .runner/current-authority-bundle.json
+          test "$(cat .runner/request.sha256)" = "${{ inputs.request_sha256 }}"
+          test "$(python3 -c 'import json; print(json.load(open(".runner/RunnerProfile.json"))["profile_id"])')" = "${{ inputs.profile_id }}"
+      - name: Execute repository-owned bounded task
+        shell: bash
+        run: .runner/run-authorized-local-task.sh
+      - name: Verify source remains clean
+        if: always()
+        shell: bash
+        run: test -z "$(git status --porcelain)"
+      - name: Upload bounded execution evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2 pinned
+        with:
+          name: private-runner-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runner/evidence/
+          if-no-files-found: error
+          retention-days: 30
+          include-hidden-files: false
+
+# Consumer repository must provide tracked `.runner/` authority files generated from
+# the framework schemas. No issue/comment text becomes shell. This template grants
+# no source repair, push, merge, tag, release, Provider or broad process-kill authority.

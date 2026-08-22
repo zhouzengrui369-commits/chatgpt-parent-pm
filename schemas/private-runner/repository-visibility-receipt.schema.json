@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://parent-pm.local/schemas/private-runner/repository-visibility-receipt.schema.json",
+  "title":"RepositoryVisibilityReceipt",
+  "type":"object","additionalProperties":false,
+  "required":["schema","repository_full_name","repository_id","visibility","observed_at","executor_route"],
+  "properties":{
+    "schema":{"const":"parent-pm.repository-visibility-receipt.v1"},
+    "repository_full_name":{"type":"string","pattern":"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+    "repository_id":{"type":"string","pattern":"^[0-9]+$"},
+    "visibility":{"enum":["private","public"]},
+    "observed_at":{"type":"string","format":"date-time"},
+    "executor_route":{"enum":["MAC_MINI_SELF_HOSTED_RUNNER","OWNER_DESIGNATED_LOCAL_AGENT"]}
+  }
+}

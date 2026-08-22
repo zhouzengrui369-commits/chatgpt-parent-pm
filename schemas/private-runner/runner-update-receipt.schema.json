@@ -1,0 +1,5 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","title":"RunnerUpdateReceipt","type":"object","additionalProperties":false,
+  "required":["schema","profile_id","observed_at","runner_version","update_required","update_state"],
+  "properties":{"schema":{"const":"parent-pm.runner-update-receipt.v1"},"profile_id":{"type":"string"},"observed_at":{"type":"string","format":"date-time"},"runner_version":{"type":"string"},"update_required":{"type":"boolean"},"update_state":{"enum":["CURRENT","UPDATED","BLOCKED"]}}
+}

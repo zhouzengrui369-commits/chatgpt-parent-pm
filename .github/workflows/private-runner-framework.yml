@@ -1,0 +1,57 @@
+name: private-runner-framework
+
+on:
+  pull_request:
+    branches:
+      - chatgpt/codex-harness-gateway-r1
+    paths:
+      - 'schemas/private-runner/**'
+      - 'validators/validate_private_runner_framework.py'
+      - 'validators/tests/test_validate_private_runner_framework.py'
+      - 'fixtures/private-runner/**'
+      - 'starter-kit/private-runner/**'
+      - 'docs/private-runner/**'
+      - 'work/tasks/2026-08-22-private-runner-framework-srf1-srf2-r1/**'
+      - '.github/workflows/private-runner-framework.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+      - name: Parse private Runner schemas and fixtures
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          for p in sorted(Path('schemas/private-runner').glob('*.json')): json.loads(p.read_text())
+          for p in sorted(Path('fixtures/private-runner').glob('*.json')): json.loads(p.read_text())
+          print('PASS_JSON_PARSE')
+          PY
+      - name: Unit and semantic negatives
+        run: |
+          python3 -m unittest validators.tests.test_validate_private_runner_framework -v
+          python3 validators/validate_private_runner_framework.py --self-test
+          python3 validators/validate_private_runner_framework.py fixtures/private-runner/positive-lingxi-shaped.json
+      - name: Python compile
+        run: python3 -m compileall -q validators
+      - name: Starter workflow safety scan
+        run: |
+          set -euo pipefail
+          f=starter-kit/private-runner/private-runner.yml.template
+          grep -F 'workflow_dispatch:' "$f"
+          grep -F 'contents: read' "$f"
+          grep -F 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' "$f"
+          grep -F 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' "$f"
+          ! grep -E 'pull_request_target:|issue_comment:|issues:|push:' "$f"
+          ! grep -E 'uses: [^@]+@(v[0-9]+|main|master)([[:space:]#]|$)' "$f"
+          grep -F 'persist-credentials: false' "$f"
+          echo PASS_STARTER_WORKFLOW_SAFETY
+      - name: Public framework self-runner guard
+        run: |
+          ! grep -R --line-number -E '^\s*runs-on:\s*\[?self-hosted' .github/workflows
+          echo PASS_PARENT_PM_NO_SELF_HOSTED_RUNNER

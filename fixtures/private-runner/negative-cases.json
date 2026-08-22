@@ -1,0 +1,14 @@
+[
+ {"name":"public-repo","path":"visibility.visibility","value":"public","expected_blocker":"BLOCKED_PUBLIC_REPOSITORY_SELF_HOSTED_RUNNER"},
+ {"name":"route-mismatch","path":"visibility.executor_route","value":"OWNER_DESIGNATED_LOCAL_AGENT","expected_blocker":"BLOCKED_EXECUTOR_VISIBILITY_POLICY_MISMATCH"},
+ {"name":"profile-repo-mismatch","path":"profile.repository_full_name","value":"other/repo","expected_blocker":"BLOCKED_RUNNER_PROFILE_REPOSITORY_MISMATCH"},
+ {"name":"mutex-off","path":"profile.global_mac_mutex_required","value":false,"expected_blocker":"BLOCKED_GLOBAL_MAC_MUTEX_OR_CONCURRENCY"},
+ {"name":"source-mutation","path":"profile.permissions.source_mutation","value":true,"expected_blocker":"BLOCKED_RUNNER_PERMISSION_WIDENING"},
+ {"name":"wildcard-network","path":"profile.network.allowlist","value":["*"],"expected_blocker":"BLOCKED_RUNNER_NETWORK_AUTHORITY"},
+ {"name":"broad-kill","path":"profile.process_policy.broad_process_kill","value":true,"expected_blocker":"BLOCKED_BROAD_PROCESS_KILL_POLICY"},
+ {"name":"predecessor-reuse","path":"profile.predecessor_reuse","value":true,"expected_blocker":"BLOCKED_PREDECESSOR_REUSE"},
+ {"name":"health-offline","path":"health.online","value":false,"expected_blocker":"BLOCKED_RUNNER_HEALTH"},
+ {"name":"update-blocked","path":"update.update_state","value":"BLOCKED","expected_blocker":"BLOCKED_RUNNER_UPDATE_STATE"},
+ {"name":"nonterminal-process","path":"receipt.owned_processes_terminal","value":false,"expected_blocker":"BLOCKED_RUNNER_PROCESS_OR_PORT_NOT_TERMINAL"},
+ {"name":"claim-escalation","path":"receipt.claim_layer","value":"PRODUCT_EXPERIENCE","expected_blocker":"BLOCKED_RUNNER_CLAIM_ESCALATION"}
+]

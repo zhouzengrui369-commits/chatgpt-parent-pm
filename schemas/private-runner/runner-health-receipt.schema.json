@@ -1,0 +1,5 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","title":"RunnerHealthReceipt","type":"object","additionalProperties":false,
+  "required":["schema","profile_id","repository_full_name","runner_name","service_name","work_dir","labels","observed_at","online","busy","runner_version","arch","os","global_mutex_available"],
+  "properties":{"schema":{"const":"parent-pm.runner-health-receipt.v1"},"profile_id":{"type":"string"},"repository_full_name":{"type":"string"},"runner_name":{"type":"string"},"service_name":{"type":"string"},"work_dir":{"type":"string"},"labels":{"type":"array","items":{"type":"string"}},"observed_at":{"type":"string","format":"date-time"},"online":{"const":true},"busy":{"type":"boolean"},"runner_version":{"type":"string"},"arch":{"const":"arm64"},"os":{"const":"macOS"},"global_mutex_available":{"const":true}}
+}

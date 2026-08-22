@@ -1,0 +1,6 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","title":"ExecutionAttempt",
+  "type":"object","additionalProperties":false,
+  "required":["schema","attempt_id","request_id","profile_id","source_sha","source_tree","worktree_id","task_root_id","evidence_root_id","started_at","state"],
+  "properties":{"schema":{"const":"parent-pm.execution-attempt.v1"},"attempt_id":{"type":"string","minLength":8},"request_id":{"type":"string"},"profile_id":{"type":"string"},"source_sha":{"type":"string","pattern":"^[0-9a-f]{40}$"},"source_tree":{"type":"string","pattern":"^[0-9a-f]{40}$"},"worktree_id":{"type":"string"},"task_root_id":{"type":"string"},"evidence_root_id":{"type":"string"},"started_at":{"type":"string","format":"date-time"},"state":{"enum":["CREATED","RUNNING","PASS","FAIL","BLOCKED"]}}
+}
