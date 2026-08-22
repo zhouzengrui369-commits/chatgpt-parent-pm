@@ -1,0 +1,19 @@
+{
+  "schema_version":"parent-pm.runner-profile.v1",
+  "repository":"OWNER/PRIVATE_REPOSITORY",
+  "repository_visibility":"private",
+  "executor":"MAC_MINI_SELF_HOSTED_RUNNER",
+  "registration_scope":"repository",
+  "repository_scope_id":"PRIVATE_REPOSITORY_repository",
+  "labels":["self-hosted","macOS","ARM64","PRIVATE_REPOSITORY","parent-pm-r1"],
+  "service":{"name":"actions.runner.PRIVATE_REPOSITORY.mac-mini-r1","root":"/Users/RUNNER/.github-runners/PRIVATE_REPOSITORY","unique":true},
+  "paths":{"work_dir":"/Users/RUNNER/.github-runner-work/PRIVATE_REPOSITORY","task_root":"/Users/RUNNER/.parent-pm-tasks/PRIVATE_REPOSITORY","evidence_root":"/Users/RUNNER/.parent-pm-evidence/PRIVATE_REPOSITORY","unique":true},
+  "secrets":{"scope":"repository","repository_specific":true},
+  "concurrency":{"max_local":1,"global_mac_mutex":true},
+  "global_mutex":{"path":"/Users/Shared/chatgpt-parent-pm/mac-mini-global.lock","stale_lock_policy":"BLOCK_NOT_AUTO_DELETE"},
+  "protected_resource_registry":"/Users/RUNNER/.parent-pm/protected-resources/PRIVATE_REPOSITORY.json",
+  "data_policy":{"default_class":"D0_SYNTHETIC_OR_D1_SANITIZED","raw_production_pii":false,"d2_default_access":false,"d3_access":false},
+  "network_policy":{"mode":"DENY_BY_DEFAULT","allowlist":["github.com","api.github.com"]},
+  "authority":{"local_agent_fallback":false,"source_mutation":false,"local_repair":false,"owner_source_write":false,"manual_status_override":false,"production_db_write":false,"cloud_write":false,"predecessor_reuse":false,"broad_process_kill":false,"runner_auto_repair_by_codex":false,"push":false,"merge":false,"deploy":false,"release":false},
+  "codex":{"engineering_model":"Luna","engineering_reasoning":"xhigh","product_model":"Sol","product_reasoning":"xhigh","silent_fallback":false}
+}
