@@ -23,6 +23,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4 pinned
+        with:
+          persist-credentials: false
       - name: Parse private Runner schemas and fixtures
         run: |
           python3 - <<'PY'
@@ -47,6 +49,8 @@ jobs:
           grep -F 'contents: read' "$f"
           grep -F 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' "$f"
           grep -F 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' "$f"
+          grep -F 'shasum -a 256 .runner/LocalExecutionRequest.json' "$f"
+          grep -F 'shasum -a 256 .runner/RunnerProfile.json' "$f"
           ! grep -E 'pull_request_target:|issue_comment:|issues:|push:' "$f"
           ! grep -E 'uses: [^@]+@(v[0-9]+|main|master)([[:space:]#]|$)' "$f"
           grep -F 'persist-credentials: false' "$f"

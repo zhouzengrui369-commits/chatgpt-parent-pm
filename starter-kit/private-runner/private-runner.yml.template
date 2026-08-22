@@ -5,7 +5,8 @@ on:
     inputs:
       source_sha: {description: Exact 40-hex source SHA, required: true, type: string}
       source_tree: {description: Exact 40-hex source tree, required: true, type: string}
-      request_sha256: {description: Frozen request SHA-256, required: true, type: string}
+      request_sha256: {description: Frozen LocalExecutionRequest file SHA-256, required: true, type: string}
+      profile_sha256: {description: Frozen RunnerProfile file SHA-256, required: true, type: string}
       profile_id: {description: Repository-bound RunnerProfile ID, required: true, type: string}
 
 permissions:
@@ -29,8 +30,9 @@ jobs:
           test "$(git rev-parse HEAD)" = "${{ inputs.source_sha }}"
           test "$(git rev-parse 'HEAD^{tree}')" = "${{ inputs.source_tree }}"
           test -z "$(git status --porcelain)"
+          test "$(shasum -a 256 .runner/LocalExecutionRequest.json | awk '{print $1}')" = "${{ inputs.request_sha256 }}"
+          test "$(shasum -a 256 .runner/RunnerProfile.json | awk '{print $1}')" = "${{ inputs.profile_sha256 }}"
           python3 validators/validate_private_runner_framework.py .runner/current-authority-bundle.json
-          test "$(cat .runner/request.sha256)" = "${{ inputs.request_sha256 }}"
           test "$(python3 -c 'import json; print(json.load(open(".runner/RunnerProfile.json"))["profile_id"])')" = "${{ inputs.profile_id }}"
       - name: Execute repository-owned bounded task
         shell: bash
@@ -49,6 +51,6 @@ jobs:
           retention-days: 30
           include-hidden-files: false
 
-# Consumer repository must provide tracked `.runner/` authority files generated from
-# the framework schemas. No issue/comment text becomes shell. This template grants
-# no source repair, push, merge, tag, release, Provider or broad process-kill authority.
+# Consumer private repository supplies tracked `.runner/` authority files and an audited
+# bounded task script. No issue/comment text becomes shell. The validator rejects broad
+# process kill, source repair, push/merge/tag/release, wildcard network and claim escalation.

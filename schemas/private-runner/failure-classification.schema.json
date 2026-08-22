@@ -1,0 +1,5 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","title":"FailureClassification","type":"object","additionalProperties":false,
+  "required":["schema","kind","first_blocker","owner"],
+  "properties":{"schema":{"const":"parent-pm.failure-classification.v1"},"kind":{"enum":["TASK_CONTRACT_DEFECT","SOURCE_DEFECT","WORKFLOW_DEFECT","RUNNER_DEFECT","TOOLCHAIN_DEFECT","PROCESS_LIFECYCLE_DEFECT","NETWORK_DEFECT","EVIDENCE_DEFECT","PRODUCT_RUNTIME_DEFECT"]},"first_blocker":{"type":"string","minLength":3},"owner":{"enum":["REPOSITORY_PARENT_PM","FRAMEWORK_PARENT_PM","HUMAN_OWNER"]}}
+}
