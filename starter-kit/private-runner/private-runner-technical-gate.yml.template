@@ -1,0 +1,78 @@
+name: parent-pm private runner technical gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_sha:
+        required: true
+        description: Exact frozen candidate SHA
+      candidate_tree:
+        required: true
+        description: Exact frozen candidate tree
+      request_path:
+        required: true
+        default: .github/parent-pm-runner/LOCAL_EXECUTION_REQUEST.json
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Validate RunnerProfile and request
+        run: |
+          python .github/parent-pm-runner/validate_private_runner.py \
+            --profile .github/parent-pm-runner/RUNNER_PROFILE.json \
+            --request "${{ inputs.request_path }}"
+
+  runner:
+    needs: preflight
+    runs-on: [self-hosted, macOS, ARM64, __REPOSITORY_LABEL__]
+    timeout-minutes: 120
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ inputs.candidate_sha }}
+          fetch-depth: 1
+          clean: true
+          persist-credentials: false
+      - name: Exact identity
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${{ inputs.candidate_sha }}"
+          test "$(git rev-parse HEAD^{tree})" = "${{ inputs.candidate_tree }}"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Acquire host-global mutex
+        run: bash .github/parent-pm-runner/host_mutex.sh acquire
+      - name: Runner health receipt
+        run: bash .github/parent-pm-runner/runner_health.sh
+      - name: Validate health
+        run: |
+          python .github/parent-pm-runner/validate_private_runner.py \
+            --profile .github/parent-pm-runner/RUNNER_PROFILE.json \
+            --health "$RUNNER_TEMP/parent-pm-runner-health.json"
+      - name: Execute tracked authorized task
+        run: |
+          set -euo pipefail
+          task_script="$(python -c 'import json,sys;print(json.load(open(sys.argv[1]))["task_script"])' "${{ inputs.request_path }}")"
+          case "$task_script" in work/tasks/*) ;; *) echo BLOCKED_RUNNER_TASK_SCRIPT; exit 2;; esac
+          test -f "$task_script"
+          bash "$task_script"
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: parent-pm-runner-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/parent-pm-runner-health.json
+            work/tasks/**/RESULT.md
+            work/tasks/**/EVIDENCE.md
+            work/tasks/**/commands.log
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Release host-global mutex
+        if: always()
+        run: bash .github/parent-pm-runner/host_mutex.sh release
