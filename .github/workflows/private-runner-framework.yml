@@ -4,13 +4,16 @@ on:
   pull_request:
     branches:
       - chatgpt/v03-governance-adoption-plan-r1
+      - chatgpt/private-runner-framework-srf1-srf2-r1
     paths:
       - "schemas/runner-*.schema.json"
       - "schemas/local-execution-request.schema.json"
       - "validators/validate_private_runner.py"
       - "validators/tests/test_validate_private_runner.py"
+      - "validators/tests/test_private_runner_self_hosted_policy.py"
       - "starter-kit/private-runner/**"
       - "docs/plans/SELF_HOSTED_RUNNER_LOCAL_EXECUTION_PLANE_R1.md"
+      - "docs/plans/SELF_HOSTED_RUNNER_LOCAL_EXECUTION_PLANE_R2.md"
       - ".github/workflows/private-runner-framework.yml"
 
 permissions:
@@ -27,7 +30,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Unit tests
-        run: python -m unittest validators.tests.test_validate_private_runner -v
+        run: python -m unittest validators.tests.test_validate_private_runner validators.tests.test_private_runner_self_hosted_policy -v
       - name: Compile validator
         run: python -m py_compile validators/validate_private_runner.py
       - name: Validate workflow starter pins and safety
@@ -44,7 +47,9 @@ jobs:
             schemas/runner-execution-receipt.schema.json \
             validators/validate_private_runner.py \
             validators/tests/test_validate_private_runner.py \
+            validators/tests/test_private_runner_self_hosted_policy.py \
             starter-kit/private-runner \
             docs/plans/SELF_HOSTED_RUNNER_LOCAL_EXECUTION_PLANE_R1.md \
+            docs/plans/SELF_HOSTED_RUNNER_LOCAL_EXECUTION_PLANE_R2.md \
             .github/workflows/private-runner-framework.yml \
             .github/workflows/ci.yml
