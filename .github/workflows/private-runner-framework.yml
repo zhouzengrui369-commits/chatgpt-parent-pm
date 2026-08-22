@@ -32,5 +32,19 @@ jobs:
         run: python -m py_compile validators/validate_private_runner.py
       - name: Validate workflow starter pins and safety
         run: python validators/validate_private_runner.py --workflow starter-kit/private-runner/private-runner-technical-gate.yml.template
-      - name: Check whitespace
-        run: git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"
+      - name: Check SRF implementation whitespace
+        shell: bash
+        run: |
+          git diff --check "${{ github.event.pull_request.base.sha }}...HEAD" -- \
+            schemas/runner-profile.schema.json \
+            schemas/local-execution-request.schema.json \
+            schemas/runner-attempt.schema.json \
+            schemas/runner-health-receipt.schema.json \
+            schemas/runner-update-receipt.schema.json \
+            schemas/runner-execution-receipt.schema.json \
+            validators/validate_private_runner.py \
+            validators/tests/test_validate_private_runner.py \
+            starter-kit/private-runner \
+            docs/plans/SELF_HOSTED_RUNNER_LOCAL_EXECUTION_PLANE_R1.md \
+            .github/workflows/private-runner-framework.yml \
+            .github/workflows/ci.yml
