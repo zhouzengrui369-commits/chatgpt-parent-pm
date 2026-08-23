@@ -1,0 +1,18 @@
+{
+  "schema_version": "chatgpt-parent-pm.private-runner-framework-authority.v1",
+  "core_version": "0.1.2-alpha",
+  "repository": "zhouzengrui369-commits/chatgpt-parent-pm",
+  "framework_pr": 12,
+  "framework_branch": "chatgpt/codex-harness-gateway-r1",
+  "framework_sha": "ea051b03bdf7bbccb3de447ccd36f8e17bd2d0f7",
+  "predecessor_framework_sha": "69b1515c137a6389a8afdccd07114b00e9eb8f1f",
+  "policy": "PRIVATE_REPO_SELF_HOSTED_ONLY_R2",
+  "github_control_plane": true,
+  "github_hosted_runner_required": false,
+  "billing_dependency_allowed": false,
+  "primary_execution_plane": "github-self-hosted-runner",
+  "local_agent_fallback": "OUT_OF_BAND_DIAGNOSTIC_ONLY",
+  "artifact_storage_required": false,
+  "evidence_transport": "LOCAL_DURABLE_PLUS_LOG_DIGEST",
+  "consumer_rule": "PIN_EXACT_FRAMEWORK_SHA_NO_AUTO_MIGRATION"
+}
