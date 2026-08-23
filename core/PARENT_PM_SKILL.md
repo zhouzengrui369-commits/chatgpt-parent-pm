@@ -1,6 +1,6 @@
 # ChatGPT Parent PM Core Skill
 
-Version: 0.1.1-alpha
+Version: 0.1.2-alpha
 
 ## Mission
 
@@ -29,7 +29,9 @@ Default private-repository order:
 1. GitHub records immutable task/candidate identity.
 2. GitHub dispatches the project Self-hosted Runner.
 3. The same self-hosted execution chain performs runner health, exact-SHA/tree validation, governance/static preflight, build/test/runtime/browser gates, and evidence emission.
-4. A local agent is fallback for runner/bootstrap/control-plane diagnostics, not the primary product execution plane.
+4. A local agent is explicit out-of-band fallback for runner/bootstrap/control-plane diagnostics, not the primary product execution plane; silent fallback is forbidden.
+
+Before adopting or upgrading a private Runner framework, read `core/PRIVATE_RUNNER_FRAMEWORK_AUTHORITY.json` and pin its exact `framework_sha`. Do not use a moving branch or PR head as consumer authority, and do not auto-rewrite existing consumer authority/receipts.
 
 See `core/PRIVATE_REPO_EXECUTION_POLICY.md` and `adapters/github-self-hosted-runner/README.md`.
 
@@ -38,7 +40,7 @@ See `core/PRIVATE_REPO_EXECUTION_POLICY.md` and `adapters/github-self-hosted-run
 A self-hosted runner or explicitly delegated local deployment/test agent may:
 
 - verify repository, branch, SHA, tree, upstream, and dirty state
-- checkout or fast-forward to an explicitly allowed SHA
+- checkout or materialize an explicitly allowed exact SHA/tree
 - install dependencies
 - build and start the candidate
 - exercise browser, desktop, device, filesystem, permission, network, and offline scenarios
@@ -62,9 +64,9 @@ Unless a Goal explicitly delegates source ownership, a local executor must not:
 7. Commit and push on an explicit branch.
 8. Verify branch Head and PR Head.
 9. Freeze the candidate SHA.
-10. Resolve the project execution policy and expected executor identity.
+10. Resolve the project execution policy, exact framework authority, and expected executor identity.
 11. Dispatch the exact candidate to the required local execution gate.
-12. Collect execution, runtime, browser, and evidence receipts.
+12. Collect execution, runtime, browser, terminal receipt, and evidence-digest receipts.
 13. Fix findings directly in GitHub.
 14. Repeat only the necessary focused execution/retest.
 15. Ask the owner only for owner-locked decisions.
@@ -80,8 +82,10 @@ Unless a Goal explicitly delegates source ownership, a local executor must not:
 ## Non-negotiable rules
 
 - GitHub is the source of truth.
-- Use explicit repository, branch, SHA, and executor identity in every handoff.
+- Use explicit repository, branch, SHA, tree when required, framework authority, and executor identity in every handoff.
 - Never treat workflow presence as runner execution evidence.
+- Never insert billing-dependent GitHub-hosted compute into a private-repository gate by default.
+- Never silently fall back from a failed/unavailable Runner to a local agent.
 - Never treat documentation completion as runtime completion.
 - Never treat CI green as customer-value acceptance.
 - Never invent evidence or silently infer a successful local run.
