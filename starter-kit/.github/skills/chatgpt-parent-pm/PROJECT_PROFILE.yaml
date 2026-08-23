@@ -2,11 +2,27 @@ project_id: replace-me
 project_type: web-app
 repository: owner/repository
 default_branch: main
+repository_visibility: private
 
 roles:
   remote_parent_pm_and_coding_agent: chatgpt
-  local_deployment_agent: generic-local-agent
-  local_test_agent: generic-local-agent
+  primary_local_executor: github-self-hosted-runner
+  fallback_diagnostic_executor: generic-local-agent
+  local_deployment_agent: github-self-hosted-runner
+  local_test_agent: github-self-hosted-runner
+
+execution:
+  private_repo_policy: self-hosted-runner-first
+  github_hosted_runner_required: false
+  billing_dependency_allowed: false
+  runner_name: replace-me-mac-mini-r1
+  runner_labels:
+    - self-hosted
+    - macOS
+    - ARM64
+    - replace-me-mac-mini-r1
+  fail_closed: true
+  product_attempt_requires_preflight_pass: true
 
 paths:
   active_goal: tasks/active/GOAL.md
@@ -17,6 +33,7 @@ commands:
   test: ""
   build: ""
   start: ""
+  verify: ""
 
 policies:
   direct_main_write: false
