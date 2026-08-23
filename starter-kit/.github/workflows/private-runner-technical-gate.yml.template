@@ -1,0 +1,124 @@
+name: private-runner-technical-gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_sha:
+        description: Exact candidate SHA
+        required: true
+        type: string
+      candidate_tree:
+        description: Optional exact candidate tree SHA
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+  CANDIDATE_TREE: ${{ inputs.candidate_tree }}
+  EXPECTED_RUNNER_NAME: __EXPECTED_RUNNER_NAME__
+  PRODUCT_ATTEMPT_STARTED: "false"
+
+jobs:
+  technical-gate:
+    runs-on: [self-hosted, macOS, ARM64, __PROJECT_RUNNER_LABEL__]
+    timeout-minutes: __TIMEOUT_MINUTES__
+    steps:
+      - name: Immutable control and runner preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$CANDIDATE_SHA"
+          test "$RUNNER_NAME" = "$EXPECTED_RUNNER_NAME"
+          test "$RUNNER_OS" = "macOS"
+          test "$RUNNER_ARCH" = "ARM64"
+          echo "RUNNER_NAME=$RUNNER_NAME"
+          echo "RUNNER_OS=$RUNNER_OS"
+          echo "RUNNER_ARCH=$RUNNER_ARCH"
+          echo "FAIL_CLOSED=true"
+          echo "PRODUCT_ATTEMPT_STARTED=false"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify exact SHA and tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+          ACTUAL_TREE="$(git rev-parse HEAD^{tree})"
+          if [ -n "${CANDIDATE_TREE:-}" ]; then
+            test "$ACTUAL_TREE" = "$CANDIDATE_TREE"
+          fi
+          test -z "$(git status --porcelain=v1)"
+          echo "ACTUAL_TREE=$ACTUAL_TREE" >> "$GITHUB_ENV"
+
+      - name: Governance and static preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          __PREFLIGHT_COMMAND__
+
+      - name: Mark product attempt started
+        shell: bash
+        run: |
+          echo "PRODUCT_ATTEMPT_STARTED=true" >> "$GITHUB_ENV"
+          echo "PRODUCT_ATTEMPT_STARTED=true"
+
+      - name: Install
+        shell: bash
+        run: |
+          set -euo pipefail
+          __INSTALL_COMMAND__
+
+      - name: Test
+        shell: bash
+        run: |
+          set -euo pipefail
+          __TEST_COMMAND__
+
+      - name: Build / static verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          __BUILD_COMMAND__
+
+      - name: Runtime / browser / product gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          __RUNTIME_GATE_COMMAND__
+
+      - name: Emit RunnerExecutionReceipt
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          mkdir -p parent-pm-evidence
+          python3 - <<'PY'
+          import json, os, platform
+          receipt = {
+              "schema": "chatgpt-parent-pm-runner-execution-v1",
+              "repository": os.environ.get("GITHUB_REPOSITORY"),
+              "candidate_sha": os.environ.get("CANDIDATE_SHA"),
+              "candidate_tree": os.environ.get("ACTUAL_TREE") or os.environ.get("CANDIDATE_TREE"),
+              "run_id": os.environ.get("GITHUB_RUN_ID"),
+              "job": os.environ.get("GITHUB_JOB"),
+              "runner_name": os.environ.get("RUNNER_NAME"),
+              "runner_os": os.environ.get("RUNNER_OS"),
+              "runner_arch": os.environ.get("RUNNER_ARCH"),
+              "expected_runner_name": os.environ.get("EXPECTED_RUNNER_NAME"),
+              "product_attempt_started": os.environ.get("PRODUCT_ATTEMPT_STARTED", "false").lower() == "true",
+              "machine": platform.machine(),
+              "system": platform.system(),
+          }
+          with open("parent-pm-evidence/runner-execution-receipt.json", "w", encoding="utf-8") as f:
+              json.dump(receipt, f, ensure_ascii=False, indent=2)
+              f.write("\n")
+          print(json.dumps(receipt, ensure_ascii=False))
+          PY
