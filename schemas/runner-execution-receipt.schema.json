@@ -1,0 +1,18 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Private Runner Execution Receipt",
+  "type":"object",
+  "required":["schema_version","request_id","attempt_id","repository","candidate_sha","candidate_tree","runner_profile_sha256","verdict","first_blocker","source_clean","artifacts","gate_results","mutation_counters","observed_at"],
+  "properties":{
+    "schema_version":{"const":"parent-pm.runner-execution-receipt.v1"},
+    "request_id":{"type":"string"},"attempt_id":{"type":"string"},"repository":{"type":"string"},
+    "candidate_sha":{"type":"string","pattern":"^[0-9a-f]{40}$"},
+    "candidate_tree":{"type":"string","pattern":"^[0-9a-f]{40}$"},
+    "runner_profile_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "verdict":{"enum":["PASS","FAIL","BLOCKED"]},
+    "first_blocker":{"enum":["NONE","TASK_CONTRACT_DEFECT","SOURCE_DEFECT","WORKFLOW_DEFECT","RUNNER_DEFECT","TOOLCHAIN_DEFECT","DATA_POLICY_DEFECT","PII_DEFECT","IMPORT_FIDELITY_DEFECT","RUNTIME_DEFECT","EVIDENCE_INCOMPLETE"]},
+    "source_clean":{"type":"object"},"artifacts":{"type":"array"},"gate_results":{"type":"object"},
+    "mutation_counters":{"type":"object"},"observed_at":{"type":"string"}
+  },
+  "additionalProperties":true
+}

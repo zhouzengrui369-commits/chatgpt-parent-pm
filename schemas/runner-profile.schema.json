@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parent PM Private Repository RunnerProfile",
+  "type": "object",
+  "required": ["schema_version","repository","repository_visibility","executor","registration_scope","repository_scope_id","labels","service","paths","secrets","concurrency","global_mutex","protected_resource_registry","data_policy","network_policy","authority","codex"],
+  "properties": {
+    "schema_version": {"const":"parent-pm.runner-profile.v1"},
+    "repository": {"type":"string","pattern":"^[^/]+/[^/]+$"},
+    "repository_visibility": {"const":"private"},
+    "executor": {"const":"MAC_MINI_SELF_HOSTED_RUNNER"},
+    "registration_scope": {"const":"repository"},
+    "repository_scope_id": {"type":"string","pattern":"^[A-Za-z0-9._-]+_repository$"},
+    "labels": {"type":"array","minItems":4,"uniqueItems":true,"items":{"type":"string","minLength":1}},
+    "service": {"type":"object"},
+    "paths": {"type":"object"},
+    "secrets": {"type":"object"},
+    "concurrency": {"type":"object"},
+    "global_mutex": {"type":"object"},
+    "protected_resource_registry": {"type":"string"},
+    "data_policy": {"type":"object"},
+    "network_policy": {"type":"object"},
+    "authority": {"type":"object"},
+    "codex": {"type":"object"}
+  },
+  "additionalProperties": true
+}

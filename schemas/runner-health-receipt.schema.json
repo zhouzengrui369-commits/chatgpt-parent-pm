@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Private Runner Health Receipt",
+  "type":"object",
+  "required":["schema_version","repository","repository_scope_id","runner_name","service_name","service_root","work_dir","runner_os","runner_arch","labels","runner_version","health_state","observed_at"],
+  "properties":{
+    "schema_version":{"const":"parent-pm.runner-health-receipt.v1"},
+    "repository":{"type":"string"},"repository_scope_id":{"type":"string"},"runner_name":{"type":"string"},
+    "service_name":{"type":"string"},"service_root":{"type":"string"},"work_dir":{"type":"string"},
+    "runner_os":{"const":"macOS"},"runner_arch":{"enum":["ARM64","arm64"]},
+    "labels":{"type":"array","items":{"type":"string"}},"runner_version":{"type":"string","minLength":1},
+    "health_state":{"enum":["HEALTHY","DEGRADED","UNHEALTHY"]},"observed_at":{"type":"string"},
+    "global_mutex_path":{"type":"string"},"protected_resource_registry":{"type":"string"}
+  },
+  "additionalProperties":true
+}

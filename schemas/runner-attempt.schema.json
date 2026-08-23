@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Private Runner Attempt",
+  "type":"object",
+  "required":["schema_version","attempt_id","request_id","repository","candidate_sha","runner_profile_sha256","state"],
+  "properties":{
+    "schema_version":{"const":"parent-pm.runner-attempt.v1"},
+    "attempt_id":{"type":"string"},"request_id":{"type":"string"},"repository":{"type":"string"},
+    "candidate_sha":{"type":"string","pattern":"^[0-9a-f]{40}$"},
+    "runner_profile_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "state":{"enum":["CREATED","RUNNING","PASS","FAIL","BLOCKED","CANCELLED"]},
+    "started_at":{"type":["string","null"]},"finished_at":{"type":["string","null"]}
+  },
+  "additionalProperties":true
+}

@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Private Runner Update Receipt",
+  "type":"object",
+  "required":["schema_version","repository","service_name","previous_version","current_version","update_state","health_reverified","observed_at"],
+  "properties":{
+    "schema_version":{"const":"parent-pm.runner-update-receipt.v1"},
+    "repository":{"type":"string"},"service_name":{"type":"string"},
+    "previous_version":{"type":"string"},"current_version":{"type":"string"},
+    "update_state":{"enum":["NO_UPDATE_REQUIRED","UPDATED","BLOCKED"]},
+    "health_reverified":{"type":"boolean"},"observed_at":{"type":"string"}
+  },
+  "additionalProperties":true
+}
