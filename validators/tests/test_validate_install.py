@@ -60,6 +60,23 @@ owner_only_actions: []
             profile.write_text(profile.read_text().replace("automatic_merge: false", "automatic_merge: true"))
             self.assertTrue(any("unsafe project policy" in error for error in validate(root)))
 
+    def test_private_profile_without_self_hosted_contract_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.make_project(root)
+            profile = root / ".github/skills/chatgpt-parent-pm/PROJECT_PROFILE.yaml"
+            profile.write_text(
+                profile.read_text(encoding="utf-8") + "\nrepository_visibility: private\n",
+                encoding="utf-8",
+            )
+            errors = validate(root)
+            self.assertTrue(
+                any("private project execution policy missing/unsafe" in error for error in errors)
+            )
+            self.assertIn(
+                "private project missing self-hosted technical gate workflow/template", errors
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

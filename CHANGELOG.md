@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.2-alpha — 2026-08-23
+
+- Pin the canonical private Runner R2 framework authority to exact SHA `ea051b03bdf7bbccb3de447ccd36f8e17bd2d0f7`.
+- Harden the private starter workflow to require exact SHA + tree, full-SHA-pinned checkout, project Self-hosted Runner identity, fail-closed preflight, and local durable evidence plus log digests.
+- Add regression tests that reject GitHub-hosted compute, GitHub artifact-storage dependency, unpinned checkout, billing dependency, and silent local-agent fallback in the default private execution path.
+- Make historical consumer authority immutable: newer framework adoption requires a successor project authority/task instead of rewriting accepted receipts.
+
 ## 0.1.1-alpha — 2026-08-23
 
 - Make GitHub Self-hosted Runner the default execution plane for private product repositories.
