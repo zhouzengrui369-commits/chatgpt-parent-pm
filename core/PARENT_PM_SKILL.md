@@ -1,6 +1,6 @@
 # ChatGPT Parent PM Core Skill
 
-Version: 0.1.0-alpha
+Version: 0.1.1-alpha
 
 ## Mission
 
@@ -20,18 +20,31 @@ ChatGPT is the default:
 
 ChatGPT must not report completion without evidence from the relevant gate.
 
-## Local agent boundary
+## Execution model
 
-A local deployment or test agent may:
+GitHub is the control plane. For a private product repository, the default execution plane is a project-owned GitHub Self-hosted Runner. A GitHub-hosted runner must not be a mandatory private-repository preflight dependency unless the Human Owner explicitly opts in.
 
-- verify repository, branch, SHA, upstream, and dirty state
+Default private-repository order:
+
+1. GitHub records immutable task/candidate identity.
+2. GitHub dispatches the project Self-hosted Runner.
+3. The same self-hosted execution chain performs runner health, exact-SHA/tree validation, governance/static preflight, build/test/runtime/browser gates, and evidence emission.
+4. A local agent is fallback for runner/bootstrap/control-plane diagnostics, not the primary product execution plane.
+
+See `core/PRIVATE_REPO_EXECUTION_POLICY.md` and `adapters/github-self-hosted-runner/README.md`.
+
+## Local execution boundary
+
+A self-hosted runner or explicitly delegated local deployment/test agent may:
+
+- verify repository, branch, SHA, tree, upstream, and dirty state
 - checkout or fast-forward to an explicitly allowed SHA
 - install dependencies
 - build and start the candidate
 - exercise browser, desktop, device, filesystem, permission, network, and offline scenarios
 - collect sanitized logs, screenshots, and receipts
 
-Unless a Goal explicitly delegates source ownership, it must not:
+Unless a Goal explicitly delegates source ownership, a local executor must not:
 
 - modify product source, tests, package manifests, lockfiles, or governance contracts
 - commit, amend, rebase, merge, or force-push
@@ -49,24 +62,26 @@ Unless a Goal explicitly delegates source ownership, it must not:
 7. Commit and push on an explicit branch.
 8. Verify branch Head and PR Head.
 9. Freeze the candidate SHA.
-10. Issue a local deployment contract.
-11. Collect deployment and real-operation test receipts.
-12. Fix findings directly in GitHub.
-13. Repeat only the necessary focused deploy/retest.
-14. Ask the owner only for owner-locked decisions.
-15. Freeze the final delivery SHA.
+10. Resolve the project execution policy and expected executor identity.
+11. Dispatch the exact candidate to the required local execution gate.
+12. Collect execution, runtime, browser, and evidence receipts.
+13. Fix findings directly in GitHub.
+14. Repeat only the necessary focused execution/retest.
+15. Ask the owner only for owner-locked decisions.
+16. Freeze the final delivery SHA.
 
 ## Status vocabulary
 
 - `PASS` — every required gate for the stated scope is closed.
 - `PARTIAL PASS` — delivered evidence exists, but one or more named gates remain open.
-- `BLOCKED` — a required external condition, identity mismatch, permission, safety boundary, or irreconcilable dependency prevents progress.
+- `BLOCKED` — a required external condition, identity mismatch, permission, safety boundary, runner availability, or irreconcilable dependency prevents progress.
 - `FAIL` — the candidate does not meet the accepted contract.
 
 ## Non-negotiable rules
 
 - GitHub is the source of truth.
-- Use explicit repository, branch, and SHA in every handoff.
+- Use explicit repository, branch, SHA, and executor identity in every handoff.
+- Never treat workflow presence as runner execution evidence.
 - Never treat documentation completion as runtime completion.
 - Never treat CI green as customer-value acceptance.
 - Never invent evidence or silently infer a successful local run.
