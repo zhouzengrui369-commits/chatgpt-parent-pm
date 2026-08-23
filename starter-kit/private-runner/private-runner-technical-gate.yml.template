@@ -17,18 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  preflight:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-      - name: Validate RunnerProfile and request
-        run: |
-          python .github/parent-pm-runner/validate_private_runner.py \
-            --profile .github/parent-pm-runner/RUNNER_PROFILE.json \
-            --request "${{ inputs.request_path }}"
-
-  runner:
-    needs: preflight
+  runner-gate:
     runs-on: [self-hosted, macOS, ARM64, __REPOSITORY_LABEL__]
     timeout-minutes: 120
     steps:
@@ -39,40 +28,86 @@ jobs:
           fetch-depth: 1
           clean: true
           persist-credentials: false
+
       - name: Exact identity
+        shell: bash
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "${{ inputs.candidate_sha }}"
           test "$(git rev-parse HEAD^{tree})" = "${{ inputs.candidate_tree }}"
           test -z "$(git status --porcelain --untracked-files=all)"
-      - name: Acquire host-global mutex
-        run: bash .github/parent-pm-runner/host_mutex.sh acquire
-      - name: Runner health receipt
-        run: bash .github/parent-pm-runner/runner_health.sh
-      - name: Validate health
+
+      - name: Fail-closed contract preflight
+        shell: bash
         run: |
+          set -euo pipefail
+          python .github/parent-pm-runner/validate_private_runner.py \
+            --profile .github/parent-pm-runner/RUNNER_PROFILE.json \
+            --request "${{ inputs.request_path }}"
+          echo PASS_SELF_HOSTED_PRIVATE_RUNNER_PREFLIGHT
+
+      - name: Acquire host-global mutex
+        shell: bash
+        run: bash .github/parent-pm-runner/host_mutex.sh acquire
+
+      - name: Runner health receipt
+        shell: bash
+        run: bash .github/parent-pm-runner/runner_health.sh
+
+      - name: Validate health
+        shell: bash
+        run: |
+          set -euo pipefail
           python .github/parent-pm-runner/validate_private_runner.py \
             --profile .github/parent-pm-runner/RUNNER_PROFILE.json \
             --health "$RUNNER_TEMP/parent-pm-runner-health.json"
+
       - name: Execute tracked authorized task
+        id: execute
+        shell: bash
         run: |
           set -euo pipefail
           task_script="$(python -c 'import json,sys;print(json.load(open(sys.argv[1]))["task_script"])' "${{ inputs.request_path }}")"
           case "$task_script" in work/tasks/*) ;; *) echo BLOCKED_RUNNER_TASK_SCRIPT; exit 2;; esac
           test -f "$task_script"
           bash "$task_script"
-      - name: Upload evidence
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: parent-pm-runner-${{ github.run_id }}-${{ github.run_attempt }}
-          path: |
-            ${{ runner.temp }}/parent-pm-runner-health.json
-            work/tasks/**/RESULT.md
-            work/tasks/**/EVIDENCE.md
-            work/tasks/**/commands.log
-          if-no-files-found: warn
-          retention-days: 14
+
+      - name: Validate local terminal evidence
+        if: always() && steps.execute.outcome != 'skipped'
+        shell: bash
+        run: |
+          set -euo pipefail
+          request="${{ inputs.request_path }}"
+          evidence_root="$(python - .github/parent-pm-runner/RUNNER_PROFILE.json "$request" <<'PY'
+          import json,sys
+          profile=json.load(open(sys.argv[1],encoding='utf-8'))
+          request=json.load(open(sys.argv[2],encoding='utf-8'))
+          print(profile['paths']['evidence_root'].rstrip('/')+'/'+request['attempt_id'])
+          PY
+          )"
+          receipt="$evidence_root/runner-execution-receipt.json"
+          terminal="$evidence_root/terminal-evidence.sha256"
+          test -f "$receipt"
+          python .github/parent-pm-runner/validate_private_runner.py \
+            --profile .github/parent-pm-runner/RUNNER_PROFILE.json \
+            --request "$request" \
+            --receipt "$receipt"
+          receipt_sha="$(shasum -a 256 "$receipt" | awk '{print $1}')"
+          echo "LOCAL_EVIDENCE_ROOT=$evidence_root"
+          echo "RUNNER_EXECUTION_RECEIPT_SHA256=$receipt_sha"
+          python - "$receipt" <<'PY'
+          import json,sys
+          r=json.load(open(sys.argv[1],encoding='utf-8'))
+          print('RUNNER_EXECUTION_VERDICT='+str(r.get('verdict')))
+          print('RUNNER_EXECUTION_FIRST_BLOCKER='+str(r.get('first_blocker')))
+          print('RUNNER_EXECUTION_EXACT_BLOCKER='+str(r.get('exact_blocker')))
+          PY
+          if [ -f "$terminal" ]; then
+            echo "TERMINAL_EVIDENCE_MANIFEST_SHA256=$(shasum -a 256 "$terminal" | awk '{print $1}')"
+          fi
+          echo EVIDENCE_TRANSPORT=LOCAL_DURABLE_PLUS_LOG_DIGEST
+
       - name: Release host-global mutex
         if: always()
+        shell: bash
         run: bash .github/parent-pm-runner/host_mutex.sh release

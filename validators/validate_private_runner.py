@@ -91,7 +91,12 @@ def validate_receipt(x,r):
     if x.get("first_blocker") not in FAILURE_CLASSES:e.append("BLOCKED_RUNNER_FIRST_BLOCKER_ENUM")
     if x.get("verdict")=="PASS" and x.get("first_blocker")!="NONE":e.append("BLOCKED_RUNNER_PASS_WITH_BLOCKER")
     clean=x.get("source_clean") or {}
-    if clean.get("pre") is not True or clean.get("post") is not True:e.append("BLOCKED_RUNNER_SOURCE_DIRTY")
+    transport=(x.get("gate_results") or {}).get("exact_source_transport")
+    clean_required=x.get("verdict")=="PASS" or transport=="PASS"
+    if clean_required:
+        if clean.get("pre") is not True or clean.get("post") is not True:e.append("BLOCKED_RUNNER_SOURCE_DIRTY")
+    elif not isinstance(clean.get("pre"),bool) or not isinstance(clean.get("post"),bool):
+        e.append("BLOCKED_RUNNER_SOURCE_CLEAN_SHAPE")
     prohibited=("source_change","test_change","workflow_change","lockfile_change","git_commit","git_push","owner_source_write","manual_status_override","production_db_write","cloud_write","merge","deploy","release","predecessor_reuse")
     counters=x.get("mutation_counters") or {}
     for k in prohibited:
@@ -105,6 +110,8 @@ def validate_workflow(path):
     text=Path(path).read_text(encoding="utf-8"); e=[]
     if "workflow_dispatch:" not in text:e.append("BLOCKED_RUNNER_WORKFLOW_NOT_DISPATCH_ONLY")
     if "permissions:\n  contents: read" not in text:e.append("BLOCKED_RUNNER_WORKFLOW_PERMISSIONS")
+    if re.search(r"(?mi)^\s*runs-on:\s*['\"]?(?:ubuntu-|windows-|macos-)",text):e.append("BLOCKED_PRIVATE_RUNNER_GITHUB_HOSTED_DEPENDENCY")
+    if "actions/upload-artifact@" in text:e.append("BLOCKED_PRIVATE_RUNNER_GITHUB_ARTIFACT_STORAGE_DEPENDENCY")
     for m in re.finditer(r"uses:\s*([^@\s]+)@([^\s]+)",text):
         if not SHA40.fullmatch(m.group(2).strip("'\"")):e.append(f"BLOCKED_RUNNER_ACTION_NOT_FULL_SHA:{m.group(1)}")
     if "runs-on: [self-hosted, macOS, ARM64, __REPOSITORY_LABEL__]" not in text:e.append("BLOCKED_RUNNER_WORKFLOW_LABEL_SCOPE")
