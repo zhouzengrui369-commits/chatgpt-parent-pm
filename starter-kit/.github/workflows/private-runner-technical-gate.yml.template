@@ -8,8 +8,8 @@ on:
         required: true
         type: string
       candidate_tree:
-        description: Optional exact candidate tree SHA
-        required: false
+        description: Exact candidate tree SHA
+        required: true
         type: string
 
 permissions:
@@ -19,6 +19,7 @@ env:
   CANDIDATE_SHA: ${{ inputs.candidate_sha }}
   CANDIDATE_TREE: ${{ inputs.candidate_tree }}
   EXPECTED_RUNNER_NAME: __EXPECTED_RUNNER_NAME__
+  EVIDENCE_ROOT: __EVIDENCE_ROOT__
   PRODUCT_ATTEMPT_STARTED: "false"
 
 jobs:
@@ -27,10 +28,12 @@ jobs:
     timeout-minutes: __TIMEOUT_MINUTES__
     steps:
       - name: Immutable control and runner preflight
+        id: identity_preflight
         shell: bash
         run: |
           set -euo pipefail
-          test -n "$CANDIDATE_SHA"
+          [[ "$CANDIDATE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$CANDIDATE_TREE" =~ ^[0-9a-f]{40}$ ]]
           test "$RUNNER_NAME" = "$EXPECTED_RUNNER_NAME"
           test "$RUNNER_OS" = "macOS"
           test "$RUNNER_ARCH" = "ARM64"
@@ -40,85 +43,142 @@ jobs:
           echo "FAIL_CLOSED=true"
           echo "PRODUCT_ATTEMPT_STARTED=false"
 
-      - uses: actions/checkout@v4
+      - name: Checkout exact candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ env.CANDIDATE_SHA }}
           fetch-depth: 1
+          clean: true
           persist-credentials: false
 
       - name: Verify exact SHA and tree
+        id: exact_identity
         shell: bash
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
           ACTUAL_TREE="$(git rev-parse HEAD^{tree})"
-          if [ -n "${CANDIDATE_TREE:-}" ]; then
-            test "$ACTUAL_TREE" = "$CANDIDATE_TREE"
-          fi
-          test -z "$(git status --porcelain=v1)"
+          test "$ACTUAL_TREE" = "$CANDIDATE_TREE"
+          test -z "$(git status --porcelain --untracked-files=all)"
           echo "ACTUAL_TREE=$ACTUAL_TREE" >> "$GITHUB_ENV"
 
       - name: Governance and static preflight
+        id: governance_preflight
         shell: bash
         run: |
           set -euo pipefail
           __PREFLIGHT_COMMAND__
 
       - name: Mark product attempt started
+        id: mark_attempt
         shell: bash
         run: |
           echo "PRODUCT_ATTEMPT_STARTED=true" >> "$GITHUB_ENV"
           echo "PRODUCT_ATTEMPT_STARTED=true"
 
       - name: Install
+        id: install
         shell: bash
         run: |
           set -euo pipefail
           __INSTALL_COMMAND__
 
       - name: Test
+        id: test
         shell: bash
         run: |
           set -euo pipefail
           __TEST_COMMAND__
 
       - name: Build / static verification
+        id: build
         shell: bash
         run: |
           set -euo pipefail
           __BUILD_COMMAND__
 
       - name: Runtime / browser / product gate
+        id: runtime_gate
         shell: bash
         run: |
           set -euo pipefail
           __RUNTIME_GATE_COMMAND__
 
-      - name: Emit RunnerExecutionReceipt
+      - name: Emit terminal execution receipt and digest
         if: always()
         shell: bash
+        env:
+          IDENTITY_PREFLIGHT_OUTCOME: ${{ steps.identity_preflight.outcome }}
+          EXACT_IDENTITY_OUTCOME: ${{ steps.exact_identity.outcome }}
+          GOVERNANCE_PREFLIGHT_OUTCOME: ${{ steps.governance_preflight.outcome }}
+          INSTALL_OUTCOME: ${{ steps.install.outcome }}
+          TEST_OUTCOME: ${{ steps.test.outcome }}
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          RUNTIME_GATE_OUTCOME: ${{ steps.runtime_gate.outcome }}
         run: |
-          set +e
-          mkdir -p parent-pm-evidence
+          set -euo pipefail
+          attempt_root="$EVIDENCE_ROOT/${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -p "$attempt_root"
+          export ATTEMPT_ROOT="$attempt_root"
           python3 - <<'PY'
           import json, os, platform
+
+          pre = [
+              os.environ.get("IDENTITY_PREFLIGHT_OUTCOME"),
+              os.environ.get("EXACT_IDENTITY_OUTCOME"),
+              os.environ.get("GOVERNANCE_PREFLIGHT_OUTCOME"),
+          ]
+          product = [
+              os.environ.get("INSTALL_OUTCOME"),
+              os.environ.get("TEST_OUTCOME"),
+              os.environ.get("BUILD_OUTCOME"),
+              os.environ.get("RUNTIME_GATE_OUTCOME"),
+          ]
+          started = os.environ.get("PRODUCT_ATTEMPT_STARTED", "false").lower() == "true"
+          if not all(x == "success" for x in pre):
+              verdict, blocker = "BLOCKED", "PRE_PRODUCT_PREFLIGHT"
+          elif not started:
+              verdict, blocker = "BLOCKED", "PRODUCT_ATTEMPT_NOT_STARTED"
+          elif not all(x == "success" for x in product):
+              verdict, blocker = "FAIL", "PRODUCT_TECHNICAL_GATE"
+          else:
+              verdict, blocker = "PASS", "NONE"
+
           receipt = {
-              "schema": "chatgpt-parent-pm-runner-execution-v1",
+              "schema": "chatgpt-parent-pm-runner-execution-v2",
               "repository": os.environ.get("GITHUB_REPOSITORY"),
               "candidate_sha": os.environ.get("CANDIDATE_SHA"),
               "candidate_tree": os.environ.get("ACTUAL_TREE") or os.environ.get("CANDIDATE_TREE"),
               "run_id": os.environ.get("GITHUB_RUN_ID"),
+              "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT"),
               "job": os.environ.get("GITHUB_JOB"),
               "runner_name": os.environ.get("RUNNER_NAME"),
               "runner_os": os.environ.get("RUNNER_OS"),
               "runner_arch": os.environ.get("RUNNER_ARCH"),
               "expected_runner_name": os.environ.get("EXPECTED_RUNNER_NAME"),
-              "product_attempt_started": os.environ.get("PRODUCT_ATTEMPT_STARTED", "false").lower() == "true",
+              "product_attempt_started": started,
+              "preflight_outcomes": pre,
+              "product_gate_outcomes": product,
+              "verdict": verdict,
+              "first_blocker": blocker,
               "machine": platform.machine(),
               "system": platform.system(),
+              "github_hosted_runner_used": False,
+              "billing_dependency_used": False,
+              "artifact_storage_required": False,
+              "evidence_transport": "LOCAL_DURABLE_PLUS_LOG_DIGEST",
           }
-          with open("parent-pm-evidence/runner-execution-receipt.json", "w", encoding="utf-8") as f:
-              json.dump(receipt, f, ensure_ascii=False, indent=2)
+          path = os.path.join(os.environ["ATTEMPT_ROOT"], "runner-execution-receipt.json")
+          with open(path, "w", encoding="utf-8") as f:
+              json.dump(receipt, f, ensure_ascii=False, sort_keys=True, indent=2)
               f.write("\n")
-          print(json.dumps(receipt, ensure_ascii=False))
+          print(json.dumps(receipt, ensure_ascii=False, sort_keys=True))
           PY
+          receipt="$attempt_root/runner-execution-receipt.json"
+          receipt_sha="$(shasum -a 256 "$receipt" | awk '{print $1}')"
+          printf '%s  %s\n' "$receipt_sha" "runner-execution-receipt.json" > "$attempt_root/terminal-evidence.sha256"
+          terminal_sha="$(shasum -a 256 "$attempt_root/terminal-evidence.sha256" | awk '{print $1}')"
+          echo "LOCAL_EVIDENCE_ROOT=$attempt_root"
+          echo "RUNNER_EXECUTION_RECEIPT_SHA256=$receipt_sha"
+          echo "TERMINAL_EVIDENCE_MANIFEST_SHA256=$terminal_sha"
+          echo "EVIDENCE_TRANSPORT=LOCAL_DURABLE_PLUS_LOG_DIGEST"
