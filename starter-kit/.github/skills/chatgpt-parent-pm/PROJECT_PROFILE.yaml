@@ -15,12 +15,16 @@ execution:
   private_repo_policy: self-hosted-runner-first
   github_hosted_runner_required: false
   billing_dependency_allowed: false
+  silent_local_agent_fallback: false
+  artifact_storage_required: false
+  evidence_transport: local-durable-plus-log-digest
   runner_name: replace-me-mac-mini-r1
   runner_labels:
     - self-hosted
     - macOS
     - ARM64
     - replace-me-mac-mini-r1
+  evidence_root: __EVIDENCE_ROOT__
   fail_closed: true
   product_attempt_requires_preflight_pass: true
 
