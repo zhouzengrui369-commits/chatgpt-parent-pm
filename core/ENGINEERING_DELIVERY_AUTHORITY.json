@@ -1,0 +1,18 @@
+{
+  "authority_type": "ENGINEERING_DELIVERY_STANDALONE_EXACT_COMMIT",
+  "repository": "zhouzengrui369-commits/chatgpt-engineering-delivery",
+  "commit": "d63a0f6257438299eb86f204368ce74ff9170a72",
+  "tree": "62265b15b4c5e2fd5f8355e017b46e26e6d44ca7",
+  "path": "core/ENGINEERING_DELIVERY_SKILL.md",
+  "version": "0.1.0-alpha",
+  "bootstrap_provenance": {
+    "repository": "zhouzengrui369-commits/chatgpt-parent-pm",
+    "commit": "b3e22fd990b91a28a4a706b0f70ab2bd31bf6e33",
+    "path": "engineering-delivery-skill/"
+  },
+  "validation": {
+    "status": "PASS",
+    "receipt": "zhouzengrui369-commits/chatgpt-parent-pm#22-comment-5520993139"
+  },
+  "consumer_rule": "PIN_EXACT_COMMIT_AND_TREE_NEVER_MOVING_REF"
+}

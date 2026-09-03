@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0-alpha — 2026-09-03
+
+- Redefine ChatGPT Parent PM as Product Governance rather than a combined PM/coding role.
+- Enforce one Goal equals one Milestone and require Engineering Delivery to deliver against that frozen contract.
+- Separate baseline, change control, candidate admission, independent review, engineering implementation, local execution, and Human Owner authority.
+- Add Goal/Milestone and Change Request contracts plus the full standalone Engineering Delivery repository bootstrap package.
+- Preserve exact-SHA, GitHub-first, self-hosted execution, evidence, and risk-tiered security invariants.
+
 ## 0.1.2-alpha — 2026-08-23
 
 - Pin the canonical private Runner R2 framework authority to exact SHA `ea051b03bdf7bbccb3de447ccd36f8e17bd2d0f7`.

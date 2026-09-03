@@ -1,115 +1,52 @@
-# ChatGPT Parent PM
+# ChatGPT Parent PM — Product Governance
 
 [简体中文](README.zh-CN.md)
 
-**An open, repository-native governance framework for AI-assisted software delivery.**
+A GitHub-native governance framework for separating product authority from engineering implementation in AI-assisted delivery.
 
-ChatGPT acts as the remote **Parent PM + Coding Agent**. Local agents such as Codex, MiniMax Code, or other computer-capable agents act as **exact-SHA deployment, runtime testing, and acceptance executors**.
+Starting with `0.2.0-alpha`:
 
-> Community project. Not an official OpenAI, Codex, MiniMax, or GitHub project.
+- **Parent PM / Product Governance** owns Product Baseline, one-Goal/one-Milestone contracts, prioritization, change control, candidate admission, independent review orchestration, release recommendation, and milestone closure. It does not author product source or tests.
+- **Engineering Delivery** owns technical design, source, technical tests, code review, commits, pushes, pull requests, CI remediation, exact-SHA candidates, Candidate Manifests, and Technical Receipts. It cannot redefine product meaning or declare product acceptance.
+- **Local Execution** deploys an authorized exact SHA, injects local credentials, executes environment-bound tests, and returns sanitized evidence without modifying source/tests.
+- **Independent Product Experience Review** operates the real product against the frozen baseline and milestone contract without inspecting code.
+- **Human Owner** owns sensitive permissions, major tradeoffs, production authorization, and final Owner Acceptance.
 
-## Why this exists
+## Invariants
 
-AI coding workflows often mix planning, code ownership, local deployment, testing, and approval inside one long agent session. That creates hidden local state, unverifiable claims, repeated handoffs, and unclear accountability.
-
-This framework separates the delivery system into explicit roles:
-
-| Role | Default executor | Authority |
-|---|---|---|
-| Remote Parent PM + Coding Agent | ChatGPT with GitHub access | Requirements, goal contracts, source changes, tests, commits, PRs, CI triage, fixes |
-| Local Deployment Agent | Codex, MiniMax Code, or another local agent | Checkout an exact SHA, install, build, start, deploy, collect logs |
-| Local Test Agent | Codex, MiniMax Code, browser/computer-use agent, or human | Real browser/desktop/device testing, screenshots, annotations, focused retest |
-| Owner | Human project owner | Product decisions, sensitive permissions, release, final customer-value acceptance |
-
-GitHub is the single source of truth. Local agents do not own unpublished product source changes.
+1. One Goal equals one Milestone; they close together.
+2. Product Governance and Engineering Delivery use isolated contexts.
+3. The same role cannot author and accept the same exact candidate.
+4. Technical PASS does not imply Product Experience PASS.
+5. Material product changes require an approved Change Request.
+6. Only a frozen exact candidate enters independent review or the Human Owner Gate.
+7. GitHub is the source of truth.
+8. Security is risk-tiered by users, exposure, sensitivity, reversibility, and external authority.
 
 ## Delivery loop
 
 ```text
-Owner confirms outcome
-  -> ChatGPT commits a Goal contract
-  -> ChatGPT implements code and tests on GitHub
-  -> CI and code gates pass
-  -> Candidate SHA is frozen
-  -> Local deployment agent deploys that exact SHA
-  -> Local test agent performs real-operation acceptance
-  -> Findings are recorded against the candidate SHA
-  -> ChatGPT fixes and submits a new SHA
-  -> Focused redeploy and retest
-  -> Owner accepts customer value
-  -> Final delivery SHA is frozen
+Product Baseline
+-> Goal/Milestone Contract
+-> Engineering Delivery
+-> ENGINEERING_READY
+-> exact candidate + manifest/receipt
+-> Product Governance admission
+-> Independent Product Experience Review
+-> Human Owner Gate
+-> Release Authorization
+-> Goal/Milestone Close
 ```
 
-## Core invariants
+## Canonical Engineering Delivery authority
 
-1. **GitHub First** — no product truth exists only in chat or a local worktree.
-2. **Exact-SHA handoff** — deploy and test receipts identify the exact commit.
-3. **Remote coding ownership** — ChatGPT is the default integration writer.
-4. **Local execution separation** — local agents deploy and test; they do not silently become source owners.
-5. **Evidence before claims** — code, runtime, product experience, customer value, and delivery identity are separate gates.
-6. **No direct main writes** — use branches and pull requests by default.
-7. **No automatic merge or release** — owner approval remains explicit.
-8. **Fail closed on identity drift** — branch, SHA, dirty state, or scope mismatch returns `BLOCKED`.
+Consumers must pin the standalone authority recorded in `core/ENGINEERING_DELIVERY_AUTHORITY.json`:
 
-## Quick start
+- Repository: `zhouzengrui369-commits/chatgpt-engineering-delivery`
+- Commit: `d63a0f6257438299eb86f204368ce74ff9170a72`
+- Tree: `62265b15b4c5e2fd5f8355e017b46e26e6d44ca7`
+- Skill path: `core/ENGINEERING_DELIVERY_SKILL.md`
 
-Run these commands from a clone of this framework:
+Do not consume `main` or another moving ref. The directory `engineering-delivery-skill/` remains the immutable bootstrap provenance for the standalone repository, not the post-bootstrap consumer authority. See `docs/ROLE_SEPARATION_MIGRATION.md`.
 
-```bash
-FRAMEWORK_ROOT="$PWD"
-TARGET="/path/to/your-project"
-
-cp -R "$FRAMEWORK_ROOT/starter-kit/." "$TARGET/"
-cp -R "$FRAMEWORK_ROOT/validators" "$TARGET/"
-
-cd "$TARGET"
-python3 validators/validate_install.py . --allow-placeholder-lock
-```
-
-Then customize and pin the real framework commit:
-
-- `.github/skills/chatgpt-parent-pm/PROJECT_PROFILE.yaml`
-- `.github/skills/chatgpt-parent-pm/GOVERNANCE_LOCK.json`
-- `PROJECT_STATUS.md`
-- the active Goal contract
-
-After replacing the placeholder lock, run the strict validation:
-
-```bash
-python3 validators/validate_install.py .
-```
-
-See [Quick Start](docs/QUICKSTART.md) and [Adoption Guide](docs/ADOPTION_GUIDE.md).
-
-## What v0.1.0-alpha includes
-
-- Parent PM role and authority model
-- Goal-driven development contracts
-- exact-SHA deployment and test receipts
-- project profile and governance lock templates
-- repository installation validator
-- GitHub Actions governance check
-- generic, Codex, and MiniMax Code local-agent adapters
-- reference project
-- comparative research on related open-source projects
-
-## What it does not do
-
-- run an autonomous agent cloud
-- store model credentials
-- merge PRs automatically
-- deploy production automatically
-- replace project-specific architecture or product decisions
-- claim that documentation success proves runtime success
-
-## Project status
-
-`v0.1.0-alpha` — bootstrap candidate. The framework should be validated on at least one external project before `v1.0.0`.
-
-## Related work
-
-See [Related Projects Research](research/RELATED_PROJECTS_2026-08-05.md). The closest public projects focus on specification-driven development, local multi-agent orchestration, or autonomous coding runtimes. This repository's narrower contribution is the **remote coding authority / local deployment-and-acceptance separation**, backed by exact-SHA receipts and explicit owner gates.
-
-## License
-
-Apache License 2.0. See [LICENSE](LICENSE).
+> Community project. Not an official OpenAI, Codex, GitHub, or other vendor project.
