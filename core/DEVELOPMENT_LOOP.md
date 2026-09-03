@@ -1,25 +1,29 @@
-# Development Loop
+# Separated Product Delivery Loop
 
-## Phase A — Contract
+## Phase A — Product Baseline
 
-Create a bounded Goal with user outcome, scope, exclusions, input identity, acceptance criteria, evidence requirements, and owner-locked decisions.
+Product Governance confirms the authoritative product positioning, target user, core user problem, product boundaries, and risk tier.
 
-## Phase B — Remote implementation
+## Phase B — Goal/Milestone Contract
 
-ChatGPT modifies source and tests through GitHub, records verification, and freezes a candidate SHA.
+Product Governance creates exactly one Goal for exactly one Milestone and freezes customer value, scope, required journeys, evidence, limitations, and closure conditions.
 
-## Phase C — Local deployment
+## Phase C — Engineering Delivery
 
-A local agent reconstructs the candidate without source modification and returns build/start/runtime evidence.
+A separate Engineering Delivery context implements source and tests, performs code review, commits and pushes, manages the PR, and emits an exact-SHA Candidate Manifest plus Technical Receipt. It may declare only `ENGINEERING_READY`.
 
-## Phase D — Real-operation acceptance
+## Phase D — Candidate Admission
 
-A local test agent executes actual user tasks and failure paths on the deployed candidate.
+Product Governance verifies exact identity, contract coverage, unapproved deviations, evidence completeness, and unresolved blockers. It declares `PRODUCT_REVIEW_ELIGIBLE=YES/NO` without changing source.
 
-## Phase E — Remediation
+## Phase E — Local and Independent Review
 
-ChatGPT converts findings into focused source changes and a new candidate SHA. Completed gates are not rerun unless affected.
+The local execution layer deploys the authorized exact SHA and returns sanitized environment evidence. The Independent Product Experience Reviewer operates the real product against the frozen contract and publishes an independent verdict.
 
-## Phase F — Owner acceptance
+## Phase F — Remediation
 
-The owner decides customer value and any owner-locked action. Final acceptance binds to the exact final SHA.
+Product Governance converts valid findings into the existing Goal's focused engineering remediation contract, unless an approved Change Request creates a successor Goal. Engineering Delivery authors the successor candidate. Completed unaffected gates need not be repeated.
+
+## Phase G — Owner and Closure
+
+The Human Owner grants any required acceptance/release authorization. Product Governance closes the Goal and Milestone together only after all required gates close.

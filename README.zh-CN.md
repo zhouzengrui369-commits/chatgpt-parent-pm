@@ -1,89 +1,41 @@
-# ChatGPT Parent PM
+# ChatGPT Parent PM — Product Governance
 
 [English](README.md)
 
-这是一个面向任何项目、任何用户和任何 Agent 的开源 AI 软件开发治理框架：
+这是一个以 GitHub 为权威控制面的 AI 产品交付治理框架。自 `0.2.0-alpha` 起，原“Parent PM + Coding Agent”被正式拆分：
 
-- **ChatGPT**：远程父级 PM + Coding Agent，负责需求、Goal、源码、测试、Git 提交、PR、CI 和缺陷修复；
-- **本地 Agent**：Codex、MiniMax Code 或其他可操作电脑的 Agent，负责精确 SHA 本地部署、构建、启动、真操作测试和验收证据；
-- **Owner**：负责产品取舍、敏感权限、发布和最终客户价值验收。
+- **ChatGPT Parent PM / Product Governance**：负责产品基线、一个 Goal 对应一个 Milestone 的交付合同、优先级、变更控制、候选准入、独立审核编排、发布建议与里程碑关闭；不写产品源码和测试。
+- **Engineering Delivery**：负责技术方案、源码、测试、代码审查、commit/push、PR、CI、exact-SHA 候选、Candidate Manifest 与 Technical Receipt；无权改变产品基线或宣布产品通过。
+- **本地执行层**：Self-hosted Runner、Codex 或其他本地 Agent，只部署授权 exact SHA、注入本机凭据、执行真实设备/数据/浏览器测试并返回脱敏证据；不修改源码和测试。
+- **独立产品体验审核官**：只操作真实产品，按冻结基线和里程碑合同给出独立体验结论，不看不改代码。
+- **Human Owner**：负责重大取舍、敏感权限、生产授权和最终 Owner Acceptance。
 
-> 社区开源项目，不是 OpenAI、Codex、MiniMax 或 GitHub 官方项目。
+## 核心规则
 
-## 核心问题
-
-传统 AI 开发容易把规划、写代码、本地部署、测试和审批混在一个长线程里，产生：
-
-- 本地未提交代码成为隐形事实；
-- Agent 声称完成但 GitHub 或 Runtime 不可复现；
-- 多个 Agent 重复修改同一范围；
-- 部署版本和测试版本不一致；
-- 文档 PASS 被误当成产品 PASS。
-
-本框架通过角色分离和精确 SHA 交接建立闭环。
+1. 一个 Goal = 一个 Milestone，二者同时关闭；
+2. Product Governance 与 Engineering Delivery 必须使用隔离上下文；
+3. 同一角色不得 author 并 accept 同一 exact candidate；
+4. Technical PASS 不等于 Product Experience PASS；
+5. 产品范围、核心旅程和验收条件变化必须经过 Change Request；
+6. 只有冻结的 exact candidate 才能进入独立审核和 Human Owner Gate；
+7. GitHub 是唯一权威事实源；
+8. 安全按用户规模、暴露面、数据敏感度和可逆性分级，禁止以无关的企业级防线阻塞核心价值。
 
 ## 标准闭环
 
 ```text
-Owner确认结果
-→ ChatGPT提交Goal合同
-→ ChatGPT远程开发并提交GitHub
-→ CI与代码Gate
-→ 冻结候选SHA
-→ 本地Agent部署精确SHA
-→ 本地测试Agent真操作验收
-→ 证据绑定候选SHA
-→ ChatGPT直接修复并提交新SHA
-→ focused redeploy/retest
-→ Owner最终验收
-→ 冻结Final Delivery SHA
+Product Baseline
+→ Goal/Milestone Contract
+→ Engineering Delivery
+→ ENGINEERING_READY
+→ exact candidate + manifest/receipt
+→ Product Governance admission
+→ Independent Product Experience Review
+→ Human Owner Gate
+→ Release Authorization
+→ Goal/Milestone Close
 ```
 
-## 八条核心规则
+新 Engineering Delivery 独立仓库的完整启动源位于 `engineering-delivery-skill/`；角色迁移规则见 `docs/ROLE_SEPARATION_MIGRATION.md`。
 
-1. GitHub First；
-2. 精确 SHA 交接；
-3. ChatGPT 默认拥有远程源码集成权；
-4. 本地 Agent 默认只部署和测试，不静默成为源码所有者；
-5. Evidence Before Claims；
-6. 默认禁止直接写 main；
-7. 默认禁止自动 merge 和自动发布；
-8. 分支、SHA、dirty 状态或范围不一致时 fail closed。
-
-## 快速接入
-
-先在本框架仓库的克隆目录中执行：
-
-```bash
-FRAMEWORK_ROOT="$PWD"
-TARGET="/path/to/your-project"
-
-cp -R "$FRAMEWORK_ROOT/starter-kit/." "$TARGET/"
-cp -R "$FRAMEWORK_ROOT/validators" "$TARGET/"
-
-cd "$TARGET"
-python3 validators/validate_install.py . --allow-placeholder-lock
-```
-
-随后配置并锁定真实的框架提交：
-
-- `.github/skills/chatgpt-parent-pm/PROJECT_PROFILE.yaml`
-- `.github/skills/chatgpt-parent-pm/GOVERNANCE_LOCK.json`
-- `PROJECT_STATUS.md`
-- 当前活动 Goal
-
-替换占位 Governance Lock 后，执行严格验证：
-
-```bash
-python3 validators/validate_install.py .
-```
-
-详细说明见：[快速开始](docs/QUICKSTART.md)、[接入指南](docs/ADOPTION_GUIDE.md)。
-
-## 当前版本
-
-`v0.1.0-alpha`。至少经过一个外部项目完整闭环验证后，再发布 `v1.0.0`。
-
-## 许可证
-
-Apache License 2.0。
+> 社区开源项目，不是 OpenAI、Codex、GitHub 或其他厂商官方项目。

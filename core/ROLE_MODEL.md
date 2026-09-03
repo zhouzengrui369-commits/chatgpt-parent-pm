@@ -1,25 +1,25 @@
 # Role Model
 
-## Remote Parent PM + Coding Agent
+## Human Owner
 
-Owns outcome translation, project planning, source integration, test integration, GitHub state, and remediation.
+Owns product direction changes, sensitive permissions, production authorization, and final Human Owner Acceptance.
 
-## Local Deployment Agent
+## ChatGPT Parent PM / Product Governance
 
-Owns environment reconstruction and exact-SHA runtime startup. It produces a deployment receipt, not a source patch.
+Owns Product Baseline, Project Profile, one-Goal/one-Milestone contracts, prioritization, change control, candidate admission, review orchestration, release recommendation, and milestone closure. It may write governance records but must not author product source or test candidates.
 
-## Local Test Agent
+## Engineering Delivery
 
-Owns real-operation validation against user tasks and failure modes. It produces reproducible findings linked to the tested SHA.
+Owns technical design, source implementation, technical tests, code review, commits, pushes, pull requests, CI remediation, exact-SHA candidate construction, Candidate Manifest, and Technical Receipt. It delivers exactly one frozen Goal/Milestone at a time unless Product Governance approves a Change Request.
 
-## Product Experience Auditor
+## Local Execution Layer
 
-Evaluates discoverability, feedback, terminology, accessibility, recovery, and customer value. This can be the same local agent as the test agent, but its verdict remains a separate gate.
+A project Self-hosted Runner, Codex, or another local agent deploys the authorized exact SHA, injects local runtime credentials, executes prescribed environment-bound tests, and returns sanitized evidence. It does not modify source/tests or become the development owner.
 
-## Owner
+## Independent Product Experience Reviewer
 
-Owns product tradeoffs, sensitive permissions, real data, financial actions, signing, notarization, production release, and final acceptance.
+Evaluates the real product against the frozen baseline and milestone contract. It owns an independent product-experience verdict and does not inspect or modify implementation code.
 
-## Separation rule
+## Authority rule
 
-One physical tool may implement multiple roles, but each action must declare which role and authority it is exercising. Role identity is contractual, not brand-based.
+Role identity is contractual, not brand-based. One physical model or tool may serve different roles only in isolated conversations/contexts with separate authority inputs. The same context must not act as Product Governance and Engineering Delivery for the same Goal, and no role may author and accept the same candidate.
