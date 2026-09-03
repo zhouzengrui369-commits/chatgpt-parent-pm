@@ -36,6 +36,15 @@ Product Baseline
 → Goal/Milestone Close
 ```
 
-新 Engineering Delivery 独立仓库的完整启动源位于 `engineering-delivery-skill/`；角色迁移规则见 `docs/ROLE_SEPARATION_MIGRATION.md`。
+## Engineering Delivery 正式权威
+
+消费者仓库必须固定引用 `core/ENGINEERING_DELIVERY_AUTHORITY.json` 中记录的独立仓库：
+
+- 仓库：`zhouzengrui369-commits/chatgpt-engineering-delivery`
+- Commit：`d63a0f6257438299eb86f204368ce74ff9170a72`
+- Tree：`62265b15b4c5e2fd5f8355e017b46e26e6d44ca7`
+- Skill 路径：`core/ENGINEERING_DELIVERY_SKILL.md`
+
+禁止引用 `main` 或其他移动分支。`engineering-delivery-skill/` 目录保留为独立仓库创建时的 bootstrap 来源与溯源，不再作为建仓后的消费者权威。角色迁移规则见 `docs/ROLE_SEPARATION_MIGRATION.md`。
 
 > 社区开源项目，不是 OpenAI、Codex、GitHub 或其他厂商官方项目。
