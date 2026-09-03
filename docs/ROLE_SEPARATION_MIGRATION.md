@@ -24,6 +24,24 @@ Do not rewrite historic receipts. Apply the new model prospectively through a su
 
 Add a repository-level `AGENTS.md`, `governance/ECOSYSTEM_DELIVERY_POLICY.md`, Goal/Milestone and Change Request templates, and `delivery/CANDIDATE_MANIFEST_TEMPLATE.md`. Existing project baselines remain authoritative unless Product Governance explicitly supersedes them.
 
-## New Engineering Delivery repository
+## Canonical Engineering Delivery authority
 
-The standalone target is `zhouzengrui369-commits/chatgpt-engineering-delivery`. Until the repository shell exists, the complete bootstrap source is maintained under `engineering-delivery-skill/` in this repository. Copy it without changing semantics, then pin its exact commit in each consumer repository.
+The standalone Engineering Delivery repository is established and validated:
+
+```text
+REPOSITORY=zhouzengrui369-commits/chatgpt-engineering-delivery
+COMMIT=d63a0f6257438299eb86f204368ce74ff9170a72
+TREE=62265b15b4c5e2fd5f8355e017b46e26e6d44ca7
+SKILL_PATH=core/ENGINEERING_DELIVERY_SKILL.md
+VALIDATION=PASS
+```
+
+The original bootstrap provenance is:
+
+```text
+SOURCE_REPOSITORY=zhouzengrui369-commits/chatgpt-parent-pm
+SOURCE_COMMIT=b3e22fd990b91a28a4a706b0f70ab2bd31bf6e33
+SOURCE_PATH=engineering-delivery-skill/
+```
+
+Each consumer repository must replace any provisional bootstrap reference with the standalone repository, exact commit, exact tree, and skill path. Moving branch references are forbidden. Pinning the skill does not authorize engineering: Product Governance must first reconcile and freeze the Product Baseline and exactly one Goal/Milestone Contract.
