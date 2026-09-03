@@ -38,6 +38,15 @@ Product Baseline
 -> Goal/Milestone Close
 ```
 
-The bootstrap source for the standalone Engineering Delivery skill is under `engineering-delivery-skill/`. See `docs/ROLE_SEPARATION_MIGRATION.md`.
+## Canonical Engineering Delivery authority
+
+Consumers must pin the standalone authority recorded in `core/ENGINEERING_DELIVERY_AUTHORITY.json`:
+
+- Repository: `zhouzengrui369-commits/chatgpt-engineering-delivery`
+- Commit: `d63a0f6257438299eb86f204368ce74ff9170a72`
+- Tree: `62265b15b4c5e2fd5f8355e017b46e26e6d44ca7`
+- Skill path: `core/ENGINEERING_DELIVERY_SKILL.md`
+
+Do not consume `main` or another moving ref. The directory `engineering-delivery-skill/` remains the immutable bootstrap provenance for the standalone repository, not the post-bootstrap consumer authority. See `docs/ROLE_SEPARATION_MIGRATION.md`.
 
 > Community project. Not an official OpenAI, Codex, GitHub, or other vendor project.
