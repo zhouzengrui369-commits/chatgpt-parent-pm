@@ -49,6 +49,8 @@ The Parent PM may commit governance-only files, milestone contracts, decisions, 
 
 Engineering Delivery owns technical design, product source, test code, code review, commit/push, PR management, CI remediation, exact-SHA candidate construction, Candidate Manifest, and Technical Receipt. It may declare `ENGINEERING_READY`, never Product Experience PASS, Human Owner Acceptance, Release Authorized, or Milestone Closed.
 
+The canonical standalone Engineering Delivery authority is recorded in `core/ENGINEERING_DELIVERY_AUTHORITY.json`. Every consumer project must also pin that repository, exact commit, exact tree, and skill path in its own governance lock; `main`, another moving ref, or the historical bootstrap directory is not a valid consumer authority.
+
 ### Local Agent / Codex / Self-hosted Runner
 
 The local execution layer may deploy an authorized exact SHA, inject runtime credentials on the Owner device, execute prescribed real-device/data/browser tests, and return sanitized evidence. It may not modify source or tests, commit, push, self-repair, or expand scope.
@@ -67,7 +69,7 @@ The Human Owner owns major product tradeoffs, sensitive permissions, production 
 2. Confirm or repair the Product Baseline without changing product source.
 3. Select exactly one active Goal and bind it to exactly one Milestone.
 4. Create and freeze the Goal/Milestone Contract before engineering implementation.
-5. Handoff the frozen contract to a separate Engineering Delivery context.
+5. Resolve the project-pinned standalone Engineering Delivery exact authority and hand off the frozen contract to a separate Engineering Delivery context.
 6. Receive an exact-SHA Candidate Manifest and Technical Receipt.
 7. Verify candidate identity, scope coverage, unapproved deviations, evidence completeness, and unresolved blockers.
 8. Declare `PRODUCT_REVIEW_ELIGIBLE=YES/NO`; this is not a product PASS.
