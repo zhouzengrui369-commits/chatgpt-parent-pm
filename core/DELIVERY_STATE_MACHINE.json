@@ -1,0 +1,310 @@
+{
+  "schema_version": "1.0",
+  "protocol_version": "DELIVERY-LIFECYCLE-1.0",
+  "foundational_rule": "ONE_GOAL_EQUALS_ONE_MILESTONE",
+  "roles": {
+    "PRODUCT_GOVERNANCE": {
+      "owns": [
+        "PRODUCT_BASELINE",
+        "GOAL_MILESTONE_CONTRACT",
+        "CHANGE_REQUEST_DECISION",
+        "CANDIDATE_ADMISSION",
+        "PRODUCT_REVIEW_ELIGIBILITY",
+        "PRODUCT_REVIEW_REFERRAL",
+        "GOAL_MILESTONE_CLOSURE"
+      ],
+      "forbidden": [
+        "PRODUCT_SOURCE_MUTATION",
+        "PRODUCT_TEST_MUTATION",
+        "CANDIDATE_REPAIR",
+        "ENGINEERING_READY_DECLARATION",
+        "PRODUCT_EXPERIENCE_VERDICT",
+        "HUMAN_OWNER_ACCEPTANCE"
+      ]
+    },
+    "ENGINEERING_DELIVERY": {
+      "owns": [
+        "TECHNICAL_DESIGN",
+        "PRODUCT_SOURCE_AND_TESTS",
+        "ENGINEERING_PR",
+        "CI_REMEDIATION",
+        "EXACT_CANDIDATE",
+        "CANDIDATE_MANIFEST",
+        "TECHNICAL_RECEIPT",
+        "ENGINEERING_READY_DECLARATION"
+      ],
+      "forbidden": [
+        "PRODUCT_BASELINE_CHANGE",
+        "PRODUCT_ACCEPTANCE_CHANGE",
+        "CANDIDATE_ADMISSION",
+        "PRODUCT_REVIEW_ELIGIBILITY",
+        "PRODUCT_EXPERIENCE_VERDICT",
+        "HUMAN_OWNER_ACCEPTANCE",
+        "MERGE_RELEASE_GOAL_CLOSE"
+      ]
+    },
+    "LOCAL_EXECUTOR": {
+      "owns": [
+        "EXACT_SHA_MATERIALIZATION",
+        "OWNER_MACHINE_CREDENTIAL_INJECTION",
+        "PRESCRIBED_ENVIRONMENT_EXECUTION",
+        "SANITIZED_OBSERVATION_RECEIPT"
+      ],
+      "forbidden": [
+        "SOURCE_TEST_MUTATION",
+        "COMMIT_PUSH",
+        "SELF_REPAIR",
+        "SCOPE_EXPANSION",
+        "ENGINEERING_READY_DECLARATION",
+        "PRODUCT_ACCEPTANCE"
+      ]
+    },
+    "INDEPENDENT_PRODUCT_EXPERIENCE_REVIEWER": {
+      "owns": [
+        "REAL_PRODUCT_OPERATION",
+        "PRODUCT_EXPERIENCE_FINDINGS",
+        "PRODUCT_EXPERIENCE_VERDICT"
+      ],
+      "forbidden": [
+        "SOURCE_TEST_INSPECTION_FOR_VERDICT",
+        "SOURCE_TEST_MUTATION",
+        "CANDIDATE_REPAIR",
+        "ENGINEERING_READY_DECLARATION",
+        "CANDIDATE_ADMISSION",
+        "HUMAN_OWNER_ACCEPTANCE",
+        "MERGE_RELEASE_GOAL_CLOSE"
+      ]
+    },
+    "HUMAN_OWNER": {
+      "owns": [
+        "MAJOR_PRODUCT_TRADEOFFS",
+        "SENSITIVE_ACTION_AUTHORITY",
+        "FINAL_OWNER_ACCEPTANCE",
+        "PRODUCTION_AUTHORITY_WHEN_REQUIRED"
+      ]
+    }
+  },
+  "states": [
+    {
+      "id": "BASELINE_FROZEN",
+      "owner": "PRODUCT_GOVERNANCE",
+      "required_inputs": [
+        "product_baseline_ref"
+      ]
+    },
+    {
+      "id": "GOAL_MILESTONE_CONTRACT_FROZEN",
+      "owner": "PRODUCT_GOVERNANCE",
+      "required_inputs": [
+        "goal_id",
+        "milestone_id",
+        "relationship=ONE_GOAL_EQUALS_ONE_MILESTONE",
+        "contract_commit",
+        "contract_tree",
+        "contract_path",
+        "evidence_ownership_matrix"
+      ]
+    },
+    {
+      "id": "ENGINEERING_DELIVERY_ACTIVE",
+      "owner": "ENGINEERING_DELIVERY",
+      "required_inputs": [
+        "frozen_contract_identity",
+        "engineering_delivery_authority",
+        "preimage_sha",
+        "preimage_tree"
+      ]
+    },
+    {
+      "id": "ENGINEERING_READY",
+      "owner": "ENGINEERING_DELIVERY",
+      "atomic": true,
+      "required_inputs": [
+        "candidate_sha",
+        "candidate_tree",
+        "candidate_parent",
+        "branch_head_match=true",
+        "pr_head_match=true",
+        "candidate_manifest_ref",
+        "technical_receipt_ref",
+        "engineering_required_evidence=complete",
+        "unapproved_deviations=none",
+        "worktree_clean=true"
+      ],
+      "forbidden_aliases": [
+        "MILESTONE_READY",
+        "PRODUCT_READY",
+        "RELEASE_READY",
+        "PRODUCT_ACCEPTED"
+      ]
+    },
+    {
+      "id": "CANDIDATE_ADMISSION_PENDING",
+      "owner": "PRODUCT_GOVERNANCE",
+      "required_inputs": [
+        "engineering_ready_package"
+      ]
+    },
+    {
+      "id": "CANDIDATE_ADMITTED",
+      "owner": "PRODUCT_GOVERNANCE",
+      "required_inputs": [
+        "candidate_admission_record",
+        "exact_candidate_identity_verified",
+        "contract_coverage_verified",
+        "admission_required_evidence=complete",
+        "unapproved_product_deviations=none"
+      ]
+    },
+    {
+      "id": "PRODUCT_REVIEW_ELIGIBLE",
+      "owner": "PRODUCT_GOVERNANCE",
+      "required_inputs": [
+        "candidate_admitted",
+        "review_runtime_or_artifact_identity",
+        "review_required_evidence=complete",
+        "independent_reviewer_eligibility=verified",
+        "product_review_referral"
+      ]
+    },
+    {
+      "id": "PRODUCT_EXPERIENCE_REVIEW_IN_PROGRESS",
+      "owner": "INDEPENDENT_PRODUCT_EXPERIENCE_REVIEWER",
+      "required_inputs": [
+        "product_review_referral"
+      ]
+    },
+    {
+      "id": "PRODUCT_EXPERIENCE_PASS",
+      "owner": "INDEPENDENT_PRODUCT_EXPERIENCE_REVIEWER",
+      "required_inputs": [
+        "verdict_bound_to_exact_candidate"
+      ]
+    },
+    {
+      "id": "PRODUCT_EXPERIENCE_FAIL",
+      "owner": "INDEPENDENT_PRODUCT_EXPERIENCE_REVIEWER",
+      "required_inputs": [
+        "findings_bound_to_exact_candidate"
+      ]
+    },
+    {
+      "id": "HUMAN_OWNER_ACCEPTED",
+      "owner": "HUMAN_OWNER",
+      "required_inputs": [
+        "explicit_acceptance_bound_to_exact_candidate"
+      ]
+    },
+    {
+      "id": "RELEASE_AUTHORIZED",
+      "owner": "CONTRACT_DEFINED_RELEASE_AUTHORITY",
+      "required_inputs": [
+        "explicit_release_authorization"
+      ]
+    },
+    {
+      "id": "GOAL_MILESTONE_CLOSED",
+      "owner": "PRODUCT_GOVERNANCE",
+      "required_inputs": [
+        "all_contract_required_gates=closed"
+      ]
+    }
+  ],
+  "engineering_terminal_states": [
+    "ENGINEERING_READY",
+    "ENGINEERING_NOT_READY",
+    "BLOCKED_CHANGE_REQUEST_REQUIRED",
+    "BLOCKED_EXTERNAL_AUTHORITY",
+    "BLOCKED_IDENTITY_DRIFT"
+  ],
+  "candidate_admission_outcomes": [
+    "CANDIDATE_ADMITTED",
+    "CANDIDATE_REJECTED",
+    "CANDIDATE_ADMISSION_BLOCKED"
+  ],
+  "product_review_eligibility_outcomes": [
+    "PRODUCT_REVIEW_ELIGIBLE",
+    "PRODUCT_REVIEW_NOT_ELIGIBLE",
+    "PRODUCT_REVIEW_ELIGIBILITY_BLOCKED"
+  ],
+  "evidence_ownership": {
+    "engineering_required": {
+      "adjudicator": "ENGINEERING_DELIVERY",
+      "missing_effect": "ENGINEERING_READY_FORBIDDEN"
+    },
+    "admission_required": {
+      "adjudicator": "PRODUCT_GOVERNANCE",
+      "missing_effect": "CANDIDATE_ADMISSION_FORBIDDEN"
+    },
+    "review_required": {
+      "adjudicator": "PRODUCT_GOVERNANCE",
+      "missing_effect": "PRODUCT_REVIEW_ELIGIBLE_FORBIDDEN"
+    },
+    "product_experience": {
+      "adjudicator": "INDEPENDENT_PRODUCT_EXPERIENCE_REVIEWER"
+    },
+    "human_owner": {
+      "adjudicator": "HUMAN_OWNER"
+    }
+  },
+  "invalidation_rules": [
+    {
+      "trigger": "candidate_sha_or_tree_changes",
+      "invalidate": [
+        "ENGINEERING_READY",
+        "CANDIDATE_ADMITTED",
+        "PRODUCT_REVIEW_ELIGIBLE",
+        "PRODUCT_EXPERIENCE_VERDICT",
+        "HUMAN_OWNER_ACCEPTANCE",
+        "RELEASE_AUTHORIZATION"
+      ],
+      "return_to": "ENGINEERING_DELIVERY_ACTIVE"
+    },
+    {
+      "trigger": "goal_milestone_contract_changes",
+      "invalidate": [
+        "ENGINEERING_DELIVERY_HANDOFF",
+        "ENGINEERING_READY",
+        "CANDIDATE_ADMITTED",
+        "PRODUCT_REVIEW_ELIGIBLE",
+        "PRODUCT_EXPERIENCE_VERDICT",
+        "HUMAN_OWNER_ACCEPTANCE",
+        "RELEASE_AUTHORIZATION"
+      ],
+      "return_to": "GOAL_MILESTONE_CONTRACT_FROZEN"
+    },
+    {
+      "trigger": "role_or_context_independence_violation",
+      "invalidate": [
+        "affected_transition"
+      ],
+      "return_to": "last_valid_state"
+    }
+  ],
+  "mandatory_transition_receipt_fields": [
+    "protocol_version",
+    "goal_id",
+    "milestone_id",
+    "actor_role",
+    "actor_context_id",
+    "input_state",
+    "output_state",
+    "contract_commit",
+    "candidate_sha",
+    "candidate_tree",
+    "evidence_refs",
+    "forbidden_claims_acknowledged",
+    "issued_at"
+  ],
+  "fail_closed_conditions": [
+    "ROLE_DRIFT",
+    "CONTRACT_IDENTITY_DRIFT",
+    "CANDIDATE_IDENTITY_DRIFT",
+    "MISSING_REQUIRED_EVIDENCE",
+    "UNAPPROVED_PRODUCT_DEVIATION",
+    "AUTHOR_ACCEPTOR_CONFLICT",
+    "MOVING_REF_USED_AS_AUTHORITY",
+    "LOCAL_EXECUTOR_MUTATION",
+    "UNAUTHORIZED_STATE_TRANSITION"
+  ]
+}

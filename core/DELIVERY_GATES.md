@@ -1,17 +1,39 @@
-# Delivery Gates
+# Delivery Gates — Role-Owned State Machine
 
-One Goal equals one Milestone. Gate ownership is separated so no implementation author can self-accept the product candidate.
+Protocol: `DELIVERY-LIFECYCLE-1.0`
 
-| State / Gate | Authority | Minimum proof |
-|---|---|---|
-| `BASELINE_FROZEN` | Product Governance | Versioned Product Baseline and Project Profile |
-| `MILESTONE_CONTRACT_FROZEN` | Product Governance | One Goal/Milestone contract with value, scope, journeys, evidence and closure conditions |
-| `ENGINEERING_READY` | Engineering Delivery | Technical tests/checks and declared implementation scope |
-| `CANDIDATE_FROZEN` | Engineering Delivery submits; Product Governance verifies identity | Exact SHA/tree, PR head, Candidate Manifest, Technical Receipt |
-| `PRODUCT_REVIEW_ELIGIBLE` | Product Governance | Contract coverage, no unapproved baseline deviation, complete required evidence |
-| `PRODUCT_EXPERIENCE_PASS` | Independent Product Experience Reviewer | Real-product user-task verdict bound to exact SHA |
-| `HUMAN_OWNER_ACCEPTED` | Human Owner | Explicit Owner acceptance bound to exact SHA and contract |
-| `RELEASE_AUTHORIZED` | Human Owner or explicitly delegated release authority | Explicit authorization and target environment |
-| `MILESTONE_CLOSED` | Product Governance | Every required gate closed; Goal and Milestone close together |
+One Goal equals one Milestone. Every gate has exactly one decision owner.
 
-`TECHNICAL_PASS`, `PRODUCT_EXPERIENCE_PASS`, `HUMAN_OWNER_ACCEPTED`, and `RELEASE_AUTHORIZED` are distinct states. No single green gate implies another.
+| State / decision | Sole authority | Required proof | Explicitly does not prove |
+|---|---|---|---|
+| `BASELINE_FROZEN` | Product Governance | Exact Product Baseline reference | Engineering or product acceptance |
+| `GOAL_MILESTONE_CONTRACT_FROZEN` | Product Governance | Exact contract commit/tree/path and evidence-ownership matrix | Candidate readiness |
+| `ENGINEERING_READY` | Engineering Delivery | Atomic exact SHA/tree/parent + Candidate Manifest + Technical Receipt + complete engineering-required evidence | Candidate Admission, Product Review eligibility, Product Experience |
+| `CANDIDATE_ADMITTED` | Product Governance | Admission record bound to exact candidate/contract, admission evidence complete, no unapproved deviation | Product Review eligibility or Product Experience |
+| `PRODUCT_REVIEW_ELIGIBLE` | Product Governance | Candidate admitted, review runtime/artifact identity, review evidence complete, reviewer independence, referral | Product Experience PASS |
+| `PRODUCT_EXPERIENCE_PASS/FAIL/BLOCKED` | Independent Product Experience Reviewer | Code-blind real-product verdict bound to exact candidate/runtime | Human Owner Acceptance or release |
+| `HUMAN_OWNER_ACCEPTED/BLOCKED` | Human Owner | Explicit Owner decision bound to exact candidate/contract | Release unless contract says so |
+| `RELEASE_AUTHORIZED` | Contract-defined release authority | Explicit target/environment authorization | Goal close by itself |
+| `GOAL_MILESTONE_CLOSED` | Product Governance | Every contract-required gate closed | — |
+
+## Non-equivalence
+
+```text
+TECHNICAL_PASS
+!= ENGINEERING_READY
+!= CANDIDATE_ADMITTED
+!= PRODUCT_REVIEW_ELIGIBLE
+!= PRODUCT_EXPERIENCE_PASS
+!= HUMAN_OWNER_ACCEPTED
+!= RELEASE_AUTHORIZED
+!= GOAL_MILESTONE_CLOSED
+```
+
+## Fail-closed rules
+
+- Missing required fields or evidence means the current transition is blocked.
+- Candidate identity change invalidates all states from Engineering Ready onward.
+- Contract change invalidates the Engineering Delivery handoff and all downstream states.
+- One role cannot emit another role's state.
+- The candidate author cannot admit or independently review the same candidate.
+- Local Executor output is observation evidence, not a technical or product verdict.

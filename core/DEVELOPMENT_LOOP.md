@@ -1,29 +1,63 @@
 # Separated Product Delivery Loop
 
-## Phase A — Product Baseline
+Protocol: `DELIVERY-LIFECYCLE-1.0`
 
-Product Governance confirms the authoritative product positioning, target user, core user problem, product boundaries, and risk tier.
+## A — Product Baseline
 
-## Phase B — Goal/Milestone Contract
+Product Governance freezes product positioning, target user, problem, value, boundary and risk tier.
 
-Product Governance creates exactly one Goal for exactly one Milestone and freezes customer value, scope, required journeys, evidence, limitations, and closure conditions.
+## B — Goal/Milestone Contract
 
-## Phase C — Engineering Delivery
+Product Governance selects exactly one Goal and one Milestone, freezes the product contract, and classifies every required evidence item as:
 
-A separate Engineering Delivery context implements source and tests, performs code review, commits and pushes, manages the PR, and emits an exact-SHA Candidate Manifest plus Technical Receipt. It may declare only `ENGINEERING_READY`.
+```text
+engineering_required
+admission_required
+review_required
+product_experience
+human_owner
+```
 
-## Phase D — Candidate Admission
+Unclassified evidence blocks handoff.
 
-Product Governance verifies exact identity, contract coverage, unapproved deviations, evidence completeness, and unresolved blockers. It declares `PRODUCT_REVIEW_ELIGIBLE=YES/NO` without changing source.
+## C — Engineering Delivery
 
-## Phase E — Local and Independent Review
+A separate Engineering Delivery context implements source/tests, manages PR/CI, obtains all engineering-required evidence, freezes one exact candidate, emits Candidate Manifest and Technical Receipt, and returns one terminal state.
 
-The local execution layer deploys the authorized exact SHA and returns sanitized environment evidence. The Independent Product Experience Reviewer operates the real product against the frozen contract and publishes an independent verdict.
+`ENGINEERING_READY` is atomic. Engineering Delivery stops after handback.
 
-## Phase F — Remediation
+## D — Candidate Admission
 
-Product Governance converts valid findings into the existing Goal's focused engineering remediation contract, unless an approved Change Request creates a successor Goal. Engineering Delivery authors the successor candidate. Completed unaffected gates need not be repeated.
+Product Governance receives the immutable package. It verifies identity, contract coverage, admission evidence, Change Requests, defects/limitations and independence without modifying the candidate.
 
-## Phase G — Owner and Closure
+Outcome:
 
-The Human Owner grants any required acceptance/release authorization. Product Governance closes the Goal and Milestone together only after all required gates close.
+```text
+CANDIDATE_ADMITTED
+CANDIDATE_REJECTED
+CANDIDATE_ADMISSION_BLOCKED
+```
+
+## E — Product Review eligibility
+
+Only after admission, Product Governance separately verifies review runtime/artifact identity, review evidence and reviewer independence, then creates the exact Product Review referral.
+
+Outcome:
+
+```text
+PRODUCT_REVIEW_ELIGIBLE
+PRODUCT_REVIEW_NOT_ELIGIBLE
+PRODUCT_REVIEW_ELIGIBILITY_BLOCKED
+```
+
+## F — Independent Product Experience
+
+An independent, code-blind reviewer operates the exact product and issues Product Experience findings/verdict. It does not repair the candidate.
+
+## G — Remediation
+
+Product Governance reconciles the verdict. Any source/test change returns to a separate Engineering Delivery context under the same frozen Goal or an approved Change Request. Candidate identity change invalidates all downstream states.
+
+## H — Human Owner and closure
+
+The Human Owner grants any required final acceptance/sensitive authority. The contract-defined release authority acts separately. Product Governance closes Goal and Milestone together only when every required gate is closed.
