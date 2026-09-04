@@ -1,25 +1,35 @@
 # Role Model
 
-## Human Owner
+Protocol: `DELIVERY-LIFECYCLE-1.0`
 
-Owns product direction changes, sensitive permissions, production authorization, and final Human Owner Acceptance.
+## Product Governance
 
-## ChatGPT Parent PM / Product Governance
+Owns Product Baseline, one-Goal/one-Milestone Contract, evidence ownership, Change Requests, Candidate Admission, Product Review eligibility/referral, review reconciliation and Goal/Milestone closure.
 
-Owns Product Baseline, Project Profile, one-Goal/one-Milestone contracts, prioritization, change control, candidate admission, review orchestration, release recommendation, and milestone closure. It may write governance records but must not author product source or test candidates.
+It may write governance records. It must not mutate product source/tests, repair the candidate, declare Engineering Ready, issue the Product Experience verdict, or grant Human Owner Acceptance.
 
 ## Engineering Delivery
 
-Owns technical design, source implementation, technical tests, code review, commits, pushes, pull requests, CI remediation, exact-SHA candidate construction, Candidate Manifest, and Technical Receipt. It delivers exactly one frozen Goal/Milestone at a time unless Product Governance approves a Change Request.
+Owns technical design, product source/tests, code review, commit/push, engineering PR/CI, exact candidate, Candidate Manifest, Technical Receipt and only the `ENGINEERING_READY` terminal.
 
-## Local Execution Layer
+It stops after handback. It must not admit the candidate, declare Product Review eligibility, perform independent Product Experience, grant Owner acceptance, merge/release, or close the Goal/Milestone.
 
-A project Self-hosted Runner, Codex, or another local agent deploys the authorized exact SHA, injects local runtime credentials, executes prescribed environment-bound tests, and returns sanitized evidence. It does not modify source/tests or become the development owner.
+## Local Executor
+
+Materializes the authorized exact SHA, injects Owner-machine credentials, runs prescribed environment/device/data/browser steps, and returns sanitized observations.
+
+It cannot mutate source/tests, self-repair, commit/push, expand scope or issue any engineering/product acceptance state.
 
 ## Independent Product Experience Reviewer
 
-Evaluates the real product against the frozen baseline and milestone contract. It owns an independent product-experience verdict and does not inspect or modify implementation code.
+Begins only from a Product Governance referral after `PRODUCT_REVIEW_ELIGIBLE`. It operates the real product, issues independent findings/verdict, and remains code-blind for the verdict. It does not repair or grant Owner/release/closure authority.
 
-## Authority rule
+## Human Owner
 
-Role identity is contractual, not brand-based. One physical model or tool may serve different roles only in isolated conversations/contexts with separate authority inputs. The same context must not act as Product Governance and Engineering Delivery for the same Goal, and no role may author and accept the same candidate.
+Owns major product tradeoffs, sensitive permissions, explicit final Owner Acceptance, and production authority where the contract requires it.
+
+## Context isolation
+
+Role identity is contractual, not brand-based. The same physical model/tool may serve different roles only in isolated declared contexts. A candidate author cannot admit or independently review the same candidate.
+
+Any role that attempts another role's state transition must stop with `UNAUTHORIZED_STATE_TRANSITION`.
