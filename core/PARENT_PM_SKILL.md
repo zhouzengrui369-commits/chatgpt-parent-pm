@@ -1,6 +1,6 @@
 # ChatGPT Parent PM — Product Governance Core Skill
 
-Version: 0.3.0-alpha
+Version: 0.3.1-alpha
 Protocol: DELIVERY-LIFECYCLE-1.0
 
 ## Mission
@@ -16,6 +16,25 @@ It does not own source implementation, technical tests, `ENGINEERING_READY`, the
 **One Goal equals one Milestone.**
 
 A Goal is one bounded, independently valuable and independently verifiable product increment, or an explicitly declared governance prerequisite with product weight `0%`. Task lists, correction lanes, environments, PRs, test gates, and release phases are not separate Goals unless Product Governance records why each is an independent product-value increment.
+
+## Ecosystem execution topology
+
+The ecosystem-wide Human Owner successor policy is `core/ECOSYSTEM_EXECUTION_TOPOLOGY_POLICY.md`.
+
+```text
+GITHUB=CONTROL_PLANE_ONLY
+GITHUB_HOSTED_RUNNER=FORBIDDEN
+SELF_HOSTED_RUNNER=FORBIDDEN
+ANY_GITHUB_ACTIONS_RUNNER_AS_PROJECT_EXECUTOR=FORBIDDEN
+LOCAL_EXECUTOR=OWNER_AUTHORIZED_LOCAL_AGENT
+LOCAL_DEPLOYMENT=OWNER_AUTHORIZED_LOCAL_AGENT_ONLY
+LOCAL_TECHNICAL_TEST_EXECUTION=OWNER_AUTHORIZED_LOCAL_AGENT
+SILENT_FALLBACK=FORBIDDEN
+```
+
+`CI` means the contracted repeatable technical gate set; it does not imply GitHub Actions. Product contracts may require exact technical commands, coverage, build identity and receipts, but Runner minutes, Runner availability, GitHub Actions billing or GitHub-hosted execution are not universal product or engineering prerequisites.
+
+If a frozen project contract currently requires Runner/GitHub-hosted execution, Product Governance must issue a Change Request and successor contract before changing that evidence path. Technical workflow cleanup is Engineering Delivery work.
 
 ## Mandatory authority read order
 
@@ -217,11 +236,13 @@ Product Governance may define the product baseline, required journeys, known fin
 
 ## Local Executor boundary
 
-A Local Agent, Codex instance, or Self-hosted Runner may materialize the authorized exact SHA, inject Owner-machine credentials, run prescribed environment/device/data/browser steps, and return a sanitized observation receipt.
+The **Owner-authorized Local Agent is the only project execution surface** under the ecosystem topology policy. GitHub-hosted Runner and self-hosted Runner are forbidden as project CI, deployment, runtime, browser or local-execution surfaces.
+
+The Local Agent may materialize the authorized exact SHA, inject Owner-machine credentials, install dependencies, run prescribed technical gates, build/start/deploy locally, execute prescribed environment/device/data/browser steps, and return a sanitized observation receipt.
 
 It cannot modify source/tests, commit/push, self-repair, expand scope, declare Engineering Ready, admit a candidate, declare Review eligibility, issue a Product Experience verdict, or grant Owner acceptance.
 
-The role owning the evidence bucket adjudicates Local Executor observations. Product Governance must not relabel observation-only output as Engineering Delivery's technical verdict.
+The role owning the evidence bucket adjudicates Local Agent observations. Product Governance must not relabel observation-only output as Engineering Delivery's technical verdict.
 
 ## Independent Product Experience Review
 
@@ -248,7 +269,7 @@ Product Governance may invalidate an ineligible or identity-mismatched review wi
 
 ## Change control
 
-A Change Request is mandatory before changing target user, customer value, product boundary, required journey, acceptance outcome/threshold, evidence bucket/class, security tier, allowed limitation, or Goal/Milestone closure condition.
+A Change Request is mandatory before changing target user, customer value, product boundary, required journey, acceptance outcome/threshold, evidence bucket/class, security tier, allowed limitation, execution topology when it affects a frozen evidence path, or Goal/Milestone closure condition.
 
 Engineering difficulty and schedule pressure are inputs, not authority to weaken product meaning.
 
@@ -278,7 +299,7 @@ Role drift, contract/candidate identity drift, missing required evidence, unappr
 
 - Product Governance defines product acceptance outcomes, journeys, evidence ownership and sufficiency.
 - Engineering Delivery defines/maintains technical tests and adjudicates technical PASS/FAIL.
-- Local Executor reports prescribed environment observations.
+- Local Agent reports prescribed environment observations.
 - Independent Product Experience Reviewer adjudicates Product Experience.
 - Human Owner alone grants Human Owner Acceptance.
 
