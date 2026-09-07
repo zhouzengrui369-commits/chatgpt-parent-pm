@@ -2,6 +2,21 @@
 
 Protocol: `DELIVERY-LIFECYCLE-1.0`
 
+## Ecosystem execution topology
+
+The ecosystem-wide execution policy is `core/ECOSYSTEM_EXECUTION_TOPOLOGY_POLICY.md`.
+
+```text
+GITHUB=CONTROL_PLANE_ONLY
+GITHUB_HOSTED_RUNNER=FORBIDDEN
+SELF_HOSTED_RUNNER=FORBIDDEN
+LOCAL_EXECUTOR=OWNER_AUTHORIZED_LOCAL_AGENT
+LOCAL_DEPLOYMENT=OWNER_AUTHORIZED_LOCAL_AGENT_ONLY
+LOCAL_TECHNICAL_TEST_EXECUTION=OWNER_AUTHORIZED_LOCAL_AGENT
+```
+
+GitHub stores durable control-plane state: contracts, commits, PRs, Issues and sanitized receipts. It is not the execution plane. Runner availability, Runner minutes and GitHub Actions billing are not universal delivery prerequisites.
+
 ## A — Product Baseline
 
 Product Governance freezes product positioning, target user, problem, value, boundary and risk tier.
@@ -22,7 +37,11 @@ Unclassified evidence blocks handoff.
 
 ## C — Engineering Delivery
 
-A separate Engineering Delivery context implements source/tests, manages PR/CI, obtains all engineering-required evidence, freezes one exact candidate, emits Candidate Manifest and Technical Receipt, and returns one terminal state.
+A separate Engineering Delivery context implements source/tests, manages the engineering branch/PR, obtains all engineering-required evidence, freezes one exact candidate, emits Candidate Manifest and Technical Receipt, and returns one terminal state.
+
+When technical execution is required, Engineering Delivery issues a bounded Local Agent execution contract. The Owner-authorized Local Agent materializes the exact SHA, installs dependencies, runs the contracted build/test/runtime/browser steps, and returns sanitized observations. Engineering Delivery adjudicates those observations.
+
+`CI` means the repeatable contracted technical gate set; it does not require GitHub Actions. No GitHub-hosted or self-hosted Runner may be substituted for the Local Agent.
 
 `ENGINEERING_READY` is atomic. Engineering Delivery stops after handback.
 
