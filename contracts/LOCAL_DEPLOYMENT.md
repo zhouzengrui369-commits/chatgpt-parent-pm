@@ -20,28 +20,27 @@ LOCAL_DEPLOYMENT=LOCAL_AGENT_ONLY
 ## Allowed Local Agent actions
 
 - identity verification
-- exact-SHA checkout or authorized fast-forward
+- exact-SHA materialization
 - dependency installation
 - local build/start/deploy
 - prescribed technical tests
 - prescribed runtime/device/data/browser smoke
-- local runtime configuration and credential injection/generation required by the Engineering Delivery contract
+- local runtime configuration and local runtime-only technical secret generation/storage required by Engineering Delivery contract
 - sanitized log/observation collection
 
-A local runtime-only technical secret may be generated/stored locally when required by the Engineering Delivery contract if it does not grant new external-account authority, authorize payment/production/irreversible action, and is never printed/exported/committed/uploaded/returned in the receipt.
+A local runtime-only secret is technical configuration, not a Human Owner gate, when it grants no new external-account permission, billing/payment authority, production authority or irreversible capability and is never printed/exported/committed/uploaded/returned in the receipt.
 
 ## Forbidden actions
 
 - GitHub-hosted Runner execution
 - self-hosted Runner execution
 - silent executor fallback
-- source or test modification
-- package/lockfile modification
+- source/test/workflow/lockfile modification
 - commit, amend, rebase, merge, force-push
 - PR state changes
 - self-repair or scope expansion
 - secret publication/export
-- external account/provider authorization not already granted
+- unauthorized external account/provider changes
 - payment/billing/production authorization
 - `ENGINEERING_READY` declaration
 - Candidate Admission / Product Experience / Human Owner Acceptance
@@ -49,17 +48,14 @@ A local runtime-only technical secret may be generated/stored locally when requi
 ## Receipt
 
 - Executor identity: LOCAL_AGENT
-- Observed local SHA:
-- Observed tree/parent:
-- Build command/result:
-- Test command/result:
-- Start/deploy command/result:
+- Observed local SHA/tree/parent:
+- Build/test/start results:
 - Runtime endpoint/path:
-- Smoke result:
-- Local runtime secret status (non-secret metadata only):
+- Runtime configuration compliance:
+- Local runtime secret present/requirements match (non-secret metadata only):
+- Secret value exported: false
 - Clean state before/after:
 - Zero prohibited writes:
-- Secret value exported: false
 - Logs/artifacts:
 - What was not tested:
 - Verdict: PASS / PARTIAL PASS / BLOCKED / FAIL
