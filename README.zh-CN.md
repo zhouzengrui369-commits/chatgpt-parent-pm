@@ -1,42 +1,24 @@
-# ChatGPT Product Governance
+# ChatGPT Parent PM
 
-这是一个仓库原生的产品治理框架，将 Product Governance、Engineering Delivery、本地执行、独立产品体验审核和 Human Owner 权限严格分离。
+AI 项目生态的中央 Product Governance 框架。
 
-## 标准链路
-
-```text
-Product Governance 冻结一个 Goal/Milestone Contract
-→ 独立 Engineering Delivery
-→ ENGINEERING_READY + exact SHA + Candidate Manifest + Technical Receipt
-→ Product Governance Candidate Admission
-→ Product Governance 宣布 PRODUCT_REVIEW_ELIGIBLE
-→ 独立 Product Experience Review
-→ Human Owner Gate
-→ 合同定义的 Release
-→ Product Governance 关闭 Goal/Milestone
-```
-
-每个状态只有一个决策责任人，任何角色不得代替另一个角色宣布状态。
-
-## 严格不等式
+当前 successor 执行拓扑：
 
 ```text
-TECHNICAL_PASS
-!= ENGINEERING_READY
-!= CANDIDATE_ADMITTED
-!= PRODUCT_REVIEW_ELIGIBLE
-!= PRODUCT_EXPERIENCE_PASS
-!= HUMAN_OWNER_ACCEPTED
-!= RELEASE_AUTHORIZED
-!= GOAL_MILESTONE_CLOSED
+GITHUB=CONTROL_PLANE_ONLY
+GITHUB_HOSTED_RUNNER=FORBIDDEN
+SELF_HOSTED_RUNNER=FORBIDDEN
+LOCAL_EXECUTOR=LOCAL_AGENT
+LOCAL_DEPLOYMENT=LOCAL_AGENT_ONLY
+LOCAL_TECHNICAL_TEST_EXECUTION=LOCAL_AGENT
 ```
 
-## 权威入口
+`LOCAL_AGENT` 是唯一规范的本地执行角色，不存在独立的 `OWNER_AUTHORIZED_LOCAL_AGENT` 生命周期角色。
 
-- Product Governance：`core/PARENT_PM_SKILL.md`
-- 机器可读状态机：`core/DELIVERY_STATE_MACHINE.json`
-- Engineering Delivery exact authority：`core/ENGINEERING_DELIVERY_AUTHORITY.json`
-- Candidate Admission：`contracts/CANDIDATE_ADMISSION.md`
-- 产品审核转交：`contracts/PRODUCT_REVIEW_REFERRAL.md`
+Product Governance 负责产品基线、Goal/Milestone 合同、Change Request、候选准入和后续治理；Engineering Delivery 负责技术方案、源码、测试、PR、技术门和 Local Agent 执行合同；Local Agent 负责本地部署、技术执行和脱敏 observation。
 
-版本：`0.3.0-alpha`。
+安全遵循“产品价值优先、风险分级、逐步加固”。本地 runtime-only 技术配置（例如随机 JWT signing secret）在不涉及外部账号权限、支付、生产授权或不可逆操作时，由 Engineering Delivery + Local Agent 完成，不额外制造 Human Owner 确认门。
+
+Human Owner 保留重大产品取舍、真正敏感的外部权限/账号、支付、生产授权、不可逆操作和最终 Human Owner Acceptance。
+
+详见 `core/PARENT_PM_SKILL.md` 与 `core/ECOSYSTEM_EXECUTION_TOPOLOGY_POLICY.md`。
