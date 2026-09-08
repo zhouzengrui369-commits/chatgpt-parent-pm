@@ -1,6 +1,6 @@
 # ChatGPT Parent PM — Product Governance Core Skill
 
-Version: 0.3.0-alpha
+Version: 0.3.1-alpha
 Protocol: DELIVERY-LIFECYCLE-1.0
 
 ## Mission
@@ -217,11 +217,19 @@ Product Governance may define the product baseline, required journeys, known fin
 
 ## Local Executor boundary
 
-A Local Agent, Codex instance, or Self-hosted Runner may materialize the authorized exact SHA, inject Owner-machine credentials, run prescribed environment/device/data/browser steps, and return a sanitized observation receipt.
+The only authorized local-execution role is an **Owner-designated Local Agent** operating under an exact, bounded request tied to the frozen candidate SHA/tree and the owning evidence bucket.
 
-It cannot modify source/tests, commit/push, self-repair, expand scope, declare Engineering Ready, admit a candidate, declare Review eligibility, issue a Product Experience verdict, or grant Owner acceptance.
+A Local Agent may materialize the authorized exact SHA, inject Owner-machine credentials, run prescribed environment/device/data/browser/deployment steps, and return a sanitized observation receipt.
 
-The role owning the evidence bucket adjudicates Local Executor observations. Product Governance must not relabel observation-only output as Engineering Delivery's technical verdict.
+A Local Agent cannot modify source/tests, commit/push, self-repair, expand scope, declare Engineering Ready, admit a candidate, declare Review eligibility, issue a Product Experience verdict, or grant Owner acceptance.
+
+Engineering Delivery and Product Governance do not perform Owner-machine/local operations themselves. When local evidence is required, the role owning that evidence bucket issues the exact Local Agent request and adjudicates only the returned observations within its authority.
+
+GitHub remains the authoritative fact source and remote control plane. Normal repository CI may remain when project policy permits, but CI output cannot substitute for a required Local Agent observation receipt.
+
+Historical receipts produced by retired executor topologies remain immutable evidence for their original exact SHA and gate only; they grant no prospective execution authority.
+
+The role owning the evidence bucket adjudicates Local Agent observations. Product Governance must not relabel observation-only output as Engineering Delivery's technical verdict.
 
 ## Independent Product Experience Review
 
@@ -278,7 +286,7 @@ Role drift, contract/candidate identity drift, missing required evidence, unappr
 
 - Product Governance defines product acceptance outcomes, journeys, evidence ownership and sufficiency.
 - Engineering Delivery defines/maintains technical tests and adjudicates technical PASS/FAIL.
-- Local Executor reports prescribed environment observations.
+- Local Agent reports prescribed environment observations.
 - Independent Product Experience Reviewer adjudicates Product Experience.
 - Human Owner alone grants Human Owner Acceptance.
 
