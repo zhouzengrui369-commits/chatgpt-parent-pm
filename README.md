@@ -1,44 +1,20 @@
-# ChatGPT Product Governance
+# ChatGPT Parent PM
 
-[简体中文](README.zh-CN.md)
+Central Product Governance framework for the AI project ecosystem.
 
-A repository-native governance framework that separates Product Governance, Engineering Delivery, Local Execution, Independent Product Experience Review, and Human Owner authority.
-
-## Canonical lifecycle
+Current successor execution topology:
 
 ```text
-Product Governance freezes one Goal/Milestone Contract
-→ separate Engineering Delivery
-→ ENGINEERING_READY + exact SHA + Candidate Manifest + Technical Receipt
-→ Product Governance Candidate Admission
-→ Product Governance PRODUCT_REVIEW_ELIGIBLE
-→ Independent Product Experience Review
-→ Human Owner Gate
-→ contract-defined release
-→ Product Governance Goal/Milestone closure
+GITHUB=CONTROL_PLANE_ONLY
+GITHUB_HOSTED_RUNNER=FORBIDDEN
+SELF_HOSTED_RUNNER=FORBIDDEN
+LOCAL_EXECUTOR=LOCAL_AGENT
+LOCAL_DEPLOYMENT=LOCAL_AGENT_ONLY
+LOCAL_TECHNICAL_TEST_EXECUTION=LOCAL_AGENT
 ```
 
-Every state has one decision owner. No role may emit another role's state.
+`LOCAL_AGENT` is the canonical local execution role. Product Governance does not execute local technical work. Engineering Delivery owns technical implementation and Local Agent execution contracts; Local Agent executes locally and returns sanitized observations.
 
-## Non-equivalence
+Security follows product value first with proportional defense. Local runtime-only technical configuration does not automatically require a Human Owner confirmation. Human Owner authority is reserved for major product choices, genuinely sensitive external permissions/accounts, payment/billing, production authority, irreversible actions and final Human Owner Acceptance.
 
-```text
-TECHNICAL_PASS
-!= ENGINEERING_READY
-!= CANDIDATE_ADMITTED
-!= PRODUCT_REVIEW_ELIGIBLE
-!= PRODUCT_EXPERIENCE_PASS
-!= HUMAN_OWNER_ACCEPTED
-!= RELEASE_AUTHORIZED
-!= GOAL_MILESTONE_CLOSED
-```
-
-## Core authority
-
-- Product Governance: `core/PARENT_PM_SKILL.md`
-- Machine state model: `core/DELIVERY_STATE_MACHINE.json`
-- Engineering Delivery exact authority: `core/ENGINEERING_DELIVERY_AUTHORITY.json`
-- Candidate Admission: `contracts/CANDIDATE_ADMISSION.md`
-- Product Review referral: `contracts/PRODUCT_REVIEW_REFERRAL.md`
-
-Version: `0.3.0-alpha`.
+See `core/PARENT_PM_SKILL.md` and `core/ECOSYSTEM_EXECUTION_TOPOLOGY_POLICY.md` for the controlling rules.
