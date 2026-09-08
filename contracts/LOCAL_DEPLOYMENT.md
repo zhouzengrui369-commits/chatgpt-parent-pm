@@ -1,12 +1,12 @@
 # Local Deployment Contract
 
-Executor: `OWNER_AUTHORIZED_LOCAL_AGENT` only.
+Executor: `LOCAL_AGENT` only.
 
 ```text
 GITHUB=CONTROL_PLANE_ONLY
 GITHUB_HOSTED_RUNNER=FORBIDDEN
 SELF_HOSTED_RUNNER=FORBIDDEN
-LOCAL_DEPLOYMENT=OWNER_AUTHORIZED_LOCAL_AGENT_ONLY
+LOCAL_DEPLOYMENT=LOCAL_AGENT_ONLY
 ```
 
 - Goal ID:
@@ -25,8 +25,10 @@ LOCAL_DEPLOYMENT=OWNER_AUTHORIZED_LOCAL_AGENT_ONLY
 - local build/start/deploy
 - prescribed technical tests
 - prescribed runtime/device/data/browser smoke
-- Owner-machine credential injection through authorized local mechanisms
+- local runtime configuration and credential injection/generation required by the Engineering Delivery contract
 - sanitized log/observation collection
+
+A local runtime-only technical secret may be generated/stored locally when required by the Engineering Delivery contract if it does not grant new external-account authority, authorize payment/production/irreversible action, and is never printed/exported/committed/uploaded/returned in the receipt.
 
 ## Forbidden actions
 
@@ -38,13 +40,15 @@ LOCAL_DEPLOYMENT=OWNER_AUTHORIZED_LOCAL_AGENT_ONLY
 - commit, amend, rebase, merge, force-push
 - PR state changes
 - self-repair or scope expansion
-- secret publication
+- secret publication/export
+- external account/provider authorization not already granted
+- payment/billing/production authorization
 - `ENGINEERING_READY` declaration
 - Candidate Admission / Product Experience / Human Owner Acceptance
 
 ## Receipt
 
-- Executor identity: OWNER_AUTHORIZED_LOCAL_AGENT
+- Executor identity: LOCAL_AGENT
 - Observed local SHA:
 - Observed tree/parent:
 - Build command/result:
@@ -52,8 +56,10 @@ LOCAL_DEPLOYMENT=OWNER_AUTHORIZED_LOCAL_AGENT_ONLY
 - Start/deploy command/result:
 - Runtime endpoint/path:
 - Smoke result:
+- Local runtime secret status (non-secret metadata only):
 - Clean state before/after:
 - Zero prohibited writes:
+- Secret value exported: false
 - Logs/artifacts:
 - What was not tested:
 - Verdict: PASS / PARTIAL PASS / BLOCKED / FAIL
