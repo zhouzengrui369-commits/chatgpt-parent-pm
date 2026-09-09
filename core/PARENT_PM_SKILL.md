@@ -123,6 +123,8 @@ Before the Goal/Milestone Contract is frozen, every required evidence item must 
 
 An unclassified evidence item is a blocking contract defect. Product Governance must resolve it before Engineering Delivery begins.
 
+When a required local evidence item includes deployment/runtime materialization, Product Governance must make the applicable post-deployment observation explicit before the local attempt. Deployment/start/port/health success alone must not be used as an implicit substitute for required operational verification.
+
 ## Engineering Delivery handoff
 
 The handoff must pin:
@@ -221,15 +223,34 @@ The only authorized local-execution role is an **Owner-designated Local Agent** 
 
 A Local Agent may materialize the authorized exact SHA, inject Owner-machine credentials, run prescribed environment/device/data/browser/deployment steps, and return a sanitized observation receipt.
 
+When deployment, installation, runtime launch, or materialization of a runnable candidate is part of the request, the Local Agent must perform post-deployment operational verification before the local task can be treated as complete.
+
+```text
+POST_DEPLOYMENT_OPERATIONAL_VERIFICATION=REQUIRED
+DEPLOYMENT_SUCCESS_ALONE=INSUFFICIENT
+BROWSER_VERIFICATION=REQUIRED_WHEN_BROWSER_OPERABLE_OR_BROWSER_JOURNEY_APPLIES
+VERIFICATION_METHOD=TOOL_AGNOSTIC
+LOCAL_AGENT_OWN_BROWSER_CAPABILITY=PREFERRED
+OWNER_FOREGROUND_BROWSER_OR_DESKTOP=LAST_RESORT
+```
+
+For browser-accessible products or browser-operable journeys, browser operation is the default verification route. No browser vendor, engine, automation framework, or vendor-specific Browser Use implementation is mandated. The Local Agent must prefer its own built-in/program-provided browser capability, isolated browser, headless browser, or isolated browser profile/session over any route that takes over the Human Owner's foreground browser, mouse, keyboard, or desktop. Foreground-interactive operation is a last resort when the required observation cannot be proven otherwise and the frozen contract permits it.
+
+If no browser-operable surface exists, the frozen contract may mark browser verification `NOT_APPLICABLE`, but equivalent post-deployment operational verification remains required through the Local Agent's own least-disruptive permitted runtime/UI/device capability.
+
+At minimum, applicable post-deployment verification should establish exact runtime/deployment identity, reachability beyond process start, primary surface rendering/opening, operation of the prescribed deployment smoke/critical journey, and absence or presence of blocking runtime/routing/loading/bootstrap/authentication/first-interaction failures.
+
 A Local Agent cannot modify source/tests, commit/push, self-repair, expand scope, declare Engineering Ready, admit a candidate, declare Review eligibility, issue a Product Experience verdict, or grant Owner acceptance.
+
+If deployment succeeds but the required operational verification fails or cannot be completed, the Local Agent returns `FAIL`/`BLOCKED` observations; deployment-only PASS promotion is forbidden and the Local Agent must not repair the candidate.
 
 Engineering Delivery and Product Governance do not perform Owner-machine/local operations themselves. When local evidence is required, the role owning that evidence bucket issues the exact Local Agent request and adjudicates only the returned observations within its authority.
 
-GitHub remains the authoritative fact source and remote control plane. Normal repository CI may remain when project policy permits, but CI output cannot substitute for a required Local Agent observation receipt.
+GitHub remains the authoritative fact source and remote control plane. Normal repository CI may remain when project policy permits, but CI output cannot substitute for a required Local Agent observation receipt, including required post-deployment operation.
 
-Historical receipts produced by retired executor topologies remain immutable evidence for their original exact SHA and gate only; they grant no prospective execution authority.
+Historical receipts produced by retired executor topologies or predecessor Local Agent contracts remain immutable evidence for their original exact SHA and gate only; they grant no prospective execution authority and are not retroactively invalidated solely because the post-deployment rule is now mandatory for future attempts.
 
-The role owning the evidence bucket adjudicates Local Agent observations. Product Governance must not relabel observation-only output as Engineering Delivery's technical verdict.
+The role owning the evidence bucket adjudicates Local Agent observations. Product Governance must not relabel observation-only output as Engineering Delivery's technical verdict, Product Experience PASS, or Human Owner Acceptance.
 
 ## Independent Product Experience Review
 
@@ -243,6 +264,8 @@ The reviewer:
 - does not inspect source/tests for the verdict;
 - does not repair the product;
 - does not grant Human Owner Acceptance or merge/release/closure authority.
+
+Local Agent post-deployment operational verification is an observation gate and does not replace the Independent Product Experience Review.
 
 Product Governance may invalidate an ineligible or identity-mismatched review with reasons, but cannot convert a valid FAIL into PASS.
 
@@ -286,12 +309,13 @@ Role drift, contract/candidate identity drift, missing required evidence, unappr
 
 - Product Governance defines product acceptance outcomes, journeys, evidence ownership and sufficiency.
 - Engineering Delivery defines/maintains technical tests and adjudicates technical PASS/FAIL.
-- Local Agent reports prescribed environment observations.
+- Local Agent reports prescribed environment and post-deployment operational observations.
 - Independent Product Experience Reviewer adjudicates Product Experience.
 - Human Owner alone grants Human Owner Acceptance.
 
 ```text
-TECHNICAL_PASS
+LOCAL_AGENT_POST_DEPLOYMENT_PASS
+!= TECHNICAL_PASS
 != ENGINEERING_READY
 != CANDIDATE_ADMITTED
 != PRODUCT_REVIEW_ELIGIBLE
