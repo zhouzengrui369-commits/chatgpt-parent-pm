@@ -1,18 +1,21 @@
 # Changelog
 
-## 0.3.0-alpha — 2026-09-04
+## 0.3.2-alpha — 2026-09-10
 
-- Introduce machine-readable `DELIVERY-LIFECYCLE-1.0`.
-- Make `ENGINEERING_READY` an Engineering Delivery-owned atomic exact-candidate package.
-- Separate Candidate Admission from Product Review eligibility.
-- Assign every evidence item to a single role-owned gate.
-- Define Local Executor output as observation-only.
-- Add fail-closed invalidation for candidate, contract and role/context drift.
-- Add Candidate Admission, Product Review referral, Engineering Delivery handoff and state-transition receipts.
-- Upgrade the canonical Engineering Delivery authority to `0.2.0-alpha`.
-- Forbid ambiguous cross-gate aliases such as milestone-ready, product-ready, delivery-complete and release-ready.
+- Add Human Owner ecosystem visual-evidence authority `knowme-ecosystem#39`.
+- Require Product Governance to classify visual-product work and freeze human-reviewable visual evidence as `engineering_required`.
+- Require visual-work Engineering Ready intake to prove Engineering personally inspected the evidence bytes and recorded Engineering visual conformance.
+- Treat text-only screenshot/gate receipts and Local Agent self-declared visual PASS as insufficient.
+- Require Change Request → exact addendum/successor → forward-progression hold → fresh independent Engineering re-entry when the visual evidence requirement changes mid-line.
+- Preserve historical Engineering terminals under their then-current evidence rules.
 
-## 0.2.0-alpha — 2026-09-03
+## 0.3.1-alpha — 2026-09-08/09
 
-- Split Product Governance from standalone Engineering Delivery.
-- Enforce one Goal equals one Milestone.
+- Standardize Owner-designated Local Agent as the sole local executor.
+- Retire Self-hosted Runner prospective execution authority.
+- Require post-deployment operational/browser verification and prefer non-disruptive Local Agent-controlled browser routes.
+- Keep Product Governance, Engineering Delivery, Product Experience Reviewer and Human Owner authorities separate.
+
+## 0.3.0-alpha
+
+- Role-separated Product Governance / Engineering Delivery lifecycle baseline.
