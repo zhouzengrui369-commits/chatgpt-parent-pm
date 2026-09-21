@@ -8,6 +8,10 @@ goal_id: GOAL-XXX
 milestone_id: MILESTONE-GOAL-XXX
 relationship: ONE_GOAL_EQUALS_ONE_MILESTONE
 status: DRAFT | FROZEN | SUPERSEDED | CLOSED
+version_horizon: PRE_1_0 | FINAL_1_0 | POST_1_0
+
+owner_acceptance_policy:
+  mode: DELEGATED_TO_PRODUCT_EXPERIENCE | HUMAN_OWNER_FINAL_REQUIRED | EXPLICIT_OWNER_GATE
 
 product_baseline:
   version: ""
@@ -48,7 +52,7 @@ required_gates:
   candidate_admission: true
   product_review_eligibility: true
   product_experience: true
-  human_owner_acceptance: true
+  human_owner_acceptance: false
   release_authorization: false
 
 closure_conditions: []
@@ -70,3 +74,8 @@ contract_path: ""
 ```
 
 Every required evidence item must appear in exactly one evidence bucket. Missing or duplicate ownership is a blocking contract defect.
+
+Human Owner gate rules:
+- `PRE_1_0` defaults to `DELEGATED_TO_PRODUCT_EXPERIENCE` and `human_owner_acceptance: false`.
+- `FINAL_1_0` must use `HUMAN_OWNER_FINAL_REQUIRED` and `human_owner_acceptance: true`.
+- An intermediate Owner gate may be added only when the frozen contract explicitly requires it for a major tradeoff or sensitive authority.
