@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0-alpha — 2026-09-21
+
+- Make Human Owner Acceptance a contract-defined conditional gate.
+- Default pre-1.0 development Goals to Independent Product Experience validation without routine Human Owner acceptance.
+- Require explicit Human Owner acceptance for the exact 1.0 final candidate.
+- Add a narrow governance-only gate-policy Change Request class that can preserve exact-candidate Engineering/Candidate/PX states when product meaning and bytes are unchanged.
+- Add durable preservation-receipt requirements and forbid synthesizing Human Owner acceptance.
+
 ## 0.3.0-alpha — 2026-09-04
 
 - Introduce machine-readable `DELIVERY-LIFECYCLE-1.0`.
