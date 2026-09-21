@@ -1,6 +1,6 @@
 # ChatGPT Parent PM — Product Governance Core Skill
 
-Version: 0.3.0-alpha
+Version: 0.4.0-alpha
 Protocol: DELIVERY-LIFECYCLE-1.0
 
 ## Mission
@@ -99,17 +99,27 @@ PRODUCT_EXPERIENCE_REVIEW_IN_PROGRESS
 PRODUCT_EXPERIENCE_PASS | PRODUCT_EXPERIENCE_FAIL | PRODUCT_EXPERIENCE_BLOCKED
   owner: Independent Product Experience Reviewer
 ↓
-HUMAN_OWNER_ACCEPTED | HUMAN_OWNER_BLOCKED
+[CONDITIONAL] HUMAN_OWNER_ACCEPTED | HUMAN_OWNER_BLOCKED
   owner: Human Owner
+  required: contract-defined; mandatory for FINAL_1_0
 ↓
-RELEASE_AUTHORIZED
+[CONDITIONAL] RELEASE_AUTHORIZED
   owner: contract-defined release authority
 ↓
 GOAL_MILESTONE_CLOSED
   owner: Product Governance
 ```
 
-No role may skip, merge, rename, or imply another role's transition.
+No role may skip, merge, rename, or imply another role's **required** transition. Human Owner Acceptance and Release Authorization are conditional gates controlled by the frozen contract.
+
+## Human Owner gate policy
+
+The canonical policy is `core/HUMAN_OWNER_GATE_POLICY.md`.
+
+- Pre-1.0 development Goals default to `human_owner_acceptance: false`; Independent Product Experience Review owns routine development-stage experience validation.
+- A 1.0 final product candidate must set `human_owner_acceptance: true` and requires explicit Human Owner acceptance bound to the exact final candidate.
+- Human Owner time is reserved for major product tradeoffs, sensitive/irreversible authority, and final 1.0 acceptance, not routine development testing.
+- Human Owner exploratory feedback before 1.0 is valid product input but does not make the Owner the regression tester.
 
 ## Evidence ownership matrix
 
@@ -241,14 +251,17 @@ Product Governance may invalidate an ineligible or identity-mismatched review wi
 ## Invalidation rules
 
 - Candidate SHA/tree change invalidates Engineering Ready, Candidate Admission, Review eligibility, Product Experience verdict, Owner acceptance and release authorization. Return to Engineering Delivery.
-- Goal/Milestone Contract change invalidates the prior Engineering Delivery handoff and every downstream candidate state. Issue a new exact handoff.
+- Goal/Milestone Contract change that alters product meaning, acceptance, evidence ownership, security or allowed limitations invalidates the prior Engineering Delivery handoff and every downstream candidate state. Issue a new exact handoff.
+- A governance-only required-gate/closure-policy correction may preserve exact-candidate Engineering/Candidate/Review states only when it satisfies every criterion in `core/HUMAN_OWNER_GATE_POLICY.md`, has an approved Change Request, requires no product mutation, and has a durable preservation receipt.
 - Role/context independence violation invalidates the affected transition.
 - Unauthorized Local Executor mutation invalidates its evidence and the candidate if candidate bytes changed.
 - Historical receipts remain bound to their original exact SHA and gate. They may guide regression but do not auto-transfer PASS.
 
 ## Change control
 
-A Change Request is mandatory before changing target user, customer value, product boundary, required journey, acceptance outcome/threshold, evidence bucket/class, security tier, allowed limitation, or Goal/Milestone closure condition.
+A Change Request is mandatory before changing target user, customer value, product boundary, required journey, acceptance outcome/threshold, evidence bucket/class, security tier, allowed limitation, required gate, or Goal/Milestone closure condition.
+
+A governance-only Owner-gate correction may preserve prior exact-candidate states only under the narrow preservation policy in `core/HUMAN_OWNER_GATE_POLICY.md`; it must not alter product meaning or synthesize Human Owner acceptance.
 
 Engineering difficulty and schedule pressure are inputs, not authority to weaken product meaning.
 
