@@ -279,6 +279,24 @@
         "affected_transition"
       ],
       "return_to": "last_valid_state"
+    },
+    {
+      "trigger": "governance_only_gate_policy_change_meeting_preservation_policy",
+      "invalidate": [],
+      "preserve": [
+        "ENGINEERING_READY",
+        "CANDIDATE_ADMITTED",
+        "PRODUCT_REVIEW_ELIGIBLE",
+        "PRODUCT_EXPERIENCE_VERDICT"
+      ],
+      "required_evidence": [
+        "approved_change_request",
+        "exact_candidate_identity_unchanged",
+        "product_meaning_unchanged",
+        "product_mutation=none",
+        "preservation_receipt"
+      ],
+      "return_to": "last_valid_state"
     }
   ],
   "mandatory_transition_receipt_fields": [
@@ -306,5 +324,45 @@
     "MOVING_REF_USED_AS_AUTHORITY",
     "LOCAL_EXECUTOR_MUTATION",
     "UNAUTHORIZED_STATE_TRANSITION"
-  ]
+  ],
+  "human_owner_gate_policy": {
+    "contract_defined": true,
+    "pre_1_0_default_required": false,
+    "final_1_0_required": true,
+    "pre_1_0_validation_owner": "INDEPENDENT_PRODUCT_EXPERIENCE_REVIEWER",
+    "final_1_0_acceptance_owner": "HUMAN_OWNER",
+    "policy_path": "core/HUMAN_OWNER_GATE_POLICY.md"
+  },
+  "closure_policy": {
+    "rule": "all_contract_required_gates=closed",
+    "human_owner_acceptance_may_be_not_required": true,
+    "pre_1_0_close_after_product_experience_pass_when_contract_allows": true,
+    "final_1_0_human_owner_acceptance_required": true
+  },
+  "governance_only_gate_policy_change_preservation": {
+    "allowed": true,
+    "requires_explicit_owner_governance_directive": true,
+    "requires_approved_change_request": true,
+    "requires_exact_candidate_unchanged": true,
+    "product_meaning_fields_must_be_unchanged": [
+      "target_user",
+      "user_problem",
+      "customer_value",
+      "product_boundary",
+      "required_user_journeys",
+      "acceptance_outcomes",
+      "evidence_ownership",
+      "security_tier",
+      "allowed_known_limitations"
+    ],
+    "product_mutation_forbidden": true,
+    "preservation_receipt_required": true,
+    "preservable_states": [
+      "ENGINEERING_READY",
+      "CANDIDATE_ADMITTED",
+      "PRODUCT_REVIEW_ELIGIBLE",
+      "PRODUCT_EXPERIENCE_PASS"
+    ],
+    "human_owner_acceptance_synthesis_forbidden": true
+  }
 }
